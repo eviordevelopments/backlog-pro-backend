@@ -13,5 +13,8 @@ export * from './exceptions';
 // Filters
 export * from './filters';
 
+// Plugins
+export * from './plugins';
+
 // Database
-export * from './database/base.entity';
+export * from './database';

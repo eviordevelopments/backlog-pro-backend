@@ -1,7 +1,7 @@
 // Named exports
 export * from './envs.config';
 export * from './config.validation';
-export * from './typeorm.config';
+export * from './database.config';
 export * from './graphql.config';
 
 // Default export for ConfigModule

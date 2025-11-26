@@ -1,7 +1,9 @@
 import { ApolloDriverConfig } from '@nestjs/apollo';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { Request } from 'express';
 import { join } from 'path';
+import { envs } from './envs.config';
 
 interface GraphQLContext {
   req?: Request;
@@ -10,11 +12,19 @@ interface GraphQLContext {
   };
 }
 
+const isDevelopment = envs.server.environment !== 'production';
+
 export const graphqlConfig: ApolloDriverConfig = {
   autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
   sortSchema: true,
   playground: false,
   introspection: true, // Necesario para Apollo Sandbox
+  // Embedear Apollo Sandbox solo en desarrollo
+  ...(isDevelopment && {
+    plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
+  }),
+  // CSRF protection: desactivar en desarrollo local, activar en producción real
+  csrfPrevention: !isDevelopment,
   subscriptions: {
     'graphql-ws': true, // Solo usar el protocolo moderno
   },

@@ -7,13 +7,13 @@ const server = {
   host: process.env.HOST ?? 'localhost',
 };
 
-const typeorm = {
+const database = {
+  url: process.env.DATABASE_URL,
   host: process.env.DB_HOST ?? 'localhost',
   port: parseInt(String(process.env.DB_PORT ?? 5432), 10),
   database: process.env.DB_DATABASE ?? 'your_app',
   username: process.env.DB_USERNAME ?? 'postgres',
   password: process.env.DB_PASSWORD ?? 'postgres',
-  ssl: process.env.DB_SSL === 'true',
 };
 
 const jwt = {
@@ -22,7 +22,7 @@ const jwt = {
 
 const config = {
   server,
-  typeorm,
+  database,
   jwt,
 };
 

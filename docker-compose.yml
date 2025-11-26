@@ -2,7 +2,6 @@ services:
   # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
-    container_name: backlog-pro-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -11,9 +10,9 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_dev:/var/lib/postgresql/data
     networks:
-      - backlog-pro-network
+      - network-dev
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 10s
@@ -25,10 +24,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: backlog-pro-app
+    image: backlog-pro-backend:dev
+    pull_policy: build
     restart: unless-stopped
-    ports:
-      - '3000:3000'
     environment:
       NODE_ENV: development
       PORT: 3000
@@ -37,9 +35,11 @@ services:
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
       DB_DATABASE: backlog_pro
+      JWT_SECRET: your_jwt_secret_change_in_production
       # Hot reload for Windows/Docker
       CHOKIDAR_USEPOLLING: 'true'
-      JWT_SECRET: ${JWT_SECRET:-your_jwt_secret_change_in_production}
+    ports:
+      - '3000:3000'
     volumes:
       - .:/app
       - /app/node_modules
@@ -47,11 +47,11 @@ services:
       postgres:
         condition: service_healthy
     networks:
-      - backlog-pro-network
+      - network-dev
 
 networks:
-  backlog-pro-network:
+  network-dev:
     driver: bridge
 
 volumes:
-  postgres_data:
+  postgres_data_dev:

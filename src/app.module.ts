@@ -3,10 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppResolver } from './app.resolver';
-import { typeormConfig, graphqlConfig, validationSchemaConfig, envsConfig } from './shared/config';
+import { SharedModule } from './shared/shared.module';
+import { databaseConfig, graphqlConfig, validationSchemaConfig, envsConfig } from './shared/config';
 
 @Module({
   imports: [
@@ -20,9 +20,9 @@ import { typeormConfig, graphqlConfig, validationSchemaConfig, envsConfig } from
       driver: ApolloDriver,
       ...graphqlConfig,
     }),
-    TypeOrmModule.forRoot(typeormConfig),
+    TypeOrmModule.forRoot(databaseConfig),
+    SharedModule,
   ],
-  controllers: [AppController],
   providers: [AppService, AppResolver],
 })
 export class AppModule {}

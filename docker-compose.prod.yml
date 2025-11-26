@@ -1,52 +1,25 @@
 services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:15-alpine
-    container_name: backlog-pro-postgres-prod
-    restart: always
-    environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_DATABASE}
-    ports:
-      - '5432:5432'
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - backlog-pro-network
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME}']
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   # NestJS Application (Production)
+  # Conecta a DATABASE_URL (Render) en lugar de postgres local
   app:
     build:
       context: .
       dockerfile: Dockerfile.prod
-    container_name: backlog-pro-app-prod
+    image: backlog-pro-backend:prod
+    pull_policy: build
     restart: always
-    ports:
-      - '3000:3000'
+    env_file:
+      - .env.docker.production
     environment:
       NODE_ENV: production
       PORT: 3000
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_DATABASE: ${DB_DATABASE}
-      JWT_SECRET: ${JWT_SECRET}
-    depends_on:
-      postgres:
-        condition: service_healthy
+    ports:
+      - '3001:3000'
     networks:
-      - backlog-pro-network
+      - network-prod
 
 networks:
-  backlog-pro-network:
+  network-prod:
     driver: bridge
 
-volumes:
-  postgres_data:
+

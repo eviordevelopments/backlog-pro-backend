@@ -42,11 +42,10 @@ lerna-debug.log*
 # Environment (ignore actual env files, keep templates)
 .env
 .env.local
-.env.docker
 .env.production
-.env.development.local
-.env.test.local
-.env.production.local
+.env.test
+.env.docker.local
+.env.docker.production
 
 # Keep these templates in git
 !.env.example
