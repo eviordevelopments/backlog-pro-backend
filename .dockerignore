@@ -65,9 +65,5 @@ docker-compose.prod.yml
 # Misc
 .prettierrc
 .eslintrc.js
-tsconfig.json
-tsconfig.build.json
-nest-cli.json
 webpack.config.cjs
-.swcrc
 switch-env.bat
