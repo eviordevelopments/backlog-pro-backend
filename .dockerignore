@@ -1,0 +1,73 @@
+# Dependencies
+node_modules
+npm-debug.log
+
+# Build output
+dist
+
+# Package managers
+bun.lock
+yarn.lock
+pnpm-lock.yaml
+
+# Git
+.git
+.gitignore
+
+# Environment files (nunca incluir en imagen Docker)
+.env
+.env.local
+.env.docker
+.env.production
+.env.development.local
+.env.test.local
+.env.production.local
+.env.example
+
+# Documentation
+README.md
+docs/
+*.md
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+
+# Testing
+coverage
+.nyc_output
+test
+*.spec.ts
+*.e2e-spec.ts
+jest.config.js
+
+# Logs
+*.log
+logs
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+Dockerfile.prod
+docker-compose.yml
+docker-compose.prod.yml
+.dockerignore
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# Misc
+.prettierrc
+.eslintrc.js
+tsconfig.json
+tsconfig.build.json
+nest-cli.json
+webpack.config.cjs
+.swcrc
+switch-env.bat

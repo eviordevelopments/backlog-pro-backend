@@ -1,0 +1,80 @@
+name: Build and Push Docker Image to DockerHub
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Extract version from package.json
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "full=$VERSION" >> $GITHUB_OUTPUT
+          
+          # Extract major, minor, patch
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          MINOR=$(echo $VERSION | cut -d. -f2)
+          PATCH=$(echo $VERSION | cut -d. -f3)
+          
+          echo "major=$MAJOR" >> $GITHUB_OUTPUT
+          echo "minor=$MINOR" >> $GITHUB_OUTPUT
+          echo "patch=$PATCH" >> $GITHUB_OUTPUT
+          echo "major_minor=$MAJOR.$MINOR" >> $GITHUB_OUTPUT
+          
+          echo "Version: $VERSION"
+          echo "Tags: $MAJOR.$MINOR.$PATCH, $MAJOR.$MINOR, $MAJOR, latest"
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests
+        run: npm test
+      
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.prod
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/backlog-pro-backend:${{ steps.version.outputs.full }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/backlog-pro-backend:${{ steps.version.outputs.major_minor }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/backlog-pro-backend:${{ steps.version.outputs.major }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/backlog-pro-backend:latest
+      
+      - name: Show generated tags
+        run: |
+          echo "✅ Docker image built and pushed successfully!"
+          echo ""
+          echo "📦 Generated tags:"
+          echo "  - ${{ secrets.DOCKERHUB_USERNAME }}/backlog-pro-backend:${{ steps.version.outputs.full }}"
+          echo "  - ${{ secrets.DOCKERHUB_USERNAME }}/backlog-pro-backend:${{ steps.version.outputs.major_minor }}"
+          echo "  - ${{ secrets.DOCKERHUB_USERNAME }}/backlog-pro-backend:${{ steps.version.outputs.major }}"
+          echo "  - ${{ secrets.DOCKERHUB_USERNAME }}/backlog-pro-backend:latest"
+          echo ""
+          echo "🔗 DockerHub URL:"
+          echo "  https://hub.docker.com/r/${{ secrets.DOCKERHUB_USERNAME }}/backlog-pro-backend"
+          echo ""
+          echo "📥 Pull command:"
+          echo "  docker pull ${{ secrets.DOCKERHUB_USERNAME }}/backlog-pro-backend:latest"
