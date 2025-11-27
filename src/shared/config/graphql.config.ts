@@ -37,10 +37,7 @@ export const graphqlConfig: ApolloDriverConfig = {
     // Para subscriptions, usar connection
     return { req: connection?.context };
   },
-  formatError: (
-    formattedError: GraphQLFormattedError,
-    error: unknown,
-  ): GraphQLFormattedError => {
+  formatError: (formattedError: GraphQLFormattedError, error: unknown): GraphQLFormattedError => {
     // Formatear errores para no exponer detalles internos
     const graphQLError = error as GraphQLError;
     return {

@@ -18,6 +18,7 @@ const database = {
 
 const jwt = {
   secret: process.env.JWT_SECRET ?? 'default_jwt_secret',
+  expiresIn: parseInt(String(process.env.JWT_EXPIRES_IN)) ?? '24h',
 };
 
 const config = {

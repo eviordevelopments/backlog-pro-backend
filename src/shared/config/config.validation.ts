@@ -1,9 +1,7 @@
 import Joi from 'joi';
 
 export const validationSchemaConfig = Joi.object({
-  NODE_ENV: Joi.string()
-    .valid('development', 'production', 'test')
-    .default('development'),
+  NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
   PORT: Joi.number().default(3000),
 
   // DATABASE_URL (para Render/producción con URL completa)
@@ -34,4 +32,5 @@ export const validationSchemaConfig = Joi.object({
   }),
 
   JWT_SECRET: Joi.string().required(),
+  JWT_EXPIRES_IN: Joi.string().default('24h'),
 });

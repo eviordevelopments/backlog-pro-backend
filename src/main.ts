@@ -9,9 +9,7 @@ async function bootstrap() {
 
   // Enable CORS for Apollo Sandbox
   app.enableCors({
-    origin: [
-      'https://studio.apollographql.com',
-    ],
+    origin: ['https://studio.apollographql.com', 'http://localhost:3000'],
     credentials: true,
   });
 
@@ -24,18 +22,18 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  
+
   await app.listen(envs.server.port);
-  
+
   if (envs.server.environment === 'production') {
-    console.log(`🚀 Application started successfully`);
+    console.log('🚀 Application started successfully');
     console.log(`📍 Environment: ${envs.server.environment}`);
     console.log(`🔌 Port: ${envs.server.port}`);
   } else {
     console.log(`Application is running on: http://localhost:${envs.server.port}`);
     console.log(`GraphQL endpoint: http://localhost:${envs.server.port}/graphql`);
-    console.log(`Apollo Sandbox: https://studio.apollographql.com/sandbox/explorer`);
+    console.log('Apollo Sandbox: https://studio.apollographql.com/sandbox/explorer');
   }
 }
 
-bootstrap();
+void bootstrap();

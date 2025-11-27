@@ -1,17 +1,20 @@
-# Development Dockerfile with hot reload
+# Dockerfile para Desarrollo con hot reload
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Install dependencies
-COPY package*.json ./
-RUN npm install
+# Instalar dependencias de compilación para bcrypt
+RUN apk add --no-cache python3 make g++
 
-# Copy source code
+# Instalar dependencias
+COPY package*.json ./
+RUN npm ci
+
+# Copiar código fuente
 COPY . .
 
-# Expose port
+# Exponer puerto
 EXPOSE 3000
 
-# Start in development mode with hot reload
+# Iniciar en modo desarrollo con hot reload
 CMD ["npm", "run", "start:dev"]

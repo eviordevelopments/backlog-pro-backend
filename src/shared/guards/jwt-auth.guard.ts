@@ -22,7 +22,7 @@ export class JwtAuthGuard implements CanActivate {
 
     try {
       const decoded = await this.jwtService.verifyAsync(token);
-      
+
       request.user = {
         sub: decoded.sub || decoded.userId,
         email: decoded.email,

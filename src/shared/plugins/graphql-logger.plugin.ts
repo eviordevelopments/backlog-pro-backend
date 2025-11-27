@@ -1,10 +1,6 @@
 import { Plugin } from '@nestjs/apollo';
 import { Logger } from '@nestjs/common';
-import {
-  ApolloServerPlugin,
-  GraphQLRequestListener,
-  GraphQLRequestContext,
-} from '@apollo/server';
+import { ApolloServerPlugin, GraphQLRequestListener, GraphQLRequestContext } from '@apollo/server';
 import { envs } from '../config';
 
 @Plugin()
@@ -35,24 +31,20 @@ export class GraphQLLoggerPlugin implements ApolloServerPlugin {
 
         if (errors && errors.length > 0) {
           // Log de errores
-          logger.error(
-            `❌ ${operationName} - ${duration}ms - Errors: ${errors.length}`,
-          );
+          logger.error(`❌ ${operationName} - ${duration}ms - Errors: ${errors.length}`);
           errors.forEach((error) => {
             logger.error(`   └─ ${error.message}`);
           });
         } else {
           // Log exitoso
           const statusEmoji = duration < 100 ? '⚡' : duration < 500 ? '✅' : '⏱️';
-          logger.log(
-            `${statusEmoji} ${operationName} - ${duration}ms`,
-          );
+          logger.log(`${statusEmoji} ${operationName} - ${duration}ms`);
         }
 
         // Log detallado en desarrollo
         if (envs.server.environment !== 'production') {
           logger.debug(`   Query: ${query}`);
-          
+
           // Opcional: Log de variables
           if (request.variables && Object.keys(request.variables).length > 0) {
             logger.debug(`   Variables: ${JSON.stringify(request.variables)}`);

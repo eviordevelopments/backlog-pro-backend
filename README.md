@@ -58,7 +58,6 @@ Backend GraphQL para plataforma de gestión de equipos de desarrollo construido 
 
 ## Instalación
 
-
 ### Opción 1: Desarrollo Local (sin Docker)
 
 ```bash
@@ -75,6 +74,7 @@ npm run env:local
 # 4. Iniciar la aplicación
 npm run start:dev
 ```
+
 ### Opción 2: Con Docker (Recomendado)
 
 ```bash
@@ -120,14 +120,15 @@ npm run start:prod
 
 El proyecto usa un sistema centralizado de configuración en `src/shared/config/envs.config.ts` y soporta múltiples archivos de entorno:
 
-| Archivo | Uso | DB_HOST |
-|---------|-----|---------|
-| `.env.local` | Desarrollo local sin Docker | `localhost` |
-| `.env.docker` | Desarrollo con Docker Compose | `postgres` |
-| `.env.production` | Producción | Tu host de producción |
-| `.env.example` | Plantilla de referencia | - |
+| Archivo           | Uso                           | DB_HOST               |
+| ----------------- | ----------------------------- | --------------------- |
+| `.env.local`      | Desarrollo local sin Docker   | `localhost`           |
+| `.env.docker`     | Desarrollo con Docker Compose | `postgres`            |
+| `.env.production` | Producción                    | Tu host de producción |
+| `.env.example`    | Plantilla de referencia       | -                     |
 
 **Cambiar entre entornos:**
+
 ```bash
 # Para desarrollo local
 npm run env:local
@@ -167,6 +168,7 @@ Este proyecto usa **SWC** (Speedy Web Compiler) en lugar de webpack para hot rel
 - 🚀 **Compilación incremental**
 
 Ejemplo de velocidad:
+
 ```
 Webpack: ~12 segundos
 SWC:     ~300 milisegundos
@@ -246,6 +248,7 @@ src/
 ## Apollo Sandbox
 
 Una vez iniciada la aplicación, accede a:
+
 - http://localhost:3000/graphql
 
 Apollo Server detectará que es un navegador y te redirigirá automáticamente a Apollo Sandbox.
@@ -274,12 +277,14 @@ npm run docker:logs
 ```
 
 ### Servicios incluidos:
+
 - **app**: Aplicación NestJS (puerto 3000)
 - **postgres**: PostgreSQL 15 (puerto 5432)
 
 ## Arquitectura
 
 El proyecto sigue Clean Architecture con CQRS:
+
 - **Capa de Presentación**: GraphQL Resolvers + DTOs
 - **Capa de Aplicación**: Commands/Queries + Handlers
 - **Capa de Dominio**: Entidades + Value Objects + Interfaces
@@ -288,6 +293,7 @@ El proyecto sigue Clean Architecture con CQRS:
 ## Testing
 
 El proyecto implementa dos tipos de testing:
+
 - **Unit Tests**: Casos específicos y edge cases
 - **Property-Based Tests**: Propiedades universales con fast-check (mínimo 100 iteraciones)
 
@@ -296,11 +302,42 @@ Cobertura mínima requerida: 80%
 ## Documentación Adicional
 
 - 📖 [docs/SETUP.md](docs/SETUP.md) - **Guía completa de setup (local y Docker)**
+- 🚀 [docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md) - **Despliegue en Render con DockerHub (sin Supabase)**
 - 🌍 [docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md) - Gestión de entornos y variables (.env)
 - ⚡ [docs/SWC_SETUP.md](docs/SWC_SETUP.md) - SWC: Hot reload ultra-rápido
 - ⚙️ [docs/CONFIGURATION.md](docs/CONFIGURATION.md) - Configuraciones del sistema (GraphQL, TypeORM)
 - 🏗️ [docs/DOCKER_ARCHITECTURE.md](docs/DOCKER_ARCHITECTURE.md) - Arquitectura de contenedores
 - ✅ [docs/CHECKLIST.md](docs/CHECKLIST.md) - Checklist de verificación
+
+## Despliegue en Producción
+
+La aplicación está completamente lista para despliegue en **Render** usando imágenes Docker de **DockerHub**.
+
+### Quick Start - Despliegue en Render
+
+1. **Setup GitHub Secrets** con credenciales de DockerHub → [docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md#step-1-github-secrets-setup)
+2. **Crear PostgreSQL en Render** → [docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md#step-3-render-postgresql-database)
+3. **Configurar Docker Service en Render** → [docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md#step-4-render-docker-service)
+4. **Agregar variables de entorno** → [docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md#step-5-environment-variables)
+
+📋 Ver guía completa: **[docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md)**
+
+### Ejecutar Localmente con Docker
+
+Usa `docker-compose.yml` para levantar la aplicación localmente:
+
+```bash
+# Copiar configuración de ejemplo
+cp .env.example .env
+# Editar .env con tus valores (DB_USERNAME, DB_PASSWORD, JWT_SECRET, DOCKER_USERNAME, etc.)
+
+# Ejecutar con docker-compose
+docker-compose up
+```
+
+**Nota:** Asegúrate de que `DOCKER_USERNAME` en `.env` apunta a tu imagen de DockerHub (ej: `octocat/backlog-pro-backend`), o usa una imagen local si prefieres.
+
+Ver archivo: **[docker-compose.yml](docker-compose.yml)**
 
 ## Licencia
 

@@ -1,11 +1,11 @@
-# Dependencies
+# Dependencias
 node_modules
 npm-debug.log
 
-# Build output
+# Salida de compilación
 dist
 
-# Package managers
+# Gestores de paquetes
 bun.lock
 yarn.lock
 pnpm-lock.yaml
@@ -14,7 +14,7 @@ pnpm-lock.yaml
 .git
 .gitignore
 
-# Environment files (nunca incluir en imagen Docker)
+# Archivos de entorno (nunca incluir en imagen Docker)
 .env
 .env.local
 .env.docker
@@ -24,7 +24,7 @@ pnpm-lock.yaml
 .env.production.local
 .env.example
 
-# Documentation
+# Documentación
 README.md
 docs/
 *.md
@@ -47,7 +47,7 @@ jest.config.js
 *.log
 logs
 
-# OS
+# Sistema Operativo
 .DS_Store
 Thumbs.db
 

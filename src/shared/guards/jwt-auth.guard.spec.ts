@@ -9,14 +9,14 @@ jest.mock('@nestjs/graphql', () => ({
 
 describe('JwtAuthGuard', () => {
   let guard: JwtAuthGuard;
-  let jwtService: JwtService;
+  let jwtService: Partial<JwtService>;
 
   beforeEach(() => {
     jwtService = {
       verifyAsync: jest.fn(),
-    } as any;
-    
-    guard = new JwtAuthGuard(jwtService);
+    };
+
+    guard = new JwtAuthGuard(jwtService as unknown as JwtService);
   });
 
   it('should be defined', () => {

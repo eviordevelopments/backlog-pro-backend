@@ -15,7 +15,7 @@ Sistema backend para plataforma de gestión de equipos de desarrollo que permite
 - **Cliente**: Entidad externa que contrata proyectos
 - **Miembro de Proyecto**: Relación entre un usuario y un proyecto con rol específico
 - **Entrada de Tiempo**: Registro de horas trabajadas por un usuario en una tarea específica
-- **Supabase Auth**: Sistema de autenticación externo que maneja usuarios y JWT tokens
+- **JWT**: Sistema de autenticación basado en tokens JWT generados localmente
 
 ## Requirements
 
@@ -25,11 +25,11 @@ Sistema backend para plataforma de gestión de equipos de desarrollo que permite
 
 #### Acceptance Criteria
 
-1. WHEN un usuario se registra con email y contraseña, THEN el Sistema SHALL crear una cuenta en Supabase Auth y enviar un email de verificación
-2. WHEN un usuario inicia sesión con credenciales válidas, THEN el Sistema SHALL validar el JWT token de Supabase y retornar los datos del perfil del usuario
+1. WHEN un usuario se registra con email y contraseña, THEN el Sistema SHALL crear una cuenta en la base de datos y enviar un email de verificación
+2. WHEN un usuario inicia sesión con credenciales válidas, THEN el Sistema SHALL validar las credenciales contra la base de datos, generar un JWT token y retornar los datos del perfil del usuario
 3. WHEN un usuario intenta acceder sin autenticación, THEN el Sistema SHALL rechazar la petición con error 401 Unauthorized
 4. WHEN un usuario verifica su email mediante el link enviado, THEN el Sistema SHALL activar la cuenta y permitir el acceso completo
-5. WHEN un usuario solicita recuperación de contraseña, THEN el Sistema SHALL enviar un email con link de reseteo mediante Supabase Auth
+5. WHEN un usuario solicita recuperación de contraseña, THEN el Sistema SHALL generar un token de reseteo, almacenarlo en la base de datos y enviar un email con link de reseteo
 
 ### Requirement 2: Gestión de Perfil de Usuario
 
