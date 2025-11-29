@@ -1,9 +1,15 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
+import { GqlContextType } from '@nestjs/graphql';
 import { BaseDomainException } from '..';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
+    // No manejar excepciones de GraphQL aquí, dejar que GraphQLExceptionFilter las maneje
+    if (host.getType<GqlContextType>() === 'graphql') {
+      throw exception;
+    }
+
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
 

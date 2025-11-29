@@ -1,0 +1,19 @@
+services:
+  # NestJS Application (Production)
+  # Conecta a DATABASE_URL (Render) en lugar de postgres local
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    image: backlog-pro-backend:prod
+    env_file: 
+      - .env.production
+    ports:
+      - '${PORT}:3000'
+    restart: always
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:${PORT}/graphql']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

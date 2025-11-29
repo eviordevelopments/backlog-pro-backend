@@ -1,4 +1,4 @@
-# Dockerfile para Desarrollo con hot reload
+# Dockerfile para Desarrollo con docker compose watch
 FROM node:20-alpine
 
 WORKDIR /app
@@ -17,4 +17,5 @@ COPY . .
 EXPOSE 3000
 
 # Iniciar en modo desarrollo con hot reload
+# NestJS detectará cambios automáticamente con docker compose watch
 CMD ["npm", "run", "start:dev"]

@@ -1,0 +1,62 @@
+services:
+  # Backlog Pro Backend - construida localmente
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: backlog-pro-backend:dev
+    env_file: 
+      - .env.local
+    ports:
+      - '${PORT}:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - backlog-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:${PORT}/graphql']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+
+  # Base de Datos PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    volumes:
+      # Persistir datos de la base de datos
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      # Exponer PostgreSQL para acceso en desarrollo local
+      - '${DB_PORT}:5432'
+    networks:
+      - backlog-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  backlog-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+      driver: local
