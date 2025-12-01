@@ -4,11 +4,11 @@ import { InputType, Field } from '@nestjs/graphql';
 @InputType()
 export class SigninInput {
   @Field()
-  @IsEmail()
+  @IsEmail({}, { message: 'El email no es válido' })
   email!: string;
 
   @Field()
-  @IsString()
-  @MinLength(8)
+  @IsString({ message: 'La contraseña debe ser un texto' })
+  @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres' })
   password!: string;
 }

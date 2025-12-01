@@ -4,18 +4,18 @@ import { InputType, Field } from '@nestjs/graphql';
 @InputType()
 export class SignupInput {
   @Field()
-  @IsEmail()
+  @IsEmail({}, { message: 'El email no es válido' })
   email!: string;
 
   @Field()
-  @IsString()
-  @MinLength(8)
-  @MaxLength(255)
+  @IsString({ message: 'La contraseña debe ser un texto' })
+  @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres' })
+  @MaxLength(255, { message: 'La contraseña no puede exceder 255 caracteres' })
   password!: string;
 
   @Field()
-  @IsString()
-  @MinLength(2)
-  @MaxLength(255)
+  @IsString({ message: 'El nombre debe ser un texto' })
+  @MinLength(2, { message: 'El nombre debe tener al menos 2 caracteres' })
+  @MaxLength(255, { message: 'El nombre no puede exceder 255 caracteres' })
   name!: string;
 }

@@ -40,15 +40,22 @@ export const graphqlConfig: ApolloDriverConfig = {
   formatError: (formattedError: GraphQLFormattedError, error: unknown): GraphQLFormattedError => {
     // Formatear errores para no exponer detalles internos
     const graphQLError = error as GraphQLError;
+    const extensions: Record<string, unknown> = {
+      code:
+        formattedError.extensions?.code ||
+        graphQLError.extensions?.code ||
+        'INTERNAL_SERVER_ERROR',
+      timestamp: new Date().toISOString(),
+    };
+
+    // Agregar errores de validación si existen
+    if (graphQLError.extensions?.validationErrors) {
+      extensions.validationErrors = graphQLError.extensions.validationErrors;
+    }
+
     return {
       message: formattedError.message,
-      extensions: {
-        code:
-          formattedError.extensions?.code ||
-          graphQLError.extensions?.code ||
-          'INTERNAL_SERVER_ERROR',
-        timestamp: new Date().toISOString(),
-      },
+      extensions,
     };
   },
 };

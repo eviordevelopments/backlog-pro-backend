@@ -17,7 +17,7 @@ const database = {
 
 const jwt = {
   secret: process.env.JWT_SECRET,
-  expiresIn: parseInt(String(process.env.JWT_EXPIRES_IN)),
+  expiresIn: parseInt(String(process.env.JWT_EXPIRES_IN)) * 60 * 60, // Conversión a horas
 };
 
 const config = {

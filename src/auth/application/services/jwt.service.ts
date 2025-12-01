@@ -29,7 +29,7 @@ export class JwtService {
       email,
     };
     return this.jwtService.sign(payload, {
-      expiresIn: 1,
+      expiresIn: '1h',
     });
   }
 

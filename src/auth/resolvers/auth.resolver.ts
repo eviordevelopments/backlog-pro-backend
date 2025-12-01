@@ -26,23 +26,16 @@ export class AuthResolver {
     description: 'Registra un nuevo usuario en el sistema',
   })
   async signup(@Args('input') input: SignupInput): Promise<AuthResponse> {
-    this.logger.log(`Signup mutation called for email: ${input.email}`);
+    this.logger.log(`Se solicitó una mutación de registro: ${input.email}`);
     const command = new SignupCommand(input.email, input.password, input.name);
-    const user = await this.signupCommandHandler.handle(command);
-
-    return {
-      token: '', // El token se genera después del signup
-      userId: user.id,
-      email: user.email,
-      name: user.name,
-    };
+    return this.signupCommandHandler.handle(command);
   }
 
   @Mutation(() => AuthResponse, {
     description: 'Inicia sesión con email y contraseña',
   })
   async signin(@Args('input') input: SigninInput): Promise<AuthResponse> {
-    this.logger.log(`Signin mutation called for email: ${input.email}`);
+    this.logger.log(`Se solicitó una mutación de inicio de sesión: ${input.email}`);
     const command = new SigninCommand(input.email, input.password);
     return this.signinCommandHandler.handle(command);
   }
@@ -53,7 +46,7 @@ export class AuthResolver {
   async requestPasswordReset(
     @Args('input') input: RequestPasswordResetInput,
   ): Promise<PasswordResetResponse> {
-    this.logger.log(`Password reset requested for email: ${input.email}`);
+    this.logger.log(`Se solicitó una mutación de restablecimiento de contraseña: ${input.email}`);
     const command = new RequestPasswordResetCommand(input.email);
     return this.requestPasswordResetCommandHandler.handle(command);
   }

@@ -40,5 +40,5 @@ export const validationSchemaConfig = Joi.object({
     .default('your_db_name'),
 
   JWT_SECRET: Joi.string().default('default_jwt_secret'),
-  JWT_EXPIRES_IN: Joi.string().default('24'),
+  JWT_EXPIRES_IN: Joi.string().default('24h'),
 });

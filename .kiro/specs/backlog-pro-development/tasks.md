@@ -81,7 +81,10 @@
   - Configurar guards de autenticación JWT
   - _Requisitos: 1.1, 1.2, 1.3, 1.4, 1.5_
 
-- [ ]* 5.1 Escribir property test: Rechazo de peticiones no autenticadas
+- [x]* 5.1 Escribir property test: Rechazo de peticiones no autenticadas
+
+
+
   - **Propiedad 5: Unauthenticated request rejection**
 
 
@@ -133,37 +136,55 @@
   - Aplicar GuardJWT a todos los resolvers
   - _Requisitos: 2.1, 2.2, 2.5_
 
-- [ ]* 6.6 Escribir property test: Completitud del perfil
+- [x]* 6.6 Escribir property test: Completitud del perfil
+
+
   - **Propiedad 1: Authenticated user profile completeness**
   - **Valida: Requisitos 2.1**
 
-- [ ]* 6.7 Escribir property test: Round trip de actualización de perfil
+- [x]* 6.7 Escribir property test: Round trip de actualización de perfil
+
+
+
   - **Propiedad 2: Profile update round trip**
   - **Valida: Requisitos 2.2**
 
-- [ ]* 6.8 Escribir property test: Prevención de modificación entre usuarios
+- [x]* 6.8 Escribir property test: Prevención de modificación entre usuarios
+
+
   - **Propiedad 3: Cross-user profile modification prevention**
   - **Valida: Requisitos 2.3**
 
-- [ ]* 6.9 Escribir property test: Consistencia de horas trabajadas
+- [x]* 6.9 Escribir property test: Consistencia de horas trabajadas
+
+
+
   - **Propiedad 4: Hours worked aggregation consistency**
   - **Valida: Requisitos 2.5**
 
-- [ ]* 7. Implementar módulo de clientes (clients)
-- [ ]* 7.1 Crear entidad de dominio Client
+- [x]* 7. Implementar módulo de clientes (clients)
+- [x]* 7.1 Crear entidad de dominio Client
+
+
+
+
+
   - Crear Client domain entity
   - Crear Value Objects: ClientStatus, ClientMetrics (LTV, CAC, MRR)
   - Crear excepciones de dominio
   - Crear IClienteRepository interface
   - _Requisitos: 8.1, 8.2_
 
-- [ ]* 7.2 Crear entidad TypeORM y mapper
+- [x]* 7.2 Crear entidad TypeORM y mapper
+
+
   - Crear ClientTypeORMEntity
   - Crear ClientMapper
   - Implementar ClienteRepository
   - _Requisitos: 8.1_
 
-- [ ]* 7.3 Implementar CQRS para clientes
+- [x]* 7.3 Implementar CQRS para clientes
+
   - Command: CrearClienteCommand + Handler
   - Command: ActualizarClienteCommand + Handler
   - Command: EliminarClienteCommand + Handler (validar proyectos activos)
@@ -172,12 +193,15 @@
   - Query: ObtenerProyectosClienteQuery + Handler
   - _Requisitos: 8.1, 8.2, 8.3, 8.4_
 
-- [ ]* 7.4 Crear resolvers GraphQL de clientes
+- [x]* 7.4 Crear resolvers GraphQL de clientes
+
   - Resolvers para todas las operaciones CRUD
   - Aplicar GuardJWT
   - _Requisitos: 8.1, 8.2, 8.3, 8.4_
 
-- [ ]* 7.5 Escribir property tests para clientes
+- [x]* 7.5 Escribir property tests para clientes
+
+
   - **Propiedad 23: Client creation with default state**
   - **Propiedad 24: Client metrics validation**
   - **Propiedad 25: Client deletion with active projects**
@@ -237,7 +261,11 @@
   - Aplicar GuardJWT
   - _Requisitos: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
 
-- [ ]* 8.5 Escribir property tests para proyectos
+- [x]* 8.5 Escribir property tests para proyectos
+
+
+
+
   - **Propiedad 6: Project creation with default state**
   - **Propiedad 7: Budget validation**
   - **Propiedad 8: Soft delete preservation**
@@ -303,7 +331,9 @@
   - Aplicar GuardJWT
   - _Requisitos: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-- [ ]* 10.5 Escribir property tests para sprints
+- [x]* 10.5 Escribir property tests para sprints
+
+
   - **Propiedad 10: Sprint date validation**
   - **Propiedad 11: Sprint velocity calculation**
 
@@ -347,7 +377,9 @@
   - Aplicar GuardJWT
   - _Requisitos: 5.1, 5.2, 5.3, 5.5, 5.6, 5.7_
 
-- [ ]* 11.5 Escribir property tests para tareas
+- [x]* 11.5 Escribir property tests para tareas
+
+
   - **Propiedad 12: Task creation with default state**
   - **Propiedad 13: Task assignment validation**
   - **Propiedad 15: Task dependency cycle detection**
@@ -392,7 +424,9 @@
   - Aplicar GuardJWT
   - _Requisitos: 15.1, 15.2, 15.3, 15.4, 15.5_
 
-- [ ]* 12.5 Escribir property test: Consistencia de horas de tarea
+
+- [x]* 12.5 Escribir property test: Consistencia de horas de tarea
+
   - **Propiedad 14: Task hours consistency**
   - **Valida: Requisitos 5.4, 15.2**
 
@@ -400,10 +434,16 @@
 
 
 
+
   - Asegurar que todos los tests pasen, preguntar al usuario si surgen dudas.
 
-- [ ]* 14. Implementar módulo de transacciones (finances)
-- [ ]* 14.1 Crear entidades de dominio Transaction e Invoice
+- [x]* 14. Implementar módulo de transacciones (finances)
+
+
+
+- [x]* 14.1 Crear entidades de dominio Transaction e Invoice
+
+
   - Crear Transaction domain entity
   - Crear Invoice domain entity
   - Crear Value Objects: Amount, Currency, InvoiceStatus
@@ -411,27 +451,35 @@
   - Crear ITransactionRepository e IInvoiceRepository interfaces
   - _Requisitos: 7.1, 7.6_
 
-- [ ]* 14.2 Crear entidades TypeORM y mappers
+- [x]* 14.2 Crear entidades TypeORM y mappers
+
+
   - Crear TransactionTypeORMEntity
   - Crear InvoiceTypeORMEntity
   - Crear mappers correspondientes
   - Implementar repositorios
   - _Requisitos: 7.1, 7.6_
 
-- [ ]* 14.3 Implementar CQRS para transacciones
+- [x]* 14.3 Implementar CQRS para transacciones
+
+
   - Command: CrearTransaccionCommand + Handler (actualizar project.spent)
   - Command: CrearFacturaCommand + Handler (calcular total)
   - Query: ObtenerGastosProyectoQuery + Handler (agrupar por categoría)
   - Query: ListarTransaccionesQuery + Handler
   - _Requisitos: 7.1, 7.5, 7.6_
 
-- [ ]* 14.4 Implementar cálculo de salarios
+- [x]* 14.4 Implementar cálculo de salarios
+
+
   - Query: CalcularTasaHoraIdealQuery + Handler
   - Query: CalcularSalariosQuery + Handler
   - Query: GenerarReporteFinancieroQuery + Handler
   - _Requisitos: 7.2, 7.3_
 
-- [ ]* 14.5 Crear resolvers GraphQL de finanzas
+- [x]* 14.5 Crear resolvers GraphQL de finanzas
+
+
   - Resolvers para transacciones e invoices
   - Resolvers para cálculos de salarios
   - Aplicar GuardJWT
@@ -443,6 +491,8 @@
   - **Propiedad 21: Individual salary calculation**
   - **Propiedad 22: Invoice total calculation**
   - **Valida: Requisitos 7.1, 7.2, 7.3, 7.6**
+
+
 
 - [ ]* 15. Implementar módulo de métricas (metrics)
 - [ ]* 15.1 Implementar cálculo de métricas de sprint
@@ -475,6 +525,8 @@
 - [ ]* 15.6 Escribir property tests para métricas
   - **Propiedad 16: Sprint metrics calculation accuracy**
   - **Propiedad 17: Project metrics calculation accuracy**
+
+
   - **Propiedad 18: Dashboard metrics aggregation**
   - **Valida: Requisitos 6.1, 6.2, 6.3**
 
@@ -529,6 +581,8 @@
   - _Requisitos: 16.1, 16.2, 16.3, 16.4_
 
 - [ ] 17. Checkpoint - Verificar que todos los tests pasen
+
+
   - Asegurar que todos los tests pasen, preguntar al usuario si surgen dudas.
 
 - [ ]* 18. Implementar validaciones de integridad de datos

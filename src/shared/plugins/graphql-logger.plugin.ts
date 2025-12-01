@@ -15,7 +15,23 @@ export class GraphQLLoggerPlugin implements ApolloServerPlugin {
     const logger = this.logger; // Capturar referencia al logger
 
     // Extraer información de la query
-    const operationName = request.operationName || 'Anonymous';
+    let operationName = request.operationName;
+    
+    // Si no hay operationName, intentar extraerlo del query string
+    if (!operationName && request.query) {
+      // Primero intentar extraer nombre de operación explícito: mutation NombreOp { ... }
+      let match = request.query.match(/(?:query|mutation|subscription)\s+(\w+)\s*[\({]/i);
+      
+      if (match) {
+        operationName = match[1];
+      } else {
+        // Si no hay nombre explícito, extraer el primer campo: mutation { nombreCampo(...) }
+        match = request.query.match(/(?:query|mutation|subscription)\s*\{\s*(\w+)/i);
+        operationName = match ? match[1] : 'Anonymous';
+      }
+    }
+    
+    operationName = operationName || 'Anonymous';
     const query = request.query?.replace(/\s+/g, ' ').trim().substring(0, 100);
 
     // Ignorar queries de introspección (usadas por Apollo Sandbox)
