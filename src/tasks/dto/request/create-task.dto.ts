@@ -4,34 +4,34 @@ import { InputType, Field, Float, Int } from '@nestjs/graphql';
 @InputType()
 export class CreateTaskDto {
   @Field()
-  @IsString()
-  @MaxLength(255)
+  @IsString({ message: 'El título de la tarea debe ser un texto' })
+  @MaxLength(255, { message: 'El título de la tarea no puede exceder 255 caracteres' })
   title!: string;
 
   @Field()
-  @IsUUID()
+  @IsUUID('4', { message: 'El ID del proyecto debe ser un UUID válido' })
   projectId!: string;
 
   @Field({ nullable: true })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'La descripción debe ser un texto' })
   description?: string;
 
   @Field({ nullable: true })
   @IsOptional()
-  @IsUUID()
+  @IsUUID('4', { message: 'El ID del sprint debe ser un UUID válido' })
   sprintId?: string;
 
   @Field(() => Float, { nullable: true })
   @IsOptional()
-  @IsNumber()
-  @Min(0)
+  @IsNumber({}, { message: 'Las horas estimadas deben ser un número' })
+  @Min(0, { message: 'Las horas estimadas no pueden ser negativas' })
   estimatedHours?: number;
 
   @Field(() => Int, { nullable: true })
   @IsOptional()
-  @IsNumber()
-  @Min(0)
+  @IsNumber({}, { message: 'Los puntos de historia deben ser un número' })
+  @Min(0, { message: 'Los puntos de historia no pueden ser negativos' })
   storyPoints?: number;
 
   @Field({ nullable: true })
@@ -40,6 +40,6 @@ export class CreateTaskDto {
 
   @Field(() => [String], { nullable: true })
   @IsOptional()
-  @IsArray()
+  @IsArray({ message: 'Las etiquetas deben ser un array' })
   tags?: string[];
 }
