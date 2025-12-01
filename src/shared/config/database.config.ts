@@ -1,5 +1,5 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { envs } from './envs.config';
+import { envs } from '@shared/config';
 
 /**
  * Configuración de TypeORM para PostgreSQL
@@ -30,7 +30,8 @@ export const databaseConfig: DataSourceOptions = envs.database.url
       entities: [__dirname + '/../../**/*.typeorm-entity{.ts,.js}'],
       migrations: [__dirname + '/../../database/migrations/*{.ts,.js}'],
       synchronize: envs.server.environment === 'development',
-      logging: envs.server.environment === 'development',
+      // logging: envs.server.environment === 'development',
+      dropSchema: true,
     };
 
 // DataSource para migraciones de TypeORM CLI

@@ -1,11 +1,7 @@
 import { Plugin } from '@nestjs/apollo';
 import { Logger } from '@nestjs/common';
-import {
-  ApolloServerPlugin,
-  GraphQLRequestListener,
-  GraphQLRequestContext,
-} from '@apollo/server';
-import { envs } from '../config';
+import { ApolloServerPlugin, GraphQLRequestListener, GraphQLRequestContext } from '@apollo/server';
+import { envs } from '@shared/config';
 
 @Plugin()
 export class GraphQLLoggerPlugin implements ApolloServerPlugin {
@@ -19,7 +15,23 @@ export class GraphQLLoggerPlugin implements ApolloServerPlugin {
     const logger = this.logger; // Capturar referencia al logger
 
     // Extraer información de la query
-    const operationName = request.operationName || 'Anonymous';
+    let operationName = request.operationName;
+    
+    // Si no hay operationName, intentar extraerlo del query string
+    if (!operationName && request.query) {
+      // Primero intentar extraer nombre de operación explícito: mutation NombreOp { ... }
+      let match = request.query.match(/(?:query|mutation|subscription)\s+(\w+)\s*[\({]/i);
+      
+      if (match) {
+        operationName = match[1];
+      } else {
+        // Si no hay nombre explícito, extraer el primer campo: mutation { nombreCampo(...) }
+        match = request.query.match(/(?:query|mutation|subscription)\s*\{\s*(\w+)/i);
+        operationName = match ? match[1] : 'Anonymous';
+      }
+    }
+    
+    operationName = operationName || 'Anonymous';
     const query = request.query?.replace(/\s+/g, ' ').trim().substring(0, 100);
 
     // Ignorar queries de introspección (usadas por Apollo Sandbox)
@@ -35,24 +47,20 @@ export class GraphQLLoggerPlugin implements ApolloServerPlugin {
 
         if (errors && errors.length > 0) {
           // Log de errores
-          logger.error(
-            `❌ ${operationName} - ${duration}ms - Errors: ${errors.length}`,
-          );
+          logger.error(`❌ ${operationName} - ${duration}ms - Errors: ${errors.length}`);
           errors.forEach((error) => {
             logger.error(`   └─ ${error.message}`);
           });
         } else {
           // Log exitoso
           const statusEmoji = duration < 100 ? '⚡' : duration < 500 ? '✅' : '⏱️';
-          logger.log(
-            `${statusEmoji} ${operationName} - ${duration}ms`,
-          );
+          logger.log(`${statusEmoji} ${operationName} - ${duration}ms`);
         }
 
         // Log detallado en desarrollo
         if (envs.server.environment !== 'production') {
           logger.debug(`   Query: ${query}`);
-          
+
           // Opcional: Log de variables
           if (request.variables && Object.keys(request.variables).length > 0) {
             logger.debug(`   Variables: ${JSON.stringify(request.variables)}`);

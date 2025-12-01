@@ -33,14 +33,14 @@ export class AppService {
         await this.dataSource.query('SELECT 1');
         dbConnected = true;
         dbType = this.dataSource.options.type;
-        
+
         // Extraer nombre de la base de datos
-        const options = this.dataSource.options as any;
+        const options = this.dataSource.options as unknown as Record<string, unknown>;
         if (options.database) {
-          dbName = options.database;
+          dbName = String(options.database);
         } else if (options.url) {
           // Extraer de DATABASE_URL: postgresql://user:pass@host:5432/dbname
-          const match = options.url.match(/\/([^/?]+)(\?|$)/);
+          const match = String(options.url).match(/\/([^/?]+)(\?|$)/);
           dbName = match ? match[1] : undefined;
         }
       }

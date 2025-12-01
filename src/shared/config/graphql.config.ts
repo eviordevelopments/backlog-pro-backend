@@ -3,7 +3,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { Request } from 'express';
 import { join } from 'path';
-import { envs } from './envs.config';
+import { envs } from '@shared/config';
 
 interface GraphQLContext {
   req?: Request;
@@ -37,21 +37,25 @@ export const graphqlConfig: ApolloDriverConfig = {
     // Para subscriptions, usar connection
     return { req: connection?.context };
   },
-  formatError: (
-    formattedError: GraphQLFormattedError,
-    error: unknown,
-  ): GraphQLFormattedError => {
+  formatError: (formattedError: GraphQLFormattedError, error: unknown): GraphQLFormattedError => {
     // Formatear errores para no exponer detalles internos
     const graphQLError = error as GraphQLError;
+    const extensions: Record<string, unknown> = {
+      code:
+        formattedError.extensions?.code ||
+        graphQLError.extensions?.code ||
+        'INTERNAL_SERVER_ERROR',
+      timestamp: new Date().toISOString(),
+    };
+
+    // Agregar errores de validación si existen
+    if (graphQLError.extensions?.validationErrors) {
+      extensions.validationErrors = graphQLError.extensions.validationErrors;
+    }
+
     return {
       message: formattedError.message,
-      extensions: {
-        code:
-          formattedError.extensions?.code ||
-          graphQLError.extensions?.code ||
-          'INTERNAL_SERVER_ERROR',
-        timestamp: new Date().toISOString(),
-      },
+      extensions,
     };
   },
 };

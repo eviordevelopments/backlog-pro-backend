@@ -21,7 +21,24 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@shared/*": ["src/shared/*"],
+      "@auth/*": ["src/auth/*"],
+      "@users/*": ["src/users/*"],
+      "@projects/*": ["src/projects/*"],
+      "@sprints/*": ["src/sprints/*"],
+      "@tasks/*": ["src/tasks/*"],
+      "@clients/*": ["src/clients/*"],
+      "@meetings/*": ["src/meetings/*"],
+      "@goals/*": ["src/goals/*"],
+      "@risks/*": ["src/risks/*"],
+      "@user-stories/*": ["src/user-stories/*"],
+      "@feedback/*": ["src/feedback/*"],
+      "@achievements/*": ["src/achievements/*"],
+      "@time-entries/*": ["src/time-entries/*"],
+      "@notifications/*": ["src/notifications/*"],
+      "@finances/*": ["src/finances/*"],
+      "@metrics/*": ["src/metrics/*"],
+      "@database/*": ["src/database/*"]
     }
   },
   "include": ["src/**/*", "test/**/*"],
