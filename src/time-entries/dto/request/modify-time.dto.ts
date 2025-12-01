@@ -5,14 +5,14 @@ import { InputType, Field, Float } from '@nestjs/graphql';
 export class ModifyTimeDto {
   @Field(() => Float, { nullable: true })
   @IsOptional()
-  @IsNumber()
-  @Min(0.25)
-  @Max(24)
+  @IsNumber({}, { message: 'Las horas deben ser un número' })
+  @Min(0.25, { message: 'Las horas deben ser al menos 0.25' })
+  @Max(24, { message: 'Las horas no pueden exceder 24' })
   hours?: number;
 
   @Field({ nullable: true })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'La descripción debe ser un texto' })
   description?: string;
 
   @Field({ nullable: true })
