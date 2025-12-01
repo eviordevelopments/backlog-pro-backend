@@ -10,13 +10,15 @@ import { AuthModule } from '@auth/auth.module';
 import { UsersModule } from '@users/users.module';
 import { ProjectsModule } from '@projects/projects.module';
 import { SprintsModule } from '@sprints/sprints.module';
+import { TasksModule } from '@tasks/tasks.module';
+import { TimeEntriesModule } from '@time-entries/time-entries.module';
 import { databaseConfig, envsConfig, graphqlConfig, validationSchemaConfig } from '@shared/config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: '.env.local',
       validationSchema: validationSchemaConfig,
       load: [envsConfig],
     }),
@@ -30,6 +32,8 @@ import { databaseConfig, envsConfig, graphqlConfig, validationSchemaConfig } fro
     UsersModule,
     ProjectsModule,
     SprintsModule,
+    TasksModule,
+    TimeEntriesModule,
   ],
   providers: [AppService, AppResolver],
 })

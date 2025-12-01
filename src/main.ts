@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
-import { GlobalExceptionFilter } from '@shared/filters';
+import { GlobalExceptionFilter, GraphQLExceptionFilter } from '@shared/filters';
 import { envs } from '@shared/config';
 
 async function bootstrap() {
@@ -13,7 +13,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.useGlobalFilters(new GlobalExceptionFilter());
+  app.useGlobalFilters(new GlobalExceptionFilter(), new GraphQLExceptionFilter());
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -30,7 +30,7 @@ async function bootstrap() {
     console.log(`📍 Environment: ${envs.server.environment}`);
     console.log(`🔌 Port: ${envs.server.port}`);
     console.log(`🅰️ Apollo Server: http://localhost:${envs.server.port}/graphql`);
-    console.log(`💾 Adminer: http://localhost:8080`);
+    console.log('💾 Adminer: http://localhost:8080');
   } else {
     console.log('Application started successfully');
   }
