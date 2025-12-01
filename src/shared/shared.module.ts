@@ -1,7 +1,7 @@
 import { Module, Global } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { GlobalExceptionFilter } from './filters';
-import { GraphQLLoggerPlugin } from './plugins';
+import { GlobalExceptionFilter } from '@shared/filters';
+import { GraphQLLoggerPlugin } from '@shared/plugins';
 import { JwtService } from '@nestjs/jwt';
 
 @Global()

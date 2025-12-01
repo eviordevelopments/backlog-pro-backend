@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
-import { envs } from '../../../shared';
+import { envs } from '@shared/config';
 
 export interface JwtPayload {
   sub: string;
@@ -29,7 +29,7 @@ export class JwtService {
       email,
     };
     return this.jwtService.sign(payload, {
-      expiresIn: '1h',
+      expiresIn: 1,
     });
   }
 

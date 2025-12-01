@@ -1,5 +1,5 @@
-import { UserProfile } from '../../domain/entities/user-profile.entity';
-import { UserProfileTypeOrmEntity } from '../entities/user-profile.typeorm-entity';
+import { UserProfile } from '@users/domain/entities/user-profile.entity';
+import { UserProfileTypeOrmEntity } from '@users/repository/entities/user-profile.typeorm-entity';
 
 export class UserProfileMapper {
   static toDomain(raw: UserProfileTypeOrmEntity): UserProfile {

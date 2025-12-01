@@ -1,6 +1,6 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 import { GqlContextType } from '@nestjs/graphql';
-import { BaseDomainException } from '..';
+import { BaseDomainException } from '@shared/exceptions';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {

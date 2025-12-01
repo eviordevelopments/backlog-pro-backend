@@ -3,7 +3,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { Request } from 'express';
 import { join } from 'path';
-import { envs } from './envs.config';
+import { envs } from '@shared/config';
 
 interface GraphQLContext {
   req?: Request;

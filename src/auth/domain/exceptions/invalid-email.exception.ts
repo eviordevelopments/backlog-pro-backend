@@ -1,4 +1,4 @@
-import { BaseDomainException } from '../../../shared';
+import { BaseDomainException } from '@shared/exceptions';
 
 export class InvalidEmailException extends BaseDomainException {
   constructor(email: string) {

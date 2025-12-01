@@ -1,6 +1,6 @@
 import { ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
-import { GlobalExceptionFilter } from '.';
-import { BaseDomainException } from '..';
+import { GlobalExceptionFilter } from '@shared/filters';
+import { BaseDomainException } from '@shared/exceptions';
 
 class TestDomainException extends BaseDomainException {
   constructor() {
@@ -72,7 +72,7 @@ describe('GlobalExceptionFilter', () => {
       timestamp: expect.any(String),
     });
 
-    const jsonCall = mockResponse.json.mock.calls[0][0];
+    const jsonCall = mockResponse.json.mock.calls[0][0] as Record<string, unknown>;
     expect(jsonCall).not.toHaveProperty('stack');
     expect(jsonCall.mensaje).not.toContain('Unknown error');
   });
@@ -84,7 +84,7 @@ describe('GlobalExceptionFilter', () => {
     filter.catch(exception, mockArgumentsHost);
 
     const afterTime = new Date().toISOString();
-    const jsonCall = mockResponse.json.mock.calls[0][0];
+    const jsonCall = mockResponse.json.mock.calls[0][0] as Record<string, string>;
 
     expect(jsonCall.timestamp).toBeDefined();
     expect(new Date(jsonCall.timestamp).toISOString()).toBe(jsonCall.timestamp);

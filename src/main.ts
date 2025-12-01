@@ -1,15 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
-import { GlobalExceptionFilter } from './shared/filters';
-import { envs } from './shared';
+import { GlobalExceptionFilter } from '@shared/filters';
+import { envs } from '@shared/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Enable CORS for Apollo Sandbox
   app.enableCors({
-    origin: ['https://studio.apollographql.com', 'http://localhost:3000'],
+    origin: ['https://studio.apollographql.com'],
     credentials: true,
   });
 
@@ -25,14 +25,14 @@ async function bootstrap() {
 
   await app.listen(envs.server.port);
 
-  if (envs.server.environment === 'production') {
+  if (envs.server.environment !== 'production') {
     console.log('🚀 Application started successfully');
     console.log(`📍 Environment: ${envs.server.environment}`);
     console.log(`🔌 Port: ${envs.server.port}`);
+    console.log(`🅰️ Apollo Server: http://localhost:${envs.server.port}/graphql`);
+    console.log(`💾 Adminer: http://localhost:8080`);
   } else {
-    console.log(`Application is running on: http://localhost:${envs.server.port}`);
-    console.log(`GraphQL endpoint: http://localhost:${envs.server.port}/graphql`);
-    console.log('Apollo Sandbox: https://studio.apollographql.com/sandbox/explorer');
+    console.log('Application started successfully');
   }
 }
 

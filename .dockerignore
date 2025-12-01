@@ -17,7 +17,6 @@ pnpm-lock.yaml
 # Archivos de entorno (nunca incluir en imagen Docker)
 .env
 .env.local
-.env.docker
 .env.production
 .env.development.local
 .env.test.local

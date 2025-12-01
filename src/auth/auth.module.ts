@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { UserTypeOrmEntity } from './repository/entities/user.typeorm-entity';
-import { UserRepository } from './repository/user.repository';
-import { PasswordService } from './application/services/password.service';
-import { JwtService } from './application/services/jwt.service';
-import { SignupCommandHandler } from './application/commands/signup.command-handler';
-import { SigninCommandHandler } from './application/commands/signin.command-handler';
-import { RequestPasswordResetCommandHandler } from './application/commands/request-password-reset.command-handler';
-import { AuthResolver } from './resolvers/auth.resolver';
-import { envs } from '../shared';
+import { UserTypeOrmEntity } from '@auth/repository/entities/user.typeorm-entity';
+import { UserRepository } from '@auth/repository/user.repository';
+import { PasswordService } from '@auth/application/services/password.service';
+import { JwtService } from '@auth/application/services/jwt.service';
+import { SignupCommandHandler } from '@auth/application/commands/signup.command-handler';
+import { SigninCommandHandler } from '@auth/application/commands/signin.command-handler';
+import { RequestPasswordResetCommandHandler } from '@auth/application/commands/request-password-reset.command-handler';
+import { AuthResolver } from '@auth/resolvers/auth.resolver';
+import { envs } from '@shared/config';
 
 @Module({
   imports: [

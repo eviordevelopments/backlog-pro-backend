@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import { SignupCommand } from './signup.command';
-import { User } from '../../domain/entities/user.entity';
-import { Email } from '../../domain/value-objects/email.vo';
-import { EmailAlreadyRegisteredException } from '../../domain/exceptions';
-import { UserRepository } from '../../repository/user.repository';
-import { PasswordService } from '../services/password.service';
+import { SignupCommand } from '@auth/application/commands/signup.command';
+import { User } from '@auth/domain/entities/user.entity';
+import { Email } from '@auth/domain/value-objects/email.vo';
+import { EmailAlreadyRegisteredException } from '@auth/domain/exceptions';
+import { UserRepository } from '@auth/repository/user.repository';
+import { PasswordService } from '@auth/application/services/password.service';
 
 @Injectable()
 export class SignupCommandHandler {

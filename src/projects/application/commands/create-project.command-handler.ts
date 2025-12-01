@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import { CreateProjectCommand } from './create-project.command';
-import { Project } from '../../domain/entities/project.entity';
-import { Budget } from '../../domain/value-objects/budget.vo';
-import { ProjectRepository } from '../../repository/project.repository';
+import { CreateProjectCommand } from '@projects/application/commands/create-project.command';
+import { Project } from '@projects/domain/entities/project.entity';
+import { Budget } from '@projects/domain/value-objects/budget.vo';
+import { ProjectRepository } from '@projects/repository/project.repository';
 
 @Injectable()
 export class CreateProjectCommandHandler {

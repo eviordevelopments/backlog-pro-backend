@@ -1,5 +1,5 @@
-import { ProjectMember } from '../../domain/entities/project-member.entity';
-import { ProjectMemberTypeOrmEntity } from '../entities/project-member.typeorm-entity';
+import { ProjectMember } from '@projects/domain/entities/project-member.entity';
+import { ProjectMemberTypeOrmEntity } from '@projects/repository/entities/project-member.typeorm-entity';
 
 export class ProjectMemberMapper {
   static toDomain(raw: ProjectMemberTypeOrmEntity): ProjectMember {

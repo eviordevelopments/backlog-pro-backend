@@ -1,5 +1,5 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { envs } from './envs.config';
+import { envs } from '@shared/config';
 
 /**
  * Configuración de TypeORM para PostgreSQL

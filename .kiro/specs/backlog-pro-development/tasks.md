@@ -227,7 +227,9 @@
   - _Requisitos: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
 
 
-- [ ] 8.4 Crear resolvers GraphQL de proyectos
+- [x] 8.4 Crear resolvers GraphQL de proyectos
+
+
 
 
   - Resolvers para todas las operaciones CRUD
@@ -253,31 +255,50 @@
 
   - Asegurar que todos los tests pasen, preguntar al usuario si surgen dudas.
 
-- [ ] 10. Implementar módulo de sprints (sprints)
-- [ ] 10.1 Crear entidad de dominio Sprint
+- [x] 10. Implementar módulo de sprints (sprints)
+
+
+
+
+- [x] 10.1 Crear entidad de dominio Sprint
+
   - Crear Sprint domain entity
   - Crear Value Objects: EstadoSprint, Velocidad
   - Crear excepciones de dominio
   - Crear ISprintRepository interface
   - _Requisitos: 4.1, 4.2, 4.3_
 
-- [ ] 10.2 Crear entidad TypeORM y mapper
+
+
+
+- [x] 10.2 Crear entidad TypeORM y mapper
+
   - Crear SprintTypeORMEntity
   - Crear SprintMapper
   - Implementar SprintRepository
+
+
   - _Requisitos: 4.1_
 
-- [ ] 10.3 Implementar CQRS para sprints
+
+- [x] 10.3 Implementar CQRS para sprints
+
   - Command: CrearSprintCommand + Handler (validar fechas)
   - Command: ActualizarSprintCommand + Handler
   - Command: ExtenderSprintCommand + Handler (validar fecha posterior)
   - Command: CompletarSprintCommand + Handler (calcular velocidad)
   - Command: RegistrarRetrospectiveCommand + Handler
+
+
   - Query: ObtenerSprintQuery + Handler
   - Query: ListarSprintsProyectoQuery + Handler
   - _Requisitos: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-- [ ] 10.4 Crear resolvers GraphQL de sprints
+
+
+
+
+- [x] 10.4 Crear resolvers GraphQL de sprints
   - Resolvers para todas las operaciones CRUD
   - Aplicar GuardJWT
   - _Requisitos: 4.1, 4.2, 4.3, 4.4, 4.5_
@@ -285,24 +306,33 @@
 - [ ]* 10.5 Escribir property tests para sprints
   - **Propiedad 10: Sprint date validation**
   - **Propiedad 11: Sprint velocity calculation**
+
+
   - **Valida: Requisitos 4.1, 4.3**
 
-- [ ] 11. Implementar módulo de tareas (tasks)
-- [ ] 11.1 Crear entidad de dominio Task
+- [x] 11. Implementar módulo de tareas (tasks)
+- [x] 11.1 Crear entidad de dominio Task
   - Crear Task domain entity
   - Crear Value Objects: EstadoTarea, Prioridad, StoryPoints
+
+
+
   - Crear excepciones de dominio
   - Crear ITaskRepository interface
   - Implementar validación de ciclos en dependencias
+
+
   - _Requisitos: 5.1, 5.2, 5.3, 5.6_
 
-- [ ] 11.2 Crear entidad TypeORM y mapper
+- [x] 11.2 Crear entidad TypeORM y mapper
   - Crear TaskTypeORMEntity
   - Crear TaskMapper
   - Implementar TaskRepository
   - _Requisitos: 5.1_
 
-- [ ] 11.3 Implementar CQRS para tareas
+
+
+- [x] 11.3 Implementar CQRS para tareas
   - Command: CrearTareaCommand + Handler
   - Command: ActualizarTareaCommand + Handler
   - Command: AsignarTareaCommand + Handler (validar miembro del proyecto)
@@ -312,7 +342,7 @@
   - Query: ListarTareasSprintQuery + Handler
   - _Requisitos: 5.1, 5.2, 5.3, 5.5, 5.6, 5.7_
 
-- [ ] 11.4 Crear resolvers GraphQL de tareas
+- [x] 11.4 Crear resolvers GraphQL de tareas
   - Resolvers para todas las operaciones CRUD
   - Aplicar GuardJWT
   - _Requisitos: 5.1, 5.2, 5.3, 5.5, 5.6, 5.7_
@@ -324,20 +354,29 @@
   - **Valida: Requisitos 5.1, 5.2, 5.6, 17.4**
 
 - [ ] 12. Implementar módulo de tracking de tiempo (time-entries)
-- [ ] 12.1 Crear entidad de dominio TimeEntry
+- [x] 12.1 Crear entidad de dominio TimeEntry
+
+
+
+
   - Crear TimeEntry domain entity
   - Crear Value Objects: Hours
   - Crear excepciones de dominio
   - Crear ITimeEntryRepository interface
   - _Requisitos: 15.1, 15.2_
 
-- [ ] 12.2 Crear entidad TypeORM y mapper
+- [x] 12.2 Crear entidad TypeORM y mapper
+
+
+
   - Crear TimeEntryTypeORMEntity
   - Crear TimeEntryMapper
   - Implementar TimeEntryRepository
   - _Requisitos: 15.1_
 
-- [ ] 12.3 Implementar CQRS para time entries
+- [x] 12.3 Implementar CQRS para time entries
+
+
   - Command: RegistrarTiempoCommand + Handler (validar asignación, actualizar actual_hours)
   - Command: ModificarTiempoCommand + Handler (recalcular actual_hours)
   - Command: EliminarTiempoCommand + Handler (recalcular actual_hours)
@@ -345,7 +384,10 @@
   - Query: ObtenerEntradasAgrupadasQuery + Handler
   - _Requisitos: 15.1, 15.2, 15.3, 15.4, 15.5_
 
-- [ ] 12.4 Crear resolvers GraphQL de time entries
+- [x] 12.4 Crear resolvers GraphQL de time entries
+
+
+
   - Resolvers para todas las operaciones CRUD
   - Aplicar GuardJWT
   - _Requisitos: 15.1, 15.2, 15.3, 15.4, 15.5_
@@ -354,7 +396,10 @@
   - **Propiedad 14: Task hours consistency**
   - **Valida: Requisitos 5.4, 15.2**
 
-- [ ] 13. Checkpoint - Verificar que todos los tests pasen
+- [x] 13. Checkpoint - Verificar que todos los tests pasen
+
+
+
   - Asegurar que todos los tests pasen, preguntar al usuario si surgen dudas.
 
 - [ ]* 14. Implementar módulo de transacciones (finances)

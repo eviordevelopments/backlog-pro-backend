@@ -1,19 +1,19 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { Logger, UseGuards } from '@nestjs/common';
-import { CurrentUser, CurrentUserPayload } from '../../shared/decorators/current-user.decorator';
-import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import { UpdateProfileDto } from '../dto/request/update-profile.dto';
-import { UpdateAvatarDto } from '../dto/request/update-avatar.dto';
-import { UserProfileResponseDto } from '../dto/response/user-profile.response.dto';
-import { WorkedHoursResponseDto } from '../dto/response/worked-hours.response.dto';
-import { GetProfileQueryHandler } from '../application/queries/get-profile.query-handler';
-import { GetWorkedHoursQueryHandler } from '../application/queries/get-worked-hours.query-handler';
-import { UpdateProfileCommandHandler } from '../application/commands/update-profile.command-handler';
-import { UpdateAvatarCommandHandler } from '../application/commands/update-avatar.command-handler';
-import { GetProfileQuery } from '../application/queries/get-profile.query';
-import { GetWorkedHoursQuery } from '../application/queries/get-worked-hours.query';
-import { UpdateProfileCommand } from '../application/commands/update-profile.command';
-import { UpdateAvatarCommand } from '../application/commands/update-avatar.command';
+import { CurrentUser, CurrentUserPayload } from '@shared/decorators/current-user.decorator';
+import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
+import { UpdateProfileDto } from '@users/dto/request/update-profile.dto';
+import { UpdateAvatarDto } from '@users/dto/request/update-avatar.dto';
+import { UserProfileResponseDto } from '@users/dto/response/user-profile.response.dto';
+import { WorkedHoursResponseDto } from '@users/dto/response/worked-hours.response.dto';
+import { GetProfileQueryHandler } from '@users/application/queries/get-profile.query-handler';
+import { GetWorkedHoursQueryHandler } from '@users/application/queries/get-worked-hours.query-handler';
+import { UpdateProfileCommandHandler } from '@users/application/commands/update-profile.command-handler';
+import { UpdateAvatarCommandHandler } from '@users/application/commands/update-avatar.command-handler';
+import { GetProfileQuery } from '@users/application/queries/get-profile.query';
+import { GetWorkedHoursQuery } from '@users/application/queries/get-worked-hours.query';
+import { UpdateProfileCommand } from '@users/application/commands/update-profile.command';
+import { UpdateAvatarCommand } from '@users/application/commands/update-avatar.command';
 
 @Resolver()
 @UseGuards(JwtAuthGuard)

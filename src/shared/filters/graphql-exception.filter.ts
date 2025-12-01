@@ -2,7 +2,7 @@ import { Catch } from '@nestjs/common';
 import { GqlExceptionFilter } from '@nestjs/graphql';
 import { GraphQLError } from 'graphql';
 import { HttpException } from '@nestjs/common';
-import { BaseDomainException } from '..';
+import { BaseDomainException } from '@shared/exceptions';
 
 @Catch()
 export class GraphQLExceptionFilter implements GqlExceptionFilter {
@@ -24,9 +24,10 @@ export class GraphQLExceptionFilter implements GqlExceptionFilter {
     if (exception instanceof HttpException) {
       const status = exception.getStatus();
       const response = exception.getResponse();
-      const message = typeof response === 'object' && 'message' in response 
-        ? (response as any).message 
-        : exception.message;
+      const message =
+        typeof response === 'object' && 'message' in response
+          ? (response as any).message
+          : exception.message;
 
       return new GraphQLError(message || exception.message, {
         extensions: {

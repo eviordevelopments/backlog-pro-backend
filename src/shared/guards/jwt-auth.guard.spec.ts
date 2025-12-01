@@ -1,4 +1,4 @@
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
 import { JwtService } from '@nestjs/jwt';
 
 jest.mock('@nestjs/graphql', () => ({

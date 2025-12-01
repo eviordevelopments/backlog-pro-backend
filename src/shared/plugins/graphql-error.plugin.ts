@@ -1,6 +1,6 @@
 import { Plugin } from '@nestjs/apollo';
 import { GraphQLError } from 'graphql';
-import { BaseDomainException } from '..';
+import { BaseDomainException } from '@shared/exceptions';
 
 @Plugin()
 export class GraphQLErrorPlugin {

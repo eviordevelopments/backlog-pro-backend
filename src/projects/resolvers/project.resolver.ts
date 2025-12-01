@@ -1,22 +1,27 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { Logger, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import { CurrentUser } from '../../shared/decorators/current-user.decorator';
-import { CreateProjectDto } from '../dto/request/create-project.dto';
-import { UpdateProjectDto } from '../dto/request/update-project.dto';
-import { AddMemberDto } from '../dto/request/add-member.dto';
-import { ProjectResponseDto } from '../dto/response/project.response.dto';
-import { ProjectMemberResponseDto } from '../dto/response/project-member.response.dto';
-import { ProjectService } from '../application/services/project.service';
-import { Project } from '../domain/entities/project.entity';
-import { ProjectMember } from '../domain/entities/project-member.entity';
+import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
+import { CreateProjectDto } from '@projects/dto/request/create-project.dto';
+import { UpdateProjectDto } from '@projects/dto/request/update-project.dto';
+import { AddMemberDto } from '@projects/dto/request/add-member.dto';
+import { AssignMembersDto } from '@projects/dto/request/assign-members.dto';
+import { ProjectResponseDto } from '@projects/dto/response/project.response.dto';
+import { ProjectMemberResponseDto } from '@projects/dto/response/project-member.response.dto';
+import { ProjectService } from '@projects/application/services/project.service';
+import { AssignMembersCommandHandler } from '@projects/application/commands/assign-members.command-handler';
+import { AssignMembersCommand } from '@projects/application/commands/assign-members.command';
+import { Project } from '@projects/domain/entities/project.entity';
+import { ProjectMember } from '@projects/domain/entities/project-member.entity';
 
 @Resolver()
 @UseGuards(JwtAuthGuard)
 export class ProjectResolver {
   private readonly logger = new Logger(ProjectResolver.name);
 
-  constructor(private readonly projectService: ProjectService) {}
+  constructor(
+    private readonly projectService: ProjectService,
+    private readonly assignMembersCommandHandler: AssignMembersCommandHandler,
+  ) {}
 
   @Mutation(() => ProjectResponseDto, {
     description: 'Crea un nuevo proyecto',
@@ -94,6 +99,19 @@ export class ProjectResolver {
   ): Promise<ProjectMemberResponseDto[]> {
     this.logger.log(`Obteniendo miembros del proyecto: ${projectId}`);
     const members = await this.projectService.getProjectMembers(projectId);
+    return members.map((m) => this.mapMemberToResponse(m));
+  }
+
+  @Mutation(() => [ProjectMemberResponseDto], {
+    description: 'Asigna múltiples miembros a un proyecto',
+  })
+  async assignMembers(
+    @Args('projectId') projectId: string,
+    @Args('input') input: AssignMembersDto,
+  ): Promise<ProjectMemberResponseDto[]> {
+    this.logger.log(`Asignando ${input.members.length} miembros al proyecto: ${projectId}`);
+    const command = new AssignMembersCommand(projectId, input.members);
+    const members = await this.assignMembersCommandHandler.handle(command);
     return members.map((m) => this.mapMemberToResponse(m));
   }
 

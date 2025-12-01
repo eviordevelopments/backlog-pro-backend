@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { SigninCommand } from './signin.command';
-import { InvalidCredentialsException, UserNotFoundException } from '../../domain/exceptions';
-import { UserRepository } from '../../repository/user.repository';
-import { PasswordService } from '../services/password.service';
-import { JwtService } from '../services/jwt.service';
+import { SigninCommand } from '@auth/application/commands/signin.command';
+import { InvalidCredentialsException, UserNotFoundException } from '@auth/domain/exceptions';
+import { UserRepository } from '@auth/repository/user.repository';
+import { PasswordService } from '@auth/application/services/password.service';
+import { JwtService } from '@auth/application/services/jwt.service';
 
 export interface SigninResult {
   token: string;

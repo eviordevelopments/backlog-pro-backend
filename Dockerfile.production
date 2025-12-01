@@ -35,8 +35,8 @@ RUN npm ci --only=production
 # Copiar aplicación compilada desde etapa builder
 COPY --from=builder /app/dist ./dist
 
-# Exponer puerto
-EXPOSE 3000
+# Exponer puerto (usa variable de entorno del .env.production, default 3000)
+EXPOSE ${PORT:-3000}
 
 # Iniciar aplicación
 CMD ["node", "dist/main"]

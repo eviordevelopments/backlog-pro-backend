@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import { Project } from '../../domain/entities/project.entity';
-import { ProjectMember } from '../../domain/entities/project-member.entity';
-import { ProjectNotFoundException, InvalidBudgetException } from '../../domain/exceptions';
-import { UserAlreadyMemberException } from '../../domain/exceptions/user-already-member.exception';
-import { ProjectRepository } from '../../repository/project.repository';
-import { ProjectMemberRepository } from '../../repository/project-member.repository';
+import { Project } from '@projects/domain/entities/project.entity';
+import { ProjectMember } from '@projects/domain/entities/project-member.entity';
+import { ProjectNotFoundException, InvalidBudgetException } from '@projects/domain/exceptions';
+import { UserAlreadyMemberException } from '@projects/domain/exceptions/user-already-member.exception';
+import { ProjectRepository } from '@projects/repository/project.repository';
+import { ProjectMemberRepository } from '@projects/repository/project-member.repository';
 
 @Injectable()
 export class ProjectService {

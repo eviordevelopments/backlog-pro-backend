@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Project } from '../domain/entities/project.entity';
+import { Project } from '@projects/domain/entities/project.entity';
 import {
   IProjectRepository,
   ProjectFilters,
-} from '../domain/interfaces/project.repository.interface';
-import { ProjectTypeOrmEntity } from './entities/project.typeorm-entity';
-import { ProjectMapper } from './mappers/project.mapper';
+} from '@projects/domain/interfaces/project.repository.interface';
+import { ProjectTypeOrmEntity } from '@projects/repository/entities/project.typeorm-entity';
+import { ProjectMapper } from '@projects/repository/mappers/project.mapper';
 
 @Injectable()
 export class ProjectRepository implements IProjectRepository {

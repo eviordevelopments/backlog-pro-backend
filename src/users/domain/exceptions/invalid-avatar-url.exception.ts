@@ -1,4 +1,4 @@
-import { BaseDomainException } from '../../../shared';
+import { BaseDomainException } from '@shared/exceptions/base-domain.exception';
 
 export class InvalidAvatarUrlException extends BaseDomainException {
   constructor(url: string) {

@@ -1,4 +1,4 @@
-import { InvalidProjectStatusException } from '../exceptions/invalid-project-status.exception';
+import { InvalidProjectStatusException } from '@projects/domain/exceptions';
 
 export class ProjectStatus {
   private constructor(private readonly value: string) {}
