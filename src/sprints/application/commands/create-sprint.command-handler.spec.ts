@@ -1,24 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as fc from 'fast-check';
 import { CreateSprintCommandHandler } from '@sprints/application/commands/create-sprint.command-handler';
 import { CreateSprintCommand } from '@sprints/application/commands/create-sprint.command';
-import { ISprintRepository } from '@sprints/domain/interfaces/sprint.repository.interface';
+import { SprintRepository } from '@sprints/repository/sprint.repository';
 import { InvalidSprintDatesException } from '@sprints/domain/exceptions';
 
 describe('CreateSprintCommandHandler', () => {
   let handler: CreateSprintCommandHandler;
-  let mockRepository: Partial<ISprintRepository>;
+  let mockRepository: Partial<SprintRepository>;
 
   beforeEach(async () => {
     mockRepository = {
-      crear: jest.fn((sprint) => Promise.resolve(sprint)),
+      create: jest.fn((sprint) => Promise.resolve(sprint)),
     };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CreateSprintCommandHandler,
         {
-          provide: 'ISprintRepository',
+          provide: SprintRepository,
           useValue: mockRepository,
         },
       ],
@@ -28,8 +27,6 @@ describe('CreateSprintCommandHandler', () => {
       CreateSprintCommandHandler,
     );
   });
-
-;
 
   describe('Unit Tests', () => {
     it('should create sprint with planning status', async () => {

@@ -7,6 +7,8 @@ import { CalculateSalariesQueryHandler } from '@finances/application/queries/cal
 import { CalculateSalariesQuery } from '@finances/application/queries/calculate-salaries.query';
 import { GenerateFinancialReportQueryHandler } from '@finances/application/queries/generate-financial-report.query-handler';
 import { GenerateFinancialReportQuery } from '@finances/application/queries/generate-financial-report.query';
+import { SalaryResponseDto } from '@finances/dto/response/salary.response.dto';
+import { FinancialReportResponseDto } from '@finances/dto/response/financial-report.response.dto';
 
 @Resolver('Salary')
 export class SalaryResolver {
@@ -25,20 +27,20 @@ export class SalaryResolver {
     return this.idealRateHandler.handle(query);
   }
 
-  @Query(() => [Object])
+  @Query(() => [SalaryResponseDto])
   @UseGuards(JwtAuthGuard)
   async calculateSalaries(
     @Args('projectId') projectId: string
-  ): Promise<any[]> {
+  ): Promise<SalaryResponseDto[]> {
     const query = new CalculateSalariesQuery(projectId);
     return this.salariesHandler.handle(query);
   }
 
-  @Query(() => Object)
+  @Query(() => FinancialReportResponseDto)
   @UseGuards(JwtAuthGuard)
   async generateFinancialReport(
     @Args('projectId') projectId: string
-  ): Promise<any> {
+  ): Promise<FinancialReportResponseDto> {
     const query = new GenerateFinancialReportQuery(projectId);
     return this.reportHandler.handle(query);
   }

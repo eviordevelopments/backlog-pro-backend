@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { Transaction } from '@finances/domain/entities/transaction.entity';
 import { TransactionTypeOrmEntity } from '@finances/repository/entities/transaction.typeorm-entity';
 import { TransactionMapper } from '@finances/repository/mappers/transaction.mapper';
@@ -26,7 +26,7 @@ export class TransactionRepository implements ITransactionRepository {
     id: string,
     transaction: Partial<Transaction>
   ): Promise<Transaction> {
-    await this.repository.update(id, this.mapper.toPersistence(transaction));
+    await this.repository.update(id, this.mapper.toPersistence(transaction as Transaction));
     const updated = await this.repository.findOneBy({ id });
     if (!updated) {
       throw new Error(`Transaction with id ${id} not found`);
@@ -51,7 +51,7 @@ export class TransactionRepository implements ITransactionRepository {
 
   async list(): Promise<Transaction[]> {
     const entities = await this.repository.find({
-      where: { deletedAt: null },
+      where: { deletedAt: IsNull() },
     });
     return entities.map((entity) => this.mapper.toDomain(entity));
   }

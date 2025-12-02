@@ -3,18 +3,18 @@ import { UserProfileTypeOrmEntity } from '@users/repository/entities/user-profil
 
 export class UserProfileMapper {
   static toDomain(raw: UserProfileTypeOrmEntity): UserProfile {
-    return new UserProfile({
-      id: raw.id,
-      userId: raw.userId,
-      name: raw.name,
-      email: raw.email,
-      avatar: raw.avatar,
-      skills: raw.skills,
-      hourlyRate: raw.hourlyRate,
-      createdAt: raw.createdAt,
-      updatedAt: raw.updatedAt,
-      deletedAt: raw.deletedAt,
-    });
+    return new UserProfile(
+      raw.userId,
+      raw.name,
+      raw.email,
+      raw.avatar,
+      raw.skills,
+      raw.hourlyRate,
+      raw.id,
+      raw.createdAt,
+      raw.updatedAt,
+      raw.deletedAt,
+    );
   }
 
   static toPersistence(userProfile: UserProfile): UserProfileTypeOrmEntity {

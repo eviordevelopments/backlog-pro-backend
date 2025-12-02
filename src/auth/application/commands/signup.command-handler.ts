@@ -59,22 +59,22 @@ export class SignupCommandHandler {
 
     // Crear perfil de usuario automáticamente
     try {
-      const userProfile = new UserProfile({
-        id: uuidv4(),
-        userId: createdUser.id,
-        name: command.name,
-        email: command.email,
-        avatar: null,
-        skills: [],
-        hourlyRate: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
+      const userProfile = new UserProfile(
+        createdUser.id,
+        command.name,
+        command.email,
+        undefined,
+        [],
+        0,
+        uuidv4(),
+        new Date(),
+        new Date(),
+      );
 
       await this.userProfileRepository.create(userProfile);
       this.logger.log(`Perfil de usuario creado exitosamente: ${createdUser.id}`);
     } catch (error) {
-      this.logger.error(`Error al crear perfil de usuario: ${error.message}`);
+      this.logger.error(`Error al crear perfil de usuario: ${(error as Error).message}`);
       // No lanzar error, el usuario se creó correctamente
     }
 

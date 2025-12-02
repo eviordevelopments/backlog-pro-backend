@@ -92,8 +92,26 @@ export class TaskRepository implements ITaskRepository {
     return entities.map((e) => this.mapper.toDomain(e));
   }
 
+  async getByProjectId(projectId: string): Promise<Task[]> {
+    this.logger.log(`Getting tasks for project: ${projectId}`);
+    const entities = await this.repository.find({
+      where: { projectId, deletedAt: IsNull() },
+      order: { createdAt: 'DESC' },
+    });
+    return entities.map((e) => this.mapper.toDomain(e));
+  }
+
   async listBySprint(sprintId: string): Promise<Task[]> {
     this.logger.log(`Listing tasks for sprint: ${sprintId}`);
+    const entities = await this.repository.find({
+      where: { sprintId, deletedAt: IsNull() },
+      order: { createdAt: 'DESC' },
+    });
+    return entities.map((e) => this.mapper.toDomain(e));
+  }
+
+  async getBySprintId(sprintId: string): Promise<Task[]> {
+    this.logger.log(`Getting tasks for sprint: ${sprintId}`);
     const entities = await this.repository.find({
       where: { sprintId, deletedAt: IsNull() },
       order: { createdAt: 'DESC' },

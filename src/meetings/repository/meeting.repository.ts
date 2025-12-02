@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { Meeting } from '@meetings/domain/entities/meeting.entity';
 import { MeetingTypeOrmEntity } from '@meetings/repository/entities/meeting.typeorm-entity';
 import { MeetingMapper } from '@meetings/repository/mappers/meeting.mapper';
@@ -21,7 +21,7 @@ export class MeetingRepository implements IMeetingRepository {
   }
 
   async update(id: string, meeting: Partial<Meeting>): Promise<Meeting> {
-    await this.repository.update(id, this.mapper.toPersistence(meeting));
+    await this.repository.update(id, this.mapper.toPersistence(meeting as Meeting));
     const updated = await this.repository.findOneBy({ id });
     if (!updated) {
       throw new Error(`Meeting with id ${id} not found`);
@@ -46,7 +46,7 @@ export class MeetingRepository implements IMeetingRepository {
 
   async list(): Promise<Meeting[]> {
     const entities = await this.repository.find({
-      where: { deletedAt: null },
+      where: { deletedAt: IsNull() },
     });
     return entities.map((entity) => this.mapper.toDomain(entity));
   }

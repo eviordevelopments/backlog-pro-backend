@@ -56,7 +56,7 @@ export class UserResolver {
   })
   async getWorkedHours(
     @CurrentUser() currentUser: CurrentUserPayload,
-    @Args('projectId', { nullable: true }) projectId?: string,
+    @Args('projectId', { nullable: true, description: 'UUID del proyecto (opcional)' }) projectId?: string,
   ): Promise<WorkedHoursResponseDto> {
     const userId = currentUser.sub;
     this.logger.log(`Obteniendo horas trabajadas del usuario: ${userId}`);
@@ -69,7 +69,7 @@ export class UserResolver {
   })
   async updateProfile(
     @CurrentUser() currentUser: CurrentUserPayload,
-    @Args('input') input: UpdateProfileDto,
+    @Args('input', { description: 'Datos del perfil a actualizar' }) input: UpdateProfileDto,
   ): Promise<UserProfileResponseDto> {
     const userId = currentUser.sub;
     this.logger.log(`Actualizando perfil del usuario: ${userId}`);
@@ -94,7 +94,7 @@ export class UserResolver {
   })
   async updateAvatar(
     @CurrentUser() currentUser: CurrentUserPayload,
-    @Args('input') input: UpdateAvatarDto,
+    @Args('input', { description: 'URL del nuevo avatar' }) input: UpdateAvatarDto,
   ): Promise<UserProfileResponseDto> {
     const userId = currentUser.sub;
     this.logger.log(`Actualizando avatar del usuario: ${userId}`);

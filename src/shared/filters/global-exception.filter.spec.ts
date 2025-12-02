@@ -28,6 +28,7 @@ describe('GlobalExceptionFilter', () => {
       switchToHttp: jest.fn().mockReturnValue({
         getResponse: () => mockResponse,
       }),
+      getType: jest.fn().mockReturnValue('http'),
     } as unknown as ArgumentsHost;
   });
 

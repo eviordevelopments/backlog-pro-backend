@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { Invoice } from '@finances/domain/entities/invoice.entity';
 import { InvoiceTypeOrmEntity } from '@finances/repository/entities/invoice.typeorm-entity';
 import { InvoiceMapper } from '@finances/repository/mappers/invoice.mapper';
@@ -21,7 +21,7 @@ export class InvoiceRepository implements IInvoiceRepository {
   }
 
   async update(id: string, invoice: Partial<Invoice>): Promise<Invoice> {
-    await this.repository.update(id, this.mapper.toPersistence(invoice));
+    await this.repository.update(id, this.mapper.toPersistence(invoice as Invoice));
     const updated = await this.repository.findOneBy({ id });
     if (!updated) {
       throw new Error(`Invoice with id ${id} not found`);
@@ -51,7 +51,7 @@ export class InvoiceRepository implements IInvoiceRepository {
 
   async list(): Promise<Invoice[]> {
     const entities = await this.repository.find({
-      where: { deletedAt: null },
+      where: { deletedAt: IsNull() },
     });
     return entities.map((entity) => this.mapper.toDomain(entity));
   }

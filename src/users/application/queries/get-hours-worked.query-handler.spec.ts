@@ -55,7 +55,7 @@ describe('GetHoursWorkedQueryHandler', () => {
             (timeEntryRepository.listByUser as jest.Mock).mockResolvedValue(timeEntries);
 
             const query = new GetHoursWorkedQuery(userId);
-            const result = await handler.handle(query);
+            const result = await handler.execute(query);
 
             // Calculate expected total
             const expectedTotal = timeEntriesData.reduce((sum, entry) => sum + entry.hours, 0);
@@ -66,7 +66,7 @@ describe('GetHoursWorkedQueryHandler', () => {
             // Verify that the sum of grouped hours equals total
             const groupedTotal = Object.values(result.byProject).reduce(
               (sum: number, projectHours: number) => sum + projectHours,
-              0,
+              0 as number,
             );
             expect(groupedTotal).toBeCloseTo(expectedTotal, 2);
           },
@@ -81,7 +81,7 @@ describe('GetHoursWorkedQueryHandler', () => {
           (timeEntryRepository.listByUser as jest.Mock).mockResolvedValue([]);
 
           const query = new GetHoursWorkedQuery(userId);
-          const result = await handler.handle(query);
+          const result = await handler.execute(query);
 
           expect(result.totalHours).toBe(0);
           expect(Object.keys(result.byProject).length).toBe(0);
@@ -117,7 +117,7 @@ describe('GetHoursWorkedQueryHandler', () => {
             (timeEntryRepository.listByUser as jest.Mock).mockResolvedValue(timeEntries);
 
             const query = new GetHoursWorkedQuery(userId);
-            const result = await handler.handle(query);
+            const result = await handler.execute(query);
 
             // Verify each project's hours is the sum of its entries
             const projectHoursMap: { [key: string]: number } = {};

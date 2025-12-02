@@ -26,7 +26,7 @@ export class ProjectResolver {
   @Mutation(() => ProjectResponseDto, {
     description: 'Crea un nuevo proyecto',
   })
-  async createProject(@Args('input') input: CreateProjectDto): Promise<ProjectResponseDto> {
+  async createProject(@Args('input', { description: 'Datos del proyecto a crear' }) input: CreateProjectDto): Promise<ProjectResponseDto> {
     this.logger.log(`Creando proyecto: ${input.name}`);
     const project = await this.projectService.createProject(
       input.name,
@@ -41,7 +41,7 @@ export class ProjectResolver {
   @Query(() => ProjectResponseDto, {
     description: 'Obtiene un proyecto por ID',
   })
-  async getProject(@Args('projectId') projectId: string): Promise<ProjectResponseDto> {
+  async getProject(@Args('projectId', { description: 'UUID del proyecto' }) projectId: string): Promise<ProjectResponseDto> {
     this.logger.log(`Obteniendo proyecto: ${projectId}`);
     const project = await this.projectService.getProject(projectId);
     return this.mapProjectToResponse(project);

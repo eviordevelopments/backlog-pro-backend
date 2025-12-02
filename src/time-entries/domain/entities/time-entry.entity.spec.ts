@@ -14,7 +14,7 @@ describe('TimeEntry Entity - Property-Based Tests', () => {
             timeEntries: fc.array(
               fc.record({
                 userId: fc.uuid(),
-                hours: fc.float({ min: 0.1, max: 24 }),
+                hours: fc.float({ min: Math.fround(0.1), max: Math.fround(24), noNaN: true }),
                 date: fc.date(),
               }),
               { minLength: 1, maxLength: 20 }
@@ -74,11 +74,11 @@ describe('TimeEntry Entity - Property-Based Tests', () => {
             taskId: fc.uuid(),
             projectId: fc.uuid(),
             initialHours: fc.array(
-              fc.float({ min: 0.1, max: 24 }),
+              fc.float({ min: Math.fround(0.1), max: Math.fround(24), noNaN: true }),
               { minLength: 1, maxLength: 5 }
             ),
             modifiedHours: fc.array(
-              fc.float({ min: 0.1, max: 24 }),
+              fc.float({ min: Math.fround(0.1), max: Math.fround(24), noNaN: true }),
               { minLength: 1, maxLength: 5 }
             ),
           }),

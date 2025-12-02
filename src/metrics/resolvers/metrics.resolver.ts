@@ -1,4 +1,4 @@
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, Subscription } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
 import { CalculateSprintMetricsQueryHandler } from '@metrics/application/queries/calculate-sprint-metrics.query-handler';
@@ -7,6 +7,7 @@ import { CalculateProjectMetricsQueryHandler } from '@metrics/application/querie
 import { CalculateProjectMetricsQuery } from '@metrics/application/queries/calculate-project-metrics.query';
 import { GetDashboardMetricsQueryHandler } from '@metrics/application/queries/get-dashboard-metrics.query-handler';
 import { GetDashboardMetricsQuery } from '@metrics/application/queries/get-dashboard-metrics.query';
+import { MetricsEventService } from '@metrics/application/services/metrics-event.service';
 import { SprintMetricsResponseDto } from '@metrics/dto/response/sprint-metrics.response.dto';
 import { ProjectMetricsResponseDto } from '@metrics/dto/response/project-metrics.response.dto';
 import { DashboardMetricsResponseDto } from '@metrics/dto/response/dashboard-metrics.response.dto';
@@ -17,6 +18,7 @@ export class MetricsResolver {
     private readonly sprintMetricsHandler: CalculateSprintMetricsQueryHandler,
     private readonly projectMetricsHandler: CalculateProjectMetricsQueryHandler,
     private readonly dashboardMetricsHandler: GetDashboardMetricsQueryHandler,
+    private readonly metricsEventService: MetricsEventService,
   ) {}
 
   @Query(() => SprintMetricsResponseDto)
@@ -42,5 +44,21 @@ export class MetricsResolver {
   async getDashboardMetrics(): Promise<DashboardMetricsResponseDto> {
     const query = new GetDashboardMetricsQuery();
     return this.dashboardMetricsHandler.handle(query);
+  }
+
+  @Subscription(() => ProjectMetricsResponseDto)
+  @UseGuards(JwtAuthGuard)
+  projectMetricsUpdated(@Args('projectId') projectId: string) {
+    return this.metricsEventService.getProjectMetricsUpdates().pipe(
+      // Filter events for this project
+    );
+  }
+
+  @Subscription(() => DashboardMetricsResponseDto)
+  @UseGuards(JwtAuthGuard)
+  dashboardMetricsUpdated() {
+    return this.metricsEventService.getDashboardMetricsUpdates().pipe(
+      // All dashboard updates
+    );
   }
 }

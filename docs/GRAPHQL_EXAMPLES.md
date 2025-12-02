@@ -1,5 +1,58 @@
 # GraphQL API Examples
 
+## Tabla de Contenidos
+
+1. [Health Check](#health-check)
+2. [Authentication](#authentication)
+3. [User Profile](#user-profile)
+4. [Projects](#projects)
+5. [Project Members](#project-members)
+6. [Worked Hours](#worked-hours)
+
+---
+
+## Health Check
+
+### Verificar Estado del Servicio
+
+Verifica que la aplicación y la base de datos estén funcionando correctamente.
+
+**Query:**
+```graphql
+query {
+  health {
+    status
+    service
+    database {
+      connected
+      database
+      type
+    }
+    timestamp
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "data": {
+    "health": {
+      "status": "ok",
+      "service": "Backlog Pro Backend",
+      "database": {
+        "connected": true,
+        "type": "postgres",
+        "database": "backlog_pro"
+      },
+      "timestamp": "2025-01-15T10:30:00Z"
+    }
+  }
+}
+```
+
+---
+
 ## Authentication
 
 ### Signup (Register User)
@@ -83,6 +136,43 @@ mutation Signin($input: SigninInput!) {
 }
 ```
 
+### Request Password Reset
+
+Solicita un token para resetear la contraseña.
+
+**Mutation:**
+```graphql
+mutation RequestPasswordReset($input: RequestPasswordResetInput!) {
+  requestPasswordReset(input: $input) {
+    resetToken
+    expiresIn
+  }
+}
+```
+
+**Variables:**
+```json
+{
+  "input": {
+    "email": "user@example.com"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "data": {
+    "requestPasswordReset": {
+      "resetToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+      "expiresIn": "1h"
+    }
+  }
+}
+```
+
+---
+
 ## User Profile
 
 ### Get Profile
@@ -92,8 +182,9 @@ Obtiene el perfil del usuario autenticado.
 **Query:**
 ```graphql
 query GetProfile {
-  obtenerPerfil {
+  getProfile {
     id
+    userId
     name
     email
     avatar
@@ -114,8 +205,9 @@ Authorization: Bearer <token>
 ```json
 {
   "data": {
-    "obtenerPerfil": {
+    "getProfile": {
       "id": "550e8400-e29b-41d4-a716-446655440000",
+      "userId": "550e8400-e29b-41d4-a716-446655440000",
       "name": "John Doe",
       "email": "user@example.com",
       "avatar": "https://example.com/avatar.jpg",
@@ -134,9 +226,10 @@ Actualiza el perfil del usuario autenticado.
 
 **Mutation:**
 ```graphql
-mutation UpdateProfile($input: UpdateProfileInput!) {
-  actualizarPerfil(input: $input) {
+mutation UpdateProfile($input: UpdateProfileDto!) {
+  updateProfile(input: $input) {
     id
+    userId
     name
     email
     avatar
@@ -152,7 +245,6 @@ mutation UpdateProfile($input: UpdateProfileInput!) {
 {
   "input": {
     "name": "Jane Doe",
-    "avatar": "https://example.com/new-avatar.jpg",
     "skills": ["TypeScript", "NestJS", "GraphQL", "React"],
     "hourlyRate": 60
   }
@@ -163,11 +255,12 @@ mutation UpdateProfile($input: UpdateProfileInput!) {
 ```json
 {
   "data": {
-    "actualizarPerfil": {
+    "updateProfile": {
       "id": "550e8400-e29b-41d4-a716-446655440000",
+      "userId": "550e8400-e29b-41d4-a716-446655440000",
       "name": "Jane Doe",
       "email": "user@example.com",
-      "avatar": "https://example.com/new-avatar.jpg",
+      "avatar": "https://example.com/avatar.jpg",
       "skills": ["TypeScript", "NestJS", "GraphQL", "React"],
       "hourlyRate": 60,
       "updatedAt": "2025-01-02T00:00:00Z"
@@ -175,6 +268,51 @@ mutation UpdateProfile($input: UpdateProfileInput!) {
   }
 }
 ```
+
+### Update Avatar
+
+Actualiza el avatar del usuario autenticado.
+
+**Mutation:**
+```graphql
+mutation UpdateAvatar($input: UpdateAvatarDto!) {
+  updateAvatar(input: $input) {
+    id
+    userId
+    name
+    email
+    avatar
+    updatedAt
+  }
+}
+```
+
+**Variables:**
+```json
+{
+  "input": {
+    "avatarUrl": "https://example.com/new-avatar.jpg"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "data": {
+    "updateAvatar": {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "userId": "550e8400-e29b-41d4-a716-446655440000",
+      "name": "John Doe",
+      "email": "user@example.com",
+      "avatar": "https://example.com/new-avatar.jpg",
+      "updatedAt": "2025-01-02T00:00:00Z"
+    }
+  }
+}
+```
+
+---
 
 ## Projects
 
@@ -194,6 +332,9 @@ mutation CreateProject($input: CreateProjectDto!) {
     budget
     spent
     progress
+    methodology
+    startDate
+    endDate
     createdAt
     updatedAt
   }
@@ -225,6 +366,9 @@ mutation CreateProject($input: CreateProjectDto!) {
       "budget": 50000,
       "spent": 0,
       "progress": 0,
+      "methodology": "scrum",
+      "startDate": "2025-01-15T00:00:00Z",
+      "endDate": null,
       "createdAt": "2025-01-01T00:00:00Z",
       "updatedAt": "2025-01-01T00:00:00Z"
     }
@@ -232,26 +376,25 @@ mutation CreateProject($input: CreateProjectDto!) {
 }
 ```
 
-## Clients
+### Get Project
 
-### Create Client
+Obtiene un proyecto por ID.
 
-Crea un nuevo cliente.
-
-**Mutation:**
+**Query:**
 ```graphql
-mutation CreateClient($input: CreateClientDto!) {
-  createClient(input: $input) {
+query GetProject($projectId: String!) {
+  getProject(projectId: $projectId) {
     id
     name
-    email
-    phone
-    company
-    industry
+    description
+    clientId
     status
-    ltv
-    cac
-    mrr
+    budget
+    spent
+    progress
+    methodology
+    startDate
+    endDate
     createdAt
     updatedAt
   }
@@ -261,12 +404,111 @@ mutation CreateClient($input: CreateClientDto!) {
 **Variables:**
 ```json
 {
+  "projectId": "550e8400-e29b-41d4-a716-446655440002"
+}
+```
+
+**Response:**
+```json
+{
+  "data": {
+    "getProject": {
+      "id": "550e8400-e29b-41d4-a716-446655440002",
+      "name": "E-commerce Platform",
+      "description": "Build a modern e-commerce platform",
+      "clientId": "550e8400-e29b-41d4-a716-446655440001",
+      "status": "planning",
+      "budget": 50000,
+      "spent": 0,
+      "progress": 0,
+      "methodology": "scrum",
+      "startDate": "2025-01-15T00:00:00Z",
+      "endDate": null,
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    }
+  }
+}
+```
+
+### List Projects
+
+Lista todos los proyectos (opcionalmente filtrados por cliente).
+
+**Query:**
+```graphql
+query ListProjects($clientId: String) {
+  listProjects(clientId: $clientId) {
+    id
+    name
+    description
+    clientId
+    status
+    budget
+    spent
+    progress
+    createdAt
+    updatedAt
+  }
+}
+```
+
+**Variables:**
+```json
+{
+  "clientId": "550e8400-e29b-41d4-a716-446655440001"
+}
+```
+
+**Response:**
+```json
+{
+  "data": {
+    "listProjects": [
+      {
+        "id": "550e8400-e29b-41d4-a716-446655440002",
+        "name": "E-commerce Platform",
+        "description": "Build a modern e-commerce platform",
+        "clientId": "550e8400-e29b-41d4-a716-446655440001",
+        "status": "planning",
+        "budget": 50000,
+        "spent": 0,
+        "progress": 0,
+        "createdAt": "2025-01-01T00:00:00Z",
+        "updatedAt": "2025-01-01T00:00:00Z"
+      }
+    ]
+  }
+}
+```
+
+### Update Project
+
+Actualiza un proyecto existente.
+
+**Mutation:**
+```graphql
+mutation UpdateProject($projectId: String!, $input: UpdateProjectDto!) {
+  updateProject(projectId: $projectId, input: $input) {
+    id
+    name
+    description
+    status
+    budget
+    progress
+    updatedAt
+  }
+}
+```
+
+**Variables:**
+```json
+{
+  "projectId": "550e8400-e29b-41d4-a716-446655440002",
   "input": {
-    "name": "Acme Corporation",
-    "email": "contact@acme.com",
-    "phone": "+1-555-0123",
-    "company": "Acme Corp",
-    "industry": "Technology"
+    "name": "E-commerce Platform v2",
+    "status": "in_progress",
+    "progress": 25
   }
 }
 ```
@@ -275,44 +517,63 @@ mutation CreateClient($input: CreateClientDto!) {
 ```json
 {
   "data": {
-    "createClient": {
-      "id": "550e8400-e29b-41d4-a716-446655440001",
-      "name": "Acme Corporation",
-      "email": "contact@acme.com",
-      "phone": "+1-555-0123",
-      "company": "Acme Corp",
-      "industry": "Technology",
-      "status": "active",
-      "ltv": 0,
-      "cac": 0,
-      "mrr": 0,
-      "createdAt": "2025-01-01T00:00:00Z",
-      "updatedAt": "2025-01-01T00:00:00Z"
+    "updateProject": {
+      "id": "550e8400-e29b-41d4-a716-446655440002",
+      "name": "E-commerce Platform v2",
+      "description": "Build a modern e-commerce platform",
+      "status": "in_progress",
+      "budget": 50000,
+      "progress": 25,
+      "updatedAt": "2025-01-02T00:00:00Z"
     }
   }
 }
 ```
 
-## Tasks
+### Delete Project
 
-### Create Task
-
-Crea una nueva tarea.
+Elimina un proyecto.
 
 **Mutation:**
 ```graphql
-mutation CreateTask($input: CreateTaskDto!) {
-  createTask(input: $input) {
+mutation DeleteProject($projectId: String!) {
+  deleteProject(projectId: $projectId)
+}
+```
+
+**Variables:**
+```json
+{
+  "projectId": "550e8400-e29b-41d4-a716-446655440002"
+}
+```
+
+**Response:**
+```json
+{
+  "data": {
+    "deleteProject": true
+  }
+}
+```
+
+---
+
+## Project Members
+
+### Add Project Member
+
+Agrega un miembro a un proyecto.
+
+**Mutation:**
+```graphql
+mutation AddProjectMember($projectId: String!, $input: AddMemberDto!) {
+  addProjectMember(projectId: $projectId, input: $input) {
     id
-    title
-    description
     projectId
-    sprintId
-    status
-    priority
-    estimatedHours
-    actualHours
-    storyPoints
+    userId
+    role
+    joinedAt
     createdAt
     updatedAt
   }
@@ -322,12 +583,10 @@ mutation CreateTask($input: CreateTaskDto!) {
 **Variables:**
 ```json
 {
+  "projectId": "550e8400-e29b-41d4-a716-446655440002",
   "input": {
-    "title": "Implement user authentication",
-    "projectId": "550e8400-e29b-41d4-a716-446655440002",
-    "description": "Implement JWT-based authentication",
-    "estimatedHours": 8,
-    "storyPoints": 5
+    "userId": "550e8400-e29b-41d4-a716-446655440000",
+    "role": "developer"
   }
 }
 ```
@@ -336,40 +595,32 @@ mutation CreateTask($input: CreateTaskDto!) {
 ```json
 {
   "data": {
-    "createTask": {
-      "id": "550e8400-e29b-41d4-a716-446655440003",
-      "title": "Implement user authentication",
-      "description": "Implement JWT-based authentication",
+    "addProjectMember": {
+      "id": "550e8400-e29b-41d4-a716-446655440010",
       "projectId": "550e8400-e29b-41d4-a716-446655440002",
-      "sprintId": null,
-      "status": "todo",
-      "priority": "medium",
-      "estimatedHours": 8,
-      "actualHours": 0,
-      "storyPoints": 5,
-      "createdAt": "2025-01-01T00:00:00Z",
-      "updatedAt": "2025-01-01T00:00:00Z"
+      "userId": "550e8400-e29b-41d4-a716-446655440000",
+      "role": "developer",
+      "joinedAt": "2025-01-02T00:00:00Z",
+      "createdAt": "2025-01-02T00:00:00Z",
+      "updatedAt": "2025-01-02T00:00:00Z"
     }
   }
 }
 ```
 
-## Time Entries
+### Get Project Members
 
-### Register Time
+Obtiene los miembros de un proyecto.
 
-Registra tiempo trabajado en una tarea.
-
-**Mutation:**
+**Query:**
 ```graphql
-mutation RegisterTime($input: RegisterTimeDto!) {
-  registerTime(input: $input) {
+query GetProjectMembers($projectId: String!) {
+  getProjectMembers(projectId: $projectId) {
     id
-    taskId
+    projectId
     userId
-    hours
-    date
-    description
+    role
+    joinedAt
     createdAt
     updatedAt
   }
@@ -379,13 +630,7 @@ mutation RegisterTime($input: RegisterTimeDto!) {
 **Variables:**
 ```json
 {
-  "input": {
-    "taskId": "550e8400-e29b-41d4-a716-446655440003",
-    "userId": "550e8400-e29b-41d4-a716-446655440000",
-    "hours": 4,
-    "date": "2025-01-01",
-    "description": "Implemented JWT token generation"
-  }
+  "projectId": "550e8400-e29b-41d4-a716-446655440002"
 }
 ```
 
@@ -393,15 +638,55 @@ mutation RegisterTime($input: RegisterTimeDto!) {
 ```json
 {
   "data": {
-    "registerTime": {
-      "id": "550e8400-e29b-41d4-a716-446655440004",
-      "taskId": "550e8400-e29b-41d4-a716-446655440003",
+    "getProjectMembers": [
+      {
+        "id": "550e8400-e29b-41d4-a716-446655440010",
+        "projectId": "550e8400-e29b-41d4-a716-446655440002",
+        "userId": "550e8400-e29b-41d4-a716-446655440000",
+        "role": "developer",
+        "joinedAt": "2025-01-02T00:00:00Z",
+        "createdAt": "2025-01-02T00:00:00Z",
+        "updatedAt": "2025-01-02T00:00:00Z"
+      }
+    ]
+  }
+}
+```
+
+---
+
+## Worked Hours
+
+### Get Worked Hours
+
+Obtiene las horas trabajadas del usuario autenticado (opcionalmente filtradas por proyecto).
+
+**Query:**
+```graphql
+query GetWorkedHours($projectId: String) {
+  getWorkedHours(projectId: $projectId) {
+    userId
+    projectId
+    totalHours
+  }
+}
+```
+
+**Variables:**
+```json
+{
+  "projectId": "550e8400-e29b-41d4-a716-446655440002"
+}
+```
+
+**Response:**
+```json
+{
+  "data": {
+    "getWorkedHours": {
       "userId": "550e8400-e29b-41d4-a716-446655440000",
-      "hours": 4,
-      "date": "2025-01-01",
-      "description": "Implemented JWT token generation",
-      "createdAt": "2025-01-01T00:00:00Z",
-      "updatedAt": "2025-01-01T00:00:00Z"
+      "projectId": "550e8400-e29b-41d4-a716-446655440002",
+      "totalHours": 24.5
     }
   }
 }
