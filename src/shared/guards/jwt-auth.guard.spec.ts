@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
-import { UnauthorizedException, ExecutionContext } from '@nestjs/common';
+import { UnauthorizedException, ExecutionContext, Logger } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
 import * as fc from 'fast-check';
@@ -8,6 +8,18 @@ import * as fc from 'fast-check';
 describe('JwtAuthGuard', () => {
   let guard: JwtAuthGuard;
   let jwtService: JwtService;
+
+  beforeAll(() => {
+    // Mockear el Logger de NestJS para silenciar logs
+    jest.spyOn(Logger.prototype, 'error').mockImplementation(() => {});
+    jest.spyOn(Logger.prototype, 'warn').mockImplementation(() => {});
+    jest.spyOn(Logger.prototype, 'debug').mockImplementation(() => {});
+    jest.spyOn(Logger.prototype, 'log').mockImplementation(() => {});
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -22,15 +34,23 @@ describe('JwtAuthGuard', () => {
       ],
     }).compile();
 
+    // Desabilitar logger de NestJS para tests
+    module.useLogger(false);
+
     guard = module.get<JwtAuthGuard>(JwtAuthGuard);
     jwtService = module.get<JwtService>(JwtService);
+
+    // Mockear el logger del guard
+    const loggerSpy = jest.spyOn(guard['logger'], 'error').mockImplementation(() => {});
+    const warnSpy = jest.spyOn(guard['logger'], 'warn').mockImplementation(() => {});
+    const debugSpy = jest.spyOn(guard['logger'], 'debug').mockImplementation(() => {});
   });
 
   describe('canActivate', () => {
     // Feature: backlog-pro-development, Property 5: Unauthenticated request rejection
     it('should reject requests without authentication token', async () => {
       fc.assert(
-        fc.asyncProperty(fc.string(), async (randomString) => {
+        fc.asyncProperty(fc.constant(null), async () => {
           const mockContext = {
             getContext: () => ({
               req: {
