@@ -1,0 +1,71 @@
+services:
+  # Backlog Pro Backend - construida localmente
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: backlog-pro-backend:dev
+    env_file: 
+      - .env.local
+    ports:
+      - '${PORT:-3001}:${PORT:-3001}'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: >
+        curl --fail --silent --show-error \
+          -X POST \
+          -H 'content-type: application/json' \
+          --data '{"query":"query Health{health{database{connected} status timestamp}}"}' \
+          http://localhost:${PORT:-3001}/graphql/health
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+
+  # Base de Datos PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_DATABASE:-backlog_pro}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '${DB_PORT:-5433}:${DB_PORT:-5433}'
+    restart: unless-stopped
+    healthcheck:
+      test: >
+        pg_isready -h 127.0.0.1 -U ${DB_USERNAME:-postgres}
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # Adminer - Herramienta web para gestionar la base de datos
+  adminer:
+    image: adminer:latest
+    ports:
+      - '8080:8080'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+
+volumes:
+  postgres_data:
+      driver: local

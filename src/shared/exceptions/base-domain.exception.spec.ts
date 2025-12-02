@@ -1,4 +1,4 @@
-import { BaseDomainException } from '.';
+import { BaseDomainException } from '@shared/exceptions';
 
 class TestDomainException extends BaseDomainException {
   constructor() {
@@ -15,7 +15,7 @@ class AnotherTestException extends BaseDomainException {
 describe('BaseDomainException', () => {
   it('should create exception with unique code', () => {
     const exception = new TestDomainException();
-    
+
     expect(exception.codigo).toBe('TEST_001');
     expect(exception.mensaje).toBe('Test exception message');
   });
@@ -23,7 +23,7 @@ describe('BaseDomainException', () => {
   it('should have different codes for different exceptions', () => {
     const exception1 = new TestDomainException();
     const exception2 = new AnotherTestException();
-    
+
     expect(exception1.codigo).not.toBe(exception2.codigo);
     expect(exception1.codigo).toBe('TEST_001');
     expect(exception2.codigo).toBe('TEST_002');
@@ -31,20 +31,20 @@ describe('BaseDomainException', () => {
 
   it('should be instance of Error', () => {
     const exception = new TestDomainException();
-    
+
     expect(exception).toBeInstanceOf(Error);
     expect(exception).toBeInstanceOf(BaseDomainException);
   });
 
   it('should have correct name property', () => {
     const exception = new TestDomainException();
-    
+
     expect(exception.name).toBe('TestDomainException');
   });
 
   it('should capture stack trace', () => {
     const exception = new TestDomainException();
-    
+
     expect(exception.stack).toBeDefined();
     expect(exception.stack).toContain('TestDomainException');
   });

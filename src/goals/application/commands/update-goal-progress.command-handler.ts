@@ -1,0 +1,19 @@
+import { Injectable } from '@nestjs/common';
+import { UpdateGoalProgressCommand } from './update-goal-progress.command';
+import { Goal } from '@goals/domain/entities/goal.entity';
+import { GoalRepository } from '@goals/repository/goal.repository';
+
+@Injectable()
+export class UpdateGoalProgressCommandHandler {
+  constructor(private readonly goalRepository: GoalRepository) {}
+
+  async handle(command: UpdateGoalProgressCommand): Promise<Goal> {
+    const goal = await this.goalRepository.getById(command.goalId);
+    if (!goal) {
+      throw new Error(`Goal with id ${command.goalId} not found`);
+    }
+
+    goal.setCurrentValue(command.currentValue);
+    return this.goalRepository.update(command.goalId, goal);
+  }
+}

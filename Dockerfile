@@ -1,17 +1,21 @@
-# Development Dockerfile with hot reload
+# Dockerfile para Desarrollo con docker compose watch
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Install dependencies
-COPY package*.json ./
-RUN npm install
+# Instalar dependencias de compilación para bcrypt
+RUN apk add --no-cache curl
 
-# Copy source code
+# Instalar dependencias
+COPY package*.json ./
+RUN npm ci
+
+# Copiar código fuente
 COPY . .
 
-# Expose port
-EXPOSE 3000
+# Exponer puerto (usa variable de entorno del .env.local, default 3001)
+EXPOSE ${PORT:-3001}
 
-# Start in development mode with hot reload
+# Iniciar en modo desarrollo con hot reload
+# NestJS detectará cambios automáticamente con docker compose watch
 CMD ["npm", "run", "start:dev"]

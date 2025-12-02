@@ -8,13 +8,13 @@ Sistema backend GraphQL para gestión de equipos de desarrollo construido con Ne
 
 - **Framework**: NestJS 10.x
 - **Lenguaje**: TypeScript 5.x
-- **Base de Datos**: PostgreSQL 15+ (Supabase)
+- **Base de Datos**: PostgreSQL 15+ (local con Docker, producción en Render)
 - **ORM**: TypeORM 0.3.x
 - **API**: GraphQL con Apollo Server
-- **Autenticación**: Supabase Auth + JWT Guards
+- **Autenticación**: JWT con bcrypt para hash de contraseñas
 - **Testing**: Jest + fast-check (property-based testing)
 - **Validación**: class-validator + Joi (config)
-- **Caché**: Redis (métricas en tiempo real)
+
 - **CI/CD**: GitHub Actions + Vercel
 
 ### Principios Arquitectónicos
@@ -797,7 +797,7 @@ describe('CrearProyectoCommandHandler', () => {
 
 ### Test Doubles
 
-- Usar mocks solo para repositorios e integraciones externas (Supabase, Redis)
+- Usar mocks solo para repositorios e integraciones externas
 - Dominio y handlers deben testearse sin mocks cuando sea posible
 - Generators de fast-check deben ser inteligentes y generar datos válidos del dominio
 

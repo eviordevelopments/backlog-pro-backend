@@ -3,11 +3,42 @@ import Joi from 'joi';
 export const validationSchemaConfig = Joi.object({
   NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
   PORT: Joi.number().default(3000),
-  DB_HOST: Joi.string().required(),
+
+  // DATABASE_URL (para Render/producción con URL completa)
+  DATABASE_URL: Joi.string().optional(),
+
+  // Variables individuales de DB (para desarrollo local)
+  // Son opcionales si DATABASE_URL está presente
+  DB_HOST: Joi.string()
+    .when('DATABASE_URL', {
+      is: Joi.exist(),
+      then: Joi.optional(),
+      otherwise: Joi.optional(),
+    })
+    .default('localhost'),
   DB_PORT: Joi.number().default(5432),
-  DB_USERNAME: Joi.string().required(),
-  DB_PASSWORD: Joi.string().required(),
-  DB_DATABASE: Joi.string().required(),
-  DB_SSL: Joi.string().valid('true', 'false').default('false'),
-  JWT_SECRET: Joi.string().required(),
+  DB_USERNAME: Joi.string()
+    .when('DATABASE_URL', {
+      is: Joi.exist(),
+      then: Joi.optional(),
+      otherwise: Joi.optional(),
+    })
+    .default('postgres'),
+  DB_PASSWORD: Joi.string()
+    .when('DATABASE_URL', {
+      is: Joi.exist(),
+      then: Joi.optional(),
+      otherwise: Joi.optional(),
+    })
+    .default('postgres'),
+  DB_DATABASE: Joi.string()
+    .when('DATABASE_URL', {
+      is: Joi.exist(),
+      then: Joi.optional(),
+      otherwise: Joi.optional(),
+    })
+    .default('your_db_name'),
+
+  JWT_SECRET: Joi.string().default('default_jwt_secret'),
+  JWT_EXPIRES_IN: Joi.string().default('1d'),
 });
