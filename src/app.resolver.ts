@@ -8,7 +8,7 @@ export class AppResolver {
 
   @Query(() => String)
   hello(): string {
-    return 'Hello from GraphQL! Hot reload is working! 🔥';
+    return 'Hello World!';
   }
 
   @Query(() => HealthCheck)

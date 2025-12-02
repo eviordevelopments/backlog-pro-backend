@@ -26,7 +26,7 @@ jobs:
           # Hacer request al health check GraphQL
           response=$(curl -s -o /dev/null -w "%{http_code}" "$RENDER_URL/graphql" \
             -H "Content-Type: application/json" \
-            -d '{"query":"{ health }"}' \
+            -d '{"query":"{ hello }"}' \
             --max-time 30)
           
           if [ "$response" -eq 200 ]; then

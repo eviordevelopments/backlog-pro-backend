@@ -54,7 +54,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile.prod
+          file: ./Dockerfile.production
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
@@ -62,6 +62,8 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/backlog-pro-backend:${{ steps.version.outputs.major_minor }}
             ${{ secrets.DOCKERHUB_USERNAME }}/backlog-pro-backend:${{ steps.version.outputs.major }}
             ${{ secrets.DOCKERHUB_USERNAME }}/backlog-pro-backend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       
       - name: Show generated tags
         run: |
