@@ -16,7 +16,8 @@ export const databaseConfig: DataSourceOptions = envs.database.url
       entities: [__dirname + '/../../**/*.typeorm-entity{.ts,.js}'],
       migrations: [__dirname + '/../../database/migrations/*{.ts,.js}'],
       synchronize: false, // NUNCA usar synchronize en producción
-      logging: false,
+      dropSchema: false, // NUNCA usar dropSchema en producción
+      logging: false, // SOLO si quieres ver logs de las queries
     }
   : {
       // Configuración local (usando parámetros individuales)
@@ -29,9 +30,9 @@ export const databaseConfig: DataSourceOptions = envs.database.url
       ssl: false,
       entities: [__dirname + '/../../**/*.typeorm-entity{.ts,.js}'],
       migrations: [__dirname + '/../../database/migrations/*{.ts,.js}'],
-      synchronize: envs.server.environment === 'development',
-      // logging: envs.server.environment === 'development',
-      dropSchema: true,
+      synchronize: envs.server.environment === 'development', // Activo en desarrollo para sincronizar automaticamente las entidades
+      dropSchema: envs.server.environment === 'development', // Activo en desarrollo para testear con la DB
+      logging: envs.server.environment === 'development', // Activo en desarrollo para ver logs de las queries
     };
 
 // DataSource para migraciones de TypeORM CLI

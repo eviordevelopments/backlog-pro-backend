@@ -69,9 +69,7 @@ describe('UpdateProfileCommandHandler', () => {
             const command = new UpdateProfileCommand(
               updateData.userId,
               updateData.name,
-              updateData.email,
-              updateData.avatar,
-              updateData.skills,
+              updateData.skills as string[],
               updateData.hourlyRate,
             );
 
@@ -103,7 +101,6 @@ describe('UpdateProfileCommandHandler', () => {
             const command = new UpdateProfileCommand(
               updateData.userId,
               updateData.name,
-              updateData.email,
             );
 
             await expect(handler.handle(command)).rejects.toThrow(

@@ -25,7 +25,7 @@ export class TaskResolver {
   @Mutation(() => TaskResponseDto, {
     description: 'Crea una nueva tarea',
   })
-  async createTask(@Args('input') input: CreateTaskDto): Promise<TaskResponseDto> {
+  async createTask(@Args('input', { description: 'Datos de la tarea a crear' }) input: CreateTaskDto): Promise<TaskResponseDto> {
     this.logger.log(`Creando tarea: ${input.title}`);
     const command = new CreateTaskCommand(
       input.title,
@@ -45,7 +45,7 @@ export class TaskResolver {
   @Query(() => TaskResponseDto, {
     description: 'Obtiene una tarea por ID',
   })
-  async getTask(@Args('taskId') taskId: string): Promise<TaskResponseDto> {
+  async getTask(@Args('taskId', { description: 'UUID de la tarea' }) taskId: string): Promise<TaskResponseDto> {
     this.logger.log(`Obteniendo tarea: ${taskId}`);
     const query = new GetTaskQuery(taskId);
     const task = await this.taskService.getTask(query);

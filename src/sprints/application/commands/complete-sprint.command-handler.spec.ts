@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as fc from 'fast-check';
 import { CompleteSprintCommandHandler } from '@sprints/application/commands/complete-sprint.command-handler';
 import { CompleteSprintCommand } from '@sprints/application/commands/complete-sprint.command';
 import { ISprintRepository } from '@sprints/domain/interfaces/sprint.repository.interface';
@@ -13,8 +12,8 @@ describe('CompleteSprintCommandHandler', () => {
 
   beforeEach(async () => {
     mockRepository = {
-      obtenerPorId: jest.fn(),
-      actualizar: jest.fn((id: string, sprint: Partial<Sprint>) => Promise.resolve(sprint as Sprint)),
+      getById: jest.fn(),
+      update: jest.fn((_id: string, sprint: Partial<Sprint>) => Promise.resolve(sprint as Sprint)),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -32,8 +31,6 @@ describe('CompleteSprintCommandHandler', () => {
     );
   });
 
-;
-
   describe('Unit Tests', () => {
     it('should complete sprint and set velocity', async () => {
       const sprint = new Sprint(
@@ -45,8 +42,8 @@ describe('CompleteSprintCommandHandler', () => {
       );
       sprint.setStoryPointsCompleted(42);
 
-      (mockRepository.obtenerPorId as jest.Mock).mockResolvedValue(sprint);
-      (mockRepository.actualizar as jest.Mock).mockResolvedValue(sprint);
+      (mockRepository.getById as jest.Mock).mockResolvedValue(sprint);
+      (mockRepository.update as jest.Mock).mockResolvedValue(sprint);
 
       const command = new CompleteSprintCommand(sprint.getId());
       const result = await handler.handle(command);
@@ -56,7 +53,7 @@ describe('CompleteSprintCommandHandler', () => {
     });
 
     it('should throw SprintNotFoundException when sprint does not exist', async () => {
-      (mockRepository.obtenerPorId as jest.Mock).mockResolvedValue(null);
+      (mockRepository.getById as jest.Mock).mockResolvedValue(null);
 
       const command = new CompleteSprintCommand('non-existent-id');
 
@@ -74,8 +71,8 @@ describe('CompleteSprintCommandHandler', () => {
         new Date('2024-01-15'),
       );
 
-      (mockRepository.obtenerPorId as jest.Mock).mockResolvedValue(sprint);
-      (mockRepository.actualizar as jest.Mock).mockResolvedValue(sprint);
+      (mockRepository.getById as jest.Mock).mockResolvedValue(sprint);
+      (mockRepository.update as jest.Mock).mockResolvedValue(sprint);
 
       const command = new CompleteSprintCommand(sprint.getId());
       const result = await handler.handle(command);

@@ -4,7 +4,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Instalar dependencias de compilación para bcrypt
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache curl python3 make g++
 
 # Instalar dependencias
 COPY package*.json ./

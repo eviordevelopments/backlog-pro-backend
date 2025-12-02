@@ -46,10 +46,10 @@ export class TransactionResolver {
       currency: transaction.getCurrency().getValue(),
       date: transaction.getDate(),
       description: transaction.getDescription(),
-      clientId: transaction.getClientId(),
-      projectId: transaction.getProjectId(),
+      clientId: transaction.getClientId() ?? undefined,
+      projectId: transaction.getProjectId() ?? undefined,
       isRecurring: transaction.isRecurringTransaction(),
-      recurringFrequency: transaction.getRecurringFrequency(),
+      recurringFrequency: transaction.getRecurringFrequency() ?? undefined,
       createdAt: transaction.getCreatedAt(),
       updatedAt: transaction.getUpdatedAt(),
     };
@@ -62,7 +62,7 @@ export class TransactionResolver {
   ): Promise<TransactionResponseDto[]> {
     const query = new GetProjectExpensesQuery(projectId);
     const expenses = await this.getProjectExpensesHandler.handle(query);
-    return Object.values(expenses).flat();
+    return (Object.values(expenses).flat() as TransactionResponseDto[]);
   }
 
   @Query(() => [TransactionResponseDto])

@@ -3,7 +3,7 @@ import { CalculateSalariesQuery } from './calculate-salaries.query';
 import { CalculateIdealHourlyRateQueryHandler } from './calculate-ideal-hourly-rate.query-handler';
 import { CalculateIdealHourlyRateQuery } from './calculate-ideal-hourly-rate.query';
 import { TimeEntryRepository } from '@time-entries/repository/time-entry.repository';
-import { UserRepository } from '@users/repository/user.repository';
+import { UserRepository } from '@auth/repository/user.repository';
 
 @Injectable()
 export class CalculateSalariesQueryHandler {

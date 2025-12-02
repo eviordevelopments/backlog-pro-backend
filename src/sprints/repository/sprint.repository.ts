@@ -97,6 +97,15 @@ export class SprintRepository implements ISprintRepository {
     return entities.map((e) => this.mapper.toDomain(e));
   }
 
+  async getByProjectId(projectId: string): Promise<Sprint[]> {
+    this.logger.log(`Getting sprints for project: ${projectId}`);
+    const entities = await this.repository.find({
+      where: { projectId, deletedAt: IsNull() },
+      order: { startDate: 'ASC' },
+    });
+    return entities.map((e) => this.mapper.toDomain(e));
+  }
+
   async delete(id: string): Promise<void> {
     this.logger.log(`Deleting sprint: ${id}`);
     await this.repository.update({ id }, { deletedAt: new Date() });

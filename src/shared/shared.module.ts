@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { GlobalExceptionFilter } from '@shared/filters';
 import { GraphQLLoggerPlugin } from '@shared/plugins';
+import { RelationshipValidatorService } from '@shared/services/relationship-validator.service';
 import { envs } from '@shared/config';
 
 @Global()
@@ -14,7 +15,7 @@ import { envs } from '@shared/config';
       signOptions: { expiresIn: envs.jwt.expiresIn },
     }),
   ],
-  providers: [GlobalExceptionFilter, GraphQLLoggerPlugin],
-  exports: [JwtModule, GlobalExceptionFilter, GraphQLLoggerPlugin],
+  providers: [GlobalExceptionFilter, GraphQLLoggerPlugin, RelationshipValidatorService],
+  exports: [JwtModule, GlobalExceptionFilter, GraphQLLoggerPlugin, RelationshipValidatorService],
 })
 export class SharedModule {}

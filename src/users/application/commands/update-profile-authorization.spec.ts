@@ -53,7 +53,6 @@ describe('UpdateProfileCommandHandler - Authorization', () => {
             const command = new UpdateProfileCommand(
               ownerUserId,
               updateData.name,
-              updateData.email,
             );
 
             // The handler should verify that the requesting user (attemptingUserId)

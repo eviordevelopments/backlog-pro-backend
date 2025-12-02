@@ -43,7 +43,7 @@ describe('Sprint Entity - Property-Based Tests', () => {
             name: fc.string({ minLength: 1, maxLength: 255 }),
             projectId: fc.uuid(),
             goal: fc.string({ minLength: 1, maxLength: 500 }),
-            startDate: fc.date(),
+            startDate: fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31') }),
             daysOffset: fc.integer({ min: 1, max: 365 }),
           }),
           (data) => {

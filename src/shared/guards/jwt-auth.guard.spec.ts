@@ -30,7 +30,7 @@ describe('JwtAuthGuard', () => {
     // Feature: backlog-pro-development, Property 5: Unauthenticated request rejection
     it('should reject requests without authentication token', async () => {
       fc.assert(
-        fc.property(fc.string(), (randomString) => {
+        fc.asyncProperty(fc.string(), async (randomString) => {
           const mockContext = {
             getContext: () => ({
               req: {
@@ -45,7 +45,7 @@ describe('JwtAuthGuard', () => {
             .spyOn(GqlExecutionContext, 'create')
             .mockReturnValue(mockContext);
 
-          expect(() => guard.canActivate(mockContext as ExecutionContext)).toThrow(
+          await expect(guard.canActivate(mockContext as ExecutionContext)).rejects.toThrow(
             UnauthorizedException,
           );
 
@@ -57,7 +57,7 @@ describe('JwtAuthGuard', () => {
 
     it('should reject requests with invalid token format', async () => {
       fc.assert(
-        fc.property(fc.string(), (invalidToken) => {
+        fc.asyncProperty(fc.string(), async (invalidToken) => {
           const mockContext = {
             getContext: () => ({
               req: {
@@ -76,7 +76,7 @@ describe('JwtAuthGuard', () => {
             new Error('Invalid token'),
           );
 
-          expect(() => guard.canActivate(mockContext as ExecutionContext)).toThrow(
+          await expect(guard.canActivate(mockContext as ExecutionContext)).rejects.toThrow(
             UnauthorizedException,
           );
 
@@ -88,20 +88,23 @@ describe('JwtAuthGuard', () => {
 
     it('should accept requests with valid token', async () => {
       fc.assert(
-        fc.property(
+        fc.asyncProperty(
           fc.record({
             sub: fc.uuid(),
             email: fc.emailAddress(),
             role: fc.constantFrom('admin', 'user', 'moderator'),
           }),
           async (tokenPayload) => {
+            const req = {
+              headers: {
+                authorization: 'Bearer valid-token',
+              },
+              user: undefined,
+            };
+
             const mockContext = {
               getContext: () => ({
-                req: {
-                  headers: {
-                    authorization: 'Bearer valid-token',
-                  },
-                },
+                req,
               }),
             } as any;
 
@@ -114,7 +117,7 @@ describe('JwtAuthGuard', () => {
             const result = await guard.canActivate(mockContext as ExecutionContext);
 
             expect(result).toBe(true);
-            expect(mockContext.getContext().req.user).toEqual({
+            expect(req.user).toEqual({
               sub: tokenPayload.sub,
               email: tokenPayload.email,
               role: tokenPayload.role,

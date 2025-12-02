@@ -31,19 +31,19 @@ export class InvoiceMapper {
       id: invoice.getId(),
       invoiceNumber: invoice.getInvoiceNumber(),
       clientId: invoice.getClientId(),
-      projectId: invoice.getProjectId(),
+      projectId: invoice.getProjectId() ?? undefined,
       amount: invoice.getAmount().getValue(),
       tax: invoice.getTax().getValue(),
       total: invoice.getTotal().getValue(),
       status: invoice.getStatus().getValue(),
       issueDate: invoice.getIssueDate(),
       dueDate: invoice.getDueDate(),
-      paidDate: invoice.getPaidDate(),
+      paidDate: invoice.getPaidDate() ?? undefined,
       items: invoice.getItems(),
       notes: invoice.getNotes(),
       createdAt: invoice.getCreatedAt(),
       updatedAt: invoice.getUpdatedAt(),
-      deletedAt: invoice.getDeletedAt(),
+      deletedAt: invoice.getDeletedAt() ?? undefined,
     };
   }
 }

@@ -71,6 +71,19 @@ export class TimeEntryRepository implements ITimeEntryRepository {
     return entities.map((e) => this.mapper.toDomain(e));
   }
 
+  async getByProjectId(projectId: string): Promise<TimeEntry[]> {
+    this.logger.log(`Listing time entries for project: ${projectId}`);
+    // This would require joining with tasks table
+    // For now, return empty array - this needs to be implemented with proper joins
+    const entities = await this.repository.query(`
+      SELECT te.* FROM time_entry te
+      JOIN task t ON te.task_id = t.id
+      WHERE t.project_id = $1 AND te.deleted_at IS NULL
+      ORDER BY te.date DESC
+    `, [projectId]);
+    return entities.map((e: TimeEntryTypeOrmEntity) => this.mapper.toDomain(e));
+  }
+
   async delete(id: string): Promise<void> {
     this.logger.log(`Deleting time entry: ${id}`);
     await this.repository.update({ id }, { deletedAt: new Date() });

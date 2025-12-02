@@ -32,8 +32,8 @@ export class MeetingMapper {
       id: meeting.getId(),
       title: meeting.getTitle(),
       type: meeting.getType(),
-      projectId: meeting.getProjectId(),
-      sprintId: meeting.getSprintId(),
+      projectId: meeting.getProjectId() ?? undefined,
+      sprintId: meeting.getSprintId() ?? undefined,
       dateTime: meeting.getDateTime(),
       duration: meeting.getDuration(),
       participants: meeting.getParticipants(),
@@ -41,12 +41,12 @@ export class MeetingMapper {
       agenda: meeting.getAgenda(),
       notes: meeting.getNotes(),
       isRecurring: meeting.isRecurringMeeting(),
-      recurringPattern: meeting.getRecurringPattern(),
+      recurringPattern: meeting.getRecurringPattern() ?? undefined,
       status: meeting.getStatus(),
       attendance: meeting.getAttendance(),
       createdAt: meeting.getCreatedAt(),
       updatedAt: meeting.getUpdatedAt(),
-      deletedAt: meeting.getDeletedAt(),
+      deletedAt: meeting.getDeletedAt() ?? undefined,
     };
   }
 }

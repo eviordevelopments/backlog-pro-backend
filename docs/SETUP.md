@@ -22,7 +22,7 @@
 
 1. **Clonar el repositorio**
 ```bash
-git clone <repository-url>
+git clone https://github.com/eviordevelopments/backlog-pro-backend.git>
 cd backlog-pro-backend
 ```
 
@@ -38,19 +38,21 @@ createdb backlog_pro
 ```
 
 4. **Configurar variables de entorno**
-```bash
-npm run env:local
-```
-
 Edita `.env` con tus credenciales:
-```env
+```bash
+.env
+
+NODE_ENV=development
+PORT=3000
+
 DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=your_password
 DB_DATABASE=backlog_pro
 
-JWT_SECRET=your_secret_key
+JWT_SECRET=default_jwt_secret
+JWT_EXPIRES_IN=1d
 ```
 
 5. **Iniciar servicios externos**
@@ -67,9 +69,10 @@ npm run start:dev
 ```
 
 7. **Verificar**
-- App: http://localhost:3000
-- GraphQL: http://localhost:3000/graphql
-- Health: http://localhost:3000/health
+- 🚀 Application started successfully
+- 📍 Environment: development
+- 🔌 Port: 3000
+- 🅰️ Apollo Server: http://localhost:3000/graphql⁠
 
 ---
 
@@ -82,21 +85,37 @@ npm run start:dev
 ### Setup en 3 pasos
 
 ```bash
-# 1. Configurar variables de entorno
-npm run env:docker
+# 1. Configurar variables de entorno en .env.local
 
-# 2. Editar .env con tus credenciales
-# JWT_SECRET y configuración de base de datos
+# 2. Editar .env.local con tus credenciales
+.env.local
+
+NODE_ENV=development
+PORT=3001
+
+DB_HOST=postgres
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=backlog_pro
+
+JWT_SECRET=default_jwt_secret
+JWT_EXPIRES_IN=1d
 
 # 3. Iniciar servicios
+# Levantar contenedores sin Hot Reload (los cambios no se reflejan automáticamente)
 npm run docker:up
+# Levantar contenedores con Hot Reload (los cambios se reflejan automáticamente)
+npm run docker:watch # Deja una terminal corriendo en modo Watch, puedes terminar el proceso mantando la terminal o Ctrl+C
 ```
 
 ### Verificar
 
-- App: http://localhost:3000
-- GraphQL: http://localhost:3000/graphql
-- PostgreSQL: localhost:5432
+- 🚀 Application started successfully
+- 📍 Environment: development
+- 🔌 Port: 3001
+- 🅰️ Apollo Server: http://localhost:3001/graphql⁠
+- 💾 Adminer: http://localhost:8080⁠
 
 ```bash
 # Ver logs
@@ -112,16 +131,16 @@ npm run docker:status
 
 | Archivo | Propósito | Cuándo Usar |
 |---------|-----------|-------------|
-| `Dockerfile.dev` | Desarrollo con hot reload | Desarrollo diario |
-| `Dockerfile` | Build optimizado multi-stage | Producción |
-| `docker-compose.yml` | Orquestación desarrollo | Desarrollo local |
-| `docker-compose.prod.yml` | Orquestación producción | Servidor producción |
+| `Dockerfile` | Desarrollo con hot reload | Desarrollo diario |
+| `Dockerfile.production` | Build optimizado multi-stage | Producción |
+| `compose.yml` | Orquestación desarrollo | Desarrollo local |
+| `compose.production.yml` | Orquestación producción | Servidor producción |
 
 ---
 
 ## Desarrollo vs Producción
 
-### Desarrollo (`Dockerfile.dev` + `docker-compose.yml`)
+### Desarrollo (`Dockerfile` + `compose.yml`)
 
 **Características:**
 - ✅ Hot reload (cambios se reflejan automáticamente)
@@ -132,18 +151,19 @@ npm run docker:status
 
 **Uso:**
 ```bash
-npm run env:docker
-npm run docker:up
+npm run docker:up o npm run docker:watch
 npm run docker:logs
 ```
 
-**Dockerfile.dev:**
+**Dockerfile:**
 ```dockerfile
 FROM node:20-alpine
 WORKDIR /app
+RUN apk add --no-cache python3 make g++
 COPY package*.json ./
-RUN npm install              # Todas las dependencias
+RUN npm ci  # Todas las dependencias
 COPY . .
+EXPOSE ${PORT:-3000}
 CMD ["npm", "run", "start:dev"]  # Modo watch
 ```
 
@@ -159,8 +179,7 @@ CMD ["npm", "run", "start:dev"]  # Modo watch
 
 **Uso:**
 ```bash
-npm run env:prod
-# Editar .env con credenciales de producción
+# Editar .env.production con credenciales de producción
 npm run docker:prod:up
 npm run docker:prod:logs
 ```
@@ -170,6 +189,7 @@ npm run docker:prod:logs
 # Stage 1: Builder
 FROM node:20-alpine AS builder
 WORKDIR /app
+RUN apk add --no-cache python3 make g++
 COPY package*.json ./
 RUN npm ci
 COPY . .
@@ -178,9 +198,11 @@ RUN npm run build
 # Stage 2: Production
 FROM node:20-alpine AS production
 WORKDIR /app
+RUN apk add --no-cache python3 make g++
 COPY package*.json ./
 RUN npm ci --only=production
 COPY --from=builder /app/dist ./dist
+EXPOSE ${PORT:-3000}
 CMD ["node", "dist/main"]
 ```
 
@@ -212,6 +234,7 @@ npm run build
 ```bash
 # Gestión de servicios
 npm run docker:up           # Iniciar
+npm run docker:watch        # Iniciar (Hot Reload)
 npm run docker:down         # Detener
 npm run docker:restart      # Reiniciar
 npm run docker:build        # Reconstruir
@@ -271,13 +294,11 @@ Si ejecutas desde tu máquina local:
 
 1. Asegúrate de que PostgreSQL esté corriendo:
    ```bash
-   docker-compose up -d postgres
+   pg_isready -h localhost -p 5432
    ```
 
 2. Usa `.env` con `DB_HOST=localhost`:
-   ```bash
-   npm run env:local
-   ```
+
 
 3. Ejecutar comandos:
    ```bash
@@ -301,23 +322,24 @@ Si ejecutas desde tu máquina local:
 - En producción, `synchronize: false` - debes ejecutar migraciones manualmente
 - Todas las entidades usan el sufijo `.typeorm-entity.ts`
 - Las migraciones se almacenan en `src/database/migrations/`
-- Configuración en `src/shared/config/typeorm.config.ts`
+- Configuración en `src/shared/config/database.config.ts`
 
 ---
 
 ## Servicios Incluidos (Docker)
 
 ### App (NestJS)
-- **Puerto**: 3000
+- **Puerto**: 3000 (desde el editor) || 3001 (desde Docker para desarrollo) || 3002 (desde Docker para producción)
 - **Hot Reload**: Sí (desarrollo) / No (producción)
 - **Volúmenes**: Código montado (desarrollo) / Solo datos (producción)
 
 ### PostgreSQL
 - **Puerto**: 5432
 - **Usuario**: postgres
-- **Password**: postgres (cambiar en producción)
+- **Password**: postgres
 - **Base de datos**: backlog_pro
 - **Volumen**: postgres_data (persistente)
+- **URL**: postgresql://user:password@host:5432/backlog_pro (sólo en producción)
 
 ---
 
@@ -327,7 +349,7 @@ Si ejecutas desde tu máquina local:
 
 ```bash
 # Día 1: Setup
-npm run env:local
+# Editar .env con credenciales
 npm install
 npm run start:dev
 
@@ -340,66 +362,55 @@ npm run start:dev
 
 ```bash
 # Día 1: Setup
-npm run env:docker
+# Editar .env.local con credenciale
 npm run docker:up
+o 
+npm run docker:watch
 
 # Días siguientes
 npm run docker:up
-# Hacer cambios → Hot reload automático
+o
+npm run docler:watch # Hacer cambios → Hot reload automático
 
 # Si cambias package.json
 npm run docker:build
+o
+npm run docker:watch
 ```
 
 ### Antes de Producción
 
 ```bash
-# 1. Probar build de producción localmente
-docker build -f Dockerfile -t backlog-pro:test .
+# 1. Configurar .env.production con credenciales de producción
 
-# 2. Ejecutar imagen de prueba
-docker run -p 3000:3000 --env-file .env.production backlog-pro:test
+# 2. Probar build de producción localmente
+npm run docker:prod:build
 
-# 3. Verificar
-curl http://localhost:3000/health
-```
-
-### Despliegue en Servidor
-
-```bash
-# En el servidor
-git clone <repo-url>
-cd backlog-pro-backend
-
-# Configurar
-cp .env.production .env
-nano .env  # Editar credenciales
-
-# Iniciar
-npm run docker:prod:up
-
-# Verificar
+# 3. Verificar que no haya errores
 npm run docker:prod:logs
-curl http://localhost:3000/health
+curl --request POST \
+   --header 'content-type: application/json' \
+   --url http://localhost:3002/graphql \
+   --data '{"query":"query Health {\r\n  health {\r\n    database {\r\n      connected\r\n      database\r\n      type\r\n    }\r\n    service\r\n    status\r\n    timestamp\r\n  }\r\n}"}'
 ```
 
 ---
 
 ## Troubleshooting
 
-### Puerto 3000 ocupado
+### Puerto 3000/3001/3002 ocupado
 
 ```bash
 # Ver qué usa el puerto
 netstat -ano | findstr :3000  # Windows
 lsof -i :3000                 # Linux/Mac
 
-# Cambiar puerto en .env
-PORT=3001
+# Matar proceso con el PID que te de la salida anterior
+taskkill /F /PID 1234         # Windows
+kill -9 1234                  # Linux/Mac
 
-# O en docker-compose.yml
-ports:
-  - '3001:3000'
+# O cambiar el puerto en .env, .ev.local o .env.production
+PORT=3100
 ```
 
 ### PostgreSQL no conecta (Local)
@@ -421,10 +432,10 @@ cat .env | grep DB_
 npm run docker:status
 
 # Ver logs de PostgreSQL
-docker-compose logs postgres
+docker compose -p backlog-pro-dev logs postgres
 
 # Verificar variables
-docker-compose exec app env | grep DB_
+docker compose -p backlog-pro-dev exec app env | grep DB_
 ```
 
 ### Hot reload no funciona
@@ -433,17 +444,22 @@ docker-compose exec app env | grep DB_
 # Local: Verificar que SWC esté configurado
 cat nest-cli.json
 
-# Docker: Verificar que usas docker-compose.yml (no prod)
-docker-compose ps
+# Docker: Verificar que usas compose.yml (no producción)
+docker ps
 npm run docker:logs
 npm run docker:restart
 ```
 
-### node_modules not found (Docker)
+### node_modules error (Docker)
 
 ```bash
 # Reconstruir imagen
 npm run docker:build
+```
+### node_modules error (Local)
+```bash
+# Reinstalar dependencias
+npm run clean:install
 ```
 
 ### Limpiar todo y empezar de nuevo (Docker)
@@ -453,7 +469,7 @@ npm run docker:build
 npm run docker:clean
 
 # Eliminar imágenes
-docker-compose down --rmi all
+docker compose down --rmi all
 
 # Limpiar sistema completo
 docker system prune -a --volumes
@@ -474,7 +490,7 @@ psql -U postgres -d backlog_pro
 ```bash
 npm run docker:db
 # O manualmente
-docker-compose exec postgres psql -U postgres -d backlog_pro
+docker compose -p backlog-pro-dev exec postgres psql -U postgres -d backlog_pro
 ```
 
 ### Backup y Restore
@@ -491,13 +507,13 @@ psql -U postgres -d backlog_pro < backup.sql
 **Docker:**
 ```bash
 # Backup
-docker-compose exec postgres pg_dump -U postgres backlog_pro > backup.sql
+docker-compose -p backlog-pro-dev exec postgres pg_dump -U postgres backlog_pro > backup.sql
 
 # Restore
-docker-compose exec -T postgres psql -U postgres -d backlog_pro < backup.sql
+docker-compose -p backlog-pro-dev exec -T postgres psql -U postgres -d backlog_pro < backup.sql
 
 # Ver tablas
-docker-compose exec postgres psql -U postgres -d backlog_pro -c "\dt"
+docker-compose -p backlog-pro-dev exec postgres psql -U postgres -d backlog_pro -c "\dt"
 ```
 
 ---

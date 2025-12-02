@@ -60,16 +60,19 @@ Backend GraphQL para plataforma de gestión de equipos de desarrollo construido 
 
 ### Opción 1: Desarrollo Local (sin Docker)
 
+Requiere PostgreSQL 15+ instalado localmente.
+
 ```bash
 # 1. Instalar dependencias
 npm install
 
-# 2. Configurar variables de entorno para desarrollo local
-npm run env:local
-# O manualmente: copy .env.local .env
+# 2. Crear base de datos
+createdb backlog_pro
 
 # 3. Editar .env con tus credenciales
-# Asegúrate de tener PostgreSQL instalado localmente
+# DB_HOST=localhost
+# DB_USERNAME=postgres
+# DB_PASSWORD=your_password
 
 # 4. Iniciar la aplicación
 npm run start:dev
@@ -77,86 +80,89 @@ npm run start:dev
 
 ### Opción 2: Con Docker (Recomendado)
 
+No requiere PostgreSQL instalado localmente.
+Requiere Docker Desktop instalado y configurado.
+
 ```bash
 # 1. Instalar dependencias
 npm install
 
-# 2. Configurar variables de entorno para Docker
-npm run env:docker
-# O manualmente: copy .env.docker .env
+# 2. Editar .env.local con tus credenciales (opcional)
+# DB_HOST=postgres (ya configurado)
+# DB_USERNAME=postgres
+# DB_PASSWORD=postgres
 
-# 3. Editar .env con tus credenciales
-
-# 4. Iniciar todos los servicios (PostgreSQL, App)
+# 3. Iniciar todos los servicios (PostgreSQL, App, Adminer)
 npm run docker:up
+#  Para iniciar en modo Watch (los cambios se reflejan automaticamente)
+npm run docker:watch
 
-# 5. Ver logs
+# 4. Acceder a la aplicación
+# Apollo Server: http://localhost:3001/graphql
+# Adminer: http://localhost:8080
+
+# Ver logs
 npm run docker:logs
 
 # Detener servicios
 npm run docker:down
 
-# Detener y eliminar volúmenes (datos)
+# Limpiar todo (incluyendo volúmenes)
 npm run docker:clean
 ```
 
-### Opción 3: Producción
+### Opción 3: Producción en Render
+
+Ver guía completa: **[docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md)**
 
 ```bash
-# 1. Configurar variables de entorno para producción
-npm run env:prod
-# O manualmente: copy .env.production .env
+# 1. Configurar GitHub Secrets con credenciales de DockerHub
+# DOCKERHUB_USERNAME
+# DOCKERHUB_TOKEN
 
-# 2. Editar .env con tus credenciales de producción
+# 2. Crear PostgreSQL en Render
 
-# 3. Construir y ejecutar
-npm run build
-npm run start:prod
+# 3. Crear Web Service Docker en Render
+
+# 4. Configurar variables de entorno en Render
+
+# 5. Verificar despliegue
+# https://backlog-pro-backend-xxxx.onrender.com/graphql
 ```
 
 ## Configuración
 
 ### Variables de Entorno
 
-El proyecto usa un sistema centralizado de configuración en `src/shared/config/envs.config.ts` y soporta múltiples archivos de entorno:
+El proyecto soporta múltiples archivos de entorno:
 
-| Archivo           | Uso                           | DB_HOST               |
-| ----------------- | ----------------------------- | --------------------- |
-| `.env.local`      | Desarrollo local sin Docker   | `localhost`           |
-| `.env.docker`     | Desarrollo con Docker Compose | `postgres`            |
-| `.env.production` | Producción                    | Tu host de producción |
-| `.env.example`    | Plantilla de referencia       | -                     |
+| Archivo           | Uso                        | DB_HOST               | PORT |
+| ----------------- | -------------------------- | --------------------- | ---- |
+| `.env`            | Desarrollo local           | `localhost`           | 3000 |
+| `.env.local`      | Desarrollo con Docker      | `postgres`            | 3001 |
+| `.env.production` | Producción (Render)        | Tu host de producción | 3002 |
+| `.env.example`    | Plantilla de referencia    | -                     | -    |
 
-**Cambiar entre entornos:**
-
-```bash
-# Para desarrollo local
-npm run env:local
-
-# Para desarrollo con Docker
-npm run env:docker
-
-# Para producción
-npm run env:prod
-```
-
-Edita el archivo `.env` correspondiente con tus credenciales:
+**Edita el archivo `.env` correspondiente con tus credenciales:**
 
 ```env
 NODE_ENV=development
 PORT=3000
 
 # Database (PostgreSQL)
-DB_HOST=localhost  # 'postgres' para Docker, 'localhost' para local
+DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=your_password
 DB_DATABASE=backlog_pro
-DB_SSL=false  # 'true' para producción
+DB_SSL=false
 
 # JWT
 JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=24
 ```
+
+📖 Ver documentación completa: **[docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md)**
 
 ## Rendimiento de Desarrollo
 
@@ -176,40 +182,45 @@ SWC:     ~300 milisegundos
 
 ## Comandos de Desarrollo
 
-### Sin Docker
+### Desarrollo Local
 
 ```bash
-# Desarrollo
+# Iniciar en modo watch (hot reload con SWC)
 npm run start:dev
 
-# Producción
-npm run build
-npm run start:prod
+# Iniciar en modo debug
+npm run start:debug
 
 # Tests
 npm run test
 npm run test:watch
 npm run test:cov
-npm run test:e2e
 
 # Linting y Formato
 npm run lint
 npm run format
+
+# Build para producción
+npm run build
+npm run start:prod
 ```
 
-### Con Docker
+### Desarrollo con Docker
 
 ```bash
 # Iniciar servicios
 npm run docker:up
 
-# Ver logs
+# Iniciar con hot reload (watch mode)
+npm run docker:watch
+
+# Ver logs en tiempo real
 npm run docker:logs
 
-# Ver estado
+# Ver estado de contenedores
 npm run docker:status
 
-# Ejecutar tests
+# Ejecutar tests dentro del contenedor
 npm run docker:test
 
 # Acceder a PostgreSQL
@@ -218,11 +229,30 @@ npm run docker:db
 # Reconstruir después de cambios en package.json
 npm run docker:build
 
+# Reiniciar servicios
+npm run docker:restart
+
 # Detener servicios
 npm run docker:down
 
 # Limpiar todo (incluyendo volúmenes)
 npm run docker:clean
+```
+
+### Migraciones de Base de Datos
+
+```bash
+# Generar migración (detecta cambios en entidades)
+npm run docker:migration:generate src/database/migrations/NombreMigracion
+
+# Ejecutar migraciones pendientes
+npm run docker:migration:run
+
+# Revertir última migración
+npm run docker:migration:revert
+
+# Ver estado de migraciones
+npm run docker:migration:show
 ```
 
 ## Estructura del Proyecto
@@ -245,41 +275,40 @@ src/
 └── database/                # Migraciones TypeORM
 ```
 
-## Apollo Sandbox
+## Acceso a la Aplicación
 
-Una vez iniciada la aplicación, accede a:
+### Desarrollo Local
 
-- http://localhost:3000/graphql
+```
+GraphQL: http://localhost:3000/graphql
+```
+
+### Desarrollo con Docker
+
+```
+GraphQL: http://localhost:3001/graphql
+Adminer: http://localhost:8080
+```
 
 Apollo Server detectará que es un navegador y te redirigirá automáticamente a Apollo Sandbox.
 
+**Credenciales Adminer:**
+- Servidor: `postgres`
+- Usuario: `postgres`
+- Contraseña: `postgres`
+- Base de datos: `backlog_pro`
+
 ## Docker
 
-El proyecto incluye configuración completa de Docker con PostgreSQL.
-
-**📖 Ver [docs/DOCKER.md](docs/DOCKER.md) para documentación completa de Docker**
-
-### Inicio Rápido con Docker:
-
-```bash
-# 1. Configurar variables de entorno
-cp .env.docker .env
-
-# 2. Iniciar todos los servicios
-npm run docker:up
-
-# 3. Ver logs
-npm run docker:logs
-
-# 4. Acceder a la aplicación
-# http://localhost:3000
-# http://localhost:3000/graphql
-```
+El proyecto incluye configuración completa de Docker con PostgreSQL y Adminer.
 
 ### Servicios incluidos:
 
-- **app**: Aplicación NestJS (puerto 3000)
+- **app**: Aplicación NestJS (puerto 3001)
 - **postgres**: PostgreSQL 15 (puerto 5432)
+- **adminer**: Herramienta web para gestionar BD (puerto 8080)
+
+📖 Ver documentación completa: **[docs/SETUP.md](docs/SETUP.md)** y **[docs/DOCKER_ARCHITECTURE.md](docs/DOCKER_ARCHITECTURE.md)**
 
 ## Arquitectura
 
@@ -299,45 +328,63 @@ El proyecto implementa dos tipos de testing:
 
 Cobertura mínima requerida: 80%
 
-## Documentación Adicional
+## Documentación
 
-- 📖 [docs/SETUP.md](docs/SETUP.md) - **Guía completa de setup (local y Docker)**
-- 🚀 [docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md) - **Despliegue en Render con DockerHub (sin Supabase)**
-- 🌍 [docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md) - Gestión de entornos y variables (.env)
-- ⚡ [docs/SWC_SETUP.md](docs/SWC_SETUP.md) - SWC: Hot reload ultra-rápido
-- ⚙️ [docs/CONFIGURATION.md](docs/CONFIGURATION.md) - Configuraciones del sistema (GraphQL, TypeORM)
-- 🏗️ [docs/DOCKER_ARCHITECTURE.md](docs/DOCKER_ARCHITECTURE.md) - Arquitectura de contenedores
-- ✅ [docs/CHECKLIST.md](docs/CHECKLIST.md) - Checklist de verificación
+### Guías de Setup y Configuración
+
+- 📖 **[docs/SETUP.md](docs/SETUP.md)** - Guía completa de setup (local y Docker)
+- 🌍 **[docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md)** - Gestión de entornos y variables (.env)
+- ⚡ **[docs/SWC_SETUP.md](docs/SWC_SETUP.md)** - SWC: Hot reload ultra-rápido (10-20x más rápido que webpack)
+- ⚙️ **[docs/CONFIGURATION.md](docs/CONFIGURATION.md)** - Configuraciones del sistema (GraphQL, TypeORM)
+
+### Docker y Despliegue
+
+- 🏗️ **[docs/DOCKER_ARCHITECTURE.md](docs/DOCKER_ARCHITECTURE.md)** - Arquitectura de contenedores
+- 🚀 **[docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md)** - Despliegue en Render con DockerHub
+
+### Ejemplos y Referencia
+
+- 📚 **[docs/GRAPHQL_EXAMPLES.md](docs/GRAPHQL_EXAMPLES.md)** - Ejemplos de queries y mutations GraphQL
+- ✅ **[docs/CHECKLIST.md](docs/CHECKLIST.md)** - Checklist de verificación pre-deploy
+- 🔧 **[docs/ADMINER_SETUP.md](docs/ADMINER_SETUP.md)** - Configuración de Adminer para gestión de BD
 
 ## Despliegue en Producción
 
 La aplicación está completamente lista para despliegue en **Render** usando imágenes Docker de **DockerHub**.
 
+### Flujo de Despliegue Automático
+
+1. **Push a `main`** → GitHub Actions se ejecuta automáticamente
+2. **Tests pasan** → Imagen Docker se construye
+3. **Imagen se publica** en DockerHub con tags: `latest`, `major.minor`, `major`, `major.minor.patch`
+4. **Render se redespliega** automáticamente (si auto-deploy está habilitado)
+
 ### Quick Start - Despliegue en Render
 
-1. **Setup GitHub Secrets** con credenciales de DockerHub → [docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md#step-1-github-secrets-setup)
-2. **Crear PostgreSQL en Render** → [docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md#step-3-render-postgresql-database)
-3. **Configurar Docker Service en Render** → [docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md#step-4-render-docker-service)
-4. **Agregar variables de entorno** → [docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md#step-5-environment-variables)
+1. **Configurar GitHub Secrets** con credenciales de DockerHub
+   - `DOCKERHUB_USERNAME`
+   - `DOCKERHUB_TOKEN`
+
+2. **Crear PostgreSQL en Render**
+
+3. **Crear Web Service Docker en Render**
+   - Imagen: `tu-usuario/backlog-pro-backend:latest`
+   - Puerto: `3000`
+
+4. **Configurar variables de entorno en Render**
+   - `NODE_ENV=production`
+   - `DATABASE_URL=postgresql://...` (desde Render PostgreSQL)
+   - `JWT_SECRET=...` (generar con `openssl rand -hex 32`)
+
+5. **Verificar despliegue**
+   - https://backlog-pro-backend-xxxx.onrender.com/graphql
 
 📋 Ver guía completa: **[docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md)**
 
-### Ejecutar Localmente con Docker
+### Workflows de GitHub Actions
 
-Usa `docker-compose.yml` para levantar la aplicación localmente:
-
-```bash
-# Copiar configuración de ejemplo
-cp .env.example .env
-# Editar .env con tus valores (DB_USERNAME, DB_PASSWORD, JWT_SECRET, DOCKER_USERNAME, etc.)
-
-# Ejecutar con docker-compose
-docker-compose up
-```
-
-**Nota:** Asegúrate de que `DOCKER_USERNAME` en `.env` apunta a tu imagen de DockerHub (ej: `octocat/backlog-pro-backend`), o usa una imagen local si prefieres.
-
-Ver archivo: **[docker-compose.yml](docker-compose.yml)**
+- **docker-publish.yml**: Construye y publica imagen en DockerHub en cada push a `main`
+- **keep-alive.yml**: Mantiene el servicio de Render activo (ping cada 14 minutos)
 
 ## Licencia
 

@@ -63,15 +63,15 @@ describe('GetProfileQueryHandler', () => {
 
             // Verify all required fields are present
             expect(result).toBeDefined();
-            expect(result.getId()).toBe(profileData.id);
-            expect(result.getUserId()).toBe(profileData.userId);
-            expect(result.getName()).toBe(profileData.name);
-            expect(result.getEmail()).toBe(profileData.email);
-            expect(result.getAvatar()).toBe(profileData.avatar);
-            expect(result.getSkills()).toEqual(profileData.skills);
-            expect(result.getHourlyRate()).toBe(profileData.hourlyRate);
-            expect(result.getCreatedAt()).toEqual(profileData.createdAt);
-            expect(result.getUpdatedAt()).toEqual(profileData.updatedAt);
+            expect(result.id).toBe(profileData.id);
+            expect(result.userId).toBe(profileData.userId);
+            expect(result.name).toBe(profileData.name);
+            expect(result.email).toBe(profileData.email);
+            expect(result.avatar).toBe(profileData.avatar);
+            expect(result.skills).toEqual(profileData.skills);
+            expect(result.hourlyRate).toBe(profileData.hourlyRate);
+            expect(result.createdAt).toEqual(profileData.createdAt);
+            expect(result.updatedAt).toEqual(profileData.updatedAt);
           },
         ),
         { numRuns: 100 },

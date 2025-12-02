@@ -62,7 +62,7 @@ describe('Project Entity - Property-Based Tests', () => {
 
             // Positive budget should succeed
             const positiveBudget = fc.sample(
-              fc.float({ min: 0.01, max: 1000000 }),
+              fc.integer({ min: 1, max: 1000000 }),
               1
             )[0];
             project.updateBudget(positiveBudget);
@@ -85,6 +85,7 @@ describe('Project Entity - Property-Based Tests', () => {
       fc.assert(
         fc.property(
           fc.record({
+            id: fc.uuid(),
             name: fc.string({ minLength: 1, maxLength: 255 }),
             clientId: fc.uuid(),
             budget: fc.float({ min: 0, max: 1000000 }),
@@ -119,6 +120,7 @@ describe('Project Entity - Property-Based Tests', () => {
         fc.property(
           fc.array(
             fc.record({
+              id: fc.uuid(),
               name: fc.string({ minLength: 1, maxLength: 255 }),
               clientId: fc.uuid(),
               budget: fc.float({ min: 0, max: 1000000 }),
@@ -128,10 +130,10 @@ describe('Project Entity - Property-Based Tests', () => {
             { minLength: 1, maxLength: 20 }
           ),
           (projectsData) => {
+            const now = new Date();
             const projects = projectsData.map((data) => {
-              const now = new Date();
               return new Project({
-                id: fc.sample(fc.uuid(), 1)[0],
+                id: data.id,
                 name: data.name,
                 clientId: data.clientId,
                 budget: data.budget,

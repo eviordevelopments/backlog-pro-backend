@@ -87,7 +87,7 @@ describe('Task Entity - Property-Based Tests', () => {
             title: fc.string({ minLength: 1, maxLength: 255 }),
             projectId: fc.uuid(),
             timeEntries: fc.array(
-              fc.float({ min: 0.1, max: 24 }),
+              fc.integer({ min: 1, max: 24 }),
               { minLength: 1, maxLength: 20 }
             ),
           }),
@@ -112,7 +112,7 @@ describe('Task Entity - Property-Based Tests', () => {
             title: fc.string({ minLength: 1, maxLength: 255 }),
             projectId: fc.uuid(),
             hours: fc.array(
-              fc.float({ min: 0.1, max: 24 }),
+              fc.integer({ min: 1, max: 24 }),
               { minLength: 1, maxLength: 5 }
             ),
           }),

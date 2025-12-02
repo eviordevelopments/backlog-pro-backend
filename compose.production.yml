@@ -9,10 +9,15 @@ services:
     env_file:
       - .env.production
     ports:
-      - '${PORT:-3000}:${PORT:-3000}'
+      - '${PORT:-3002}:${PORT:-3002}'
     restart: always
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:${PORT:-3000}/graphql']
+      test: >
+        curl --fail --silent --show-error \
+          -X POST \
+          -H 'content-type: application/json' \
+          --data '{"query":"query Health{health{database{connected} status timestamp}}"}' \
+          http://localhost:${PORT:-3002}/graphql/health
       interval: 30s
       timeout: 10s
       retries: 3

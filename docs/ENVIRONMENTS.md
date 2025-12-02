@@ -6,30 +6,30 @@ Backlog Pro Backend soporta múltiples entornos de ejecución con configuracione
 
 ## Archivos de Entorno
 
-### `.env.local` - Desarrollo Local
-Usa este archivo cuando ejecutes la aplicación directamente en tu máquina sin Docker.
-
-**Características:**
-- `DB_HOST=localhost` (PostgreSQL local)
-- Requiere PostgreSQL instalado localmente
-
-**Uso:**
-```bash
-npm run env:local
-npm run start:dev
-```
-
-### `.env.docker` - Desarrollo con Docker
+### `.env.local` - Desarrollo con Docker
 Usa este archivo cuando ejecutes la aplicación con Docker Compose.
 
 **Características:**
 - `DB_HOST=postgres` (contenedor Docker)
+- `PORT=3001`
 - No requiere instalación local de PostgreSQL
 
 **Uso:**
 ```bash
-npm run env:docker
 npm run docker:up
+```
+
+### `.env` - Desarrollo Local
+Usa este archivo cuando ejecutes la aplicación directamente en tu máquina sin Docker.
+
+**Características:**
+- `DB_HOST=localhost` (PostgreSQL local)
+- `PORT=3000`
+- Requiere PostgreSQL instalado localmente
+
+**Uso:**
+```bash
+npm run start:dev
 ```
 
 ### `.env.production` - Producción
@@ -37,14 +37,11 @@ Usa este archivo para despliegues en producción.
 
 **Características:**
 - Hosts de producción configurables
-- `DB_SSL=true` (conexiones seguras)
 - Secrets fuertes y seguros
 
 **Uso:**
 ```bash
-npm run env:prod
-npm run build
-npm run start:prod
+npm run docker:prod:up
 ```
 
 ### `.env.example` - Plantilla
@@ -52,57 +49,82 @@ Archivo de referencia que documenta todas las variables disponibles. No se usa d
 
 ## Comandos Rápidos
 
-### Cambiar de Entorno
+### Desarrollo Local
 
 ```bash
-# Desarrollo local (sin Docker)
-npm run env:local
+# Iniciar aplicación en modo watch
+npm run start:dev
 
-# Desarrollo con Docker
-npm run env:docker
-
-# Producción
-npm run env:prod
+# Iniciar en modo debug
+npm run start:debug
 ```
 
-Estos comandos copian el archivo correspondiente a `.env`, que es el archivo que la aplicación lee.
+### Desarrollo con Docker
+
+```bash
+# Iniciar contenedores
+npm run docker:up
+
+# Modo watch
+npm run docker:watch
+
+# Ver logs
+npm run docker:logs
+
+# Detener contenedores
+npm run docker:down
+
+# Reiniciar
+npm run docker:restart
+```
+
+### Producción con Docker
+
+```bash
+# Iniciar contenedores
+npm run docker:prod:up
+
+# Ver logs
+npm run docker:prod:logs
+
+# Detener contenedores
+npm run docker:prod:down
+
+# Reiniciar
+npm run docker:prod:restart
+```
 
 ### Verificar Configuración Actual
 
 ```bash
-# Ver el contenido del .env activo
-type .env
-
 # Ver qué host de base de datos está configurado
-findstr DB_HOST .env
+findstr DB_HOST .env | findstr DB_HOST .env.local | findstr DB_HOST .env.production
 ```
 
 ## Flujo de Trabajo Recomendado
 
-### Desarrollo Local
+### Desarrollo Local (sin Docker)
 
 1. Instala PostgreSQL localmente
-2. Configura el entorno local:
+2. Crea la base de datos:
    ```bash
-   npm run env:local
+   createdb backlog_pro
    ```
-3. Edita `.env` con tus credenciales
+3. Verifica que `.env` tenga `DB_HOST=localhost`
 4. Inicia la aplicación:
    ```bash
    npm run start:dev
    ```
 
-### Desarrollo con Docker
+### Desarrollo con Docker (Recomendado)
 
-1. Configura el entorno Docker:
-   ```bash
-   npm run env:docker
-   ```
-2. Edita `.env` con tus credenciales de tu base de datos
-3. Inicia los contenedores:
+1. Verifica que `.env.local` tenga `DB_HOST=postgres`
+2. Inicia los contenedores:
    ```bash
    npm run docker:up
    ```
+3. La aplicación estará disponible en `http://localhost:3001`
+4. Adminer estará disponible en `http://localhost:8080`
 
 ### Cambiar entre Local y Docker
 
@@ -111,11 +133,9 @@ findstr DB_HOST .env
 npm run docker:down
 
 # Cambiar a local
-npm run env:local
 npm run start:dev
 
 # O cambiar a Docker
-npm run env:docker
 npm run docker:up
 ```
 
@@ -135,6 +155,7 @@ npm run docker:up
 
 ### JWT
 - `JWT_SECRET`: Secret para firmar tokens JWT
+- `JWT_EXPIRES_IN`: Tiempo de expiración de tokens JWT en días (default: 1d)
 
 ## Seguridad
 
@@ -155,37 +176,62 @@ npm run docker:up
 
 ## Troubleshooting
 
-### Error: "Connection refused" al conectar a la base de datos
+### Error: "ENOTFOUND postgres" al usar Docker
 
-**Problema:** Estás usando el archivo `.env` incorrecto para tu entorno.
+**Problema:** Tienes configurado `DB_HOST=localhost` en `.env.local` pero estás usando Docker.
 
 **Solución:**
 ```bash
-# Si estás corriendo localmente
-npm run env:local
+# Verifica que .env.local tenga DB_HOST=postgres
+cat .env.local | findstr DB_HOST
 
-# Si estás usando Docker
-npm run env:docker
+# Reinicia los contenedores
+npm run docker:restart
 ```
 
-### Error: "ENOTFOUND postgres" sin Docker
+### Error: "ECONNREFUSED localhost:5432" sin Docker
 
-**Problema:** Tienes configurado `DB_HOST=postgres` pero estás corriendo localmente.
+**Problema:** Tienes configurado `DB_HOST=postgres` en `.env` pero estás corriendo localmente.
 
 **Solución:**
 ```bash
-npm run env:local
+# Verifica que .env tenga DB_HOST=localhost
+cat .env | findstr DB_HOST
+
+# Asegúrate de que PostgreSQL está corriendo localmente
+# Luego inicia la aplicación
 npm run start:dev
 ```
 
-### Error: "ECONNREFUSED localhost:5432" con Docker
+### Error: "Connection refused" al conectar a la base de datos
 
-**Problema:** Tienes configurado `DB_HOST=localhost` pero estás usando Docker.
+**Problema:** PostgreSQL no está corriendo o las credenciales son incorrectas.
 
 **Solución:**
 ```bash
-npm run env:docker
-npm run docker:restart
+# Si usas Docker, verifica que los contenedores estén corriendo
+npm run docker:status
+
+# Si usas local, verifica que PostgreSQL esté corriendo
+# En Windows: Services > PostgreSQL
+
+# Verifica las credenciales en .env o .env.local
+```
+
+### Adminer no está disponible
+
+**Problema:** Adminer solo está disponible cuando usas Docker.
+
+**Solución:**
+```bash
+# Inicia Docker
+npm run docker:up
+
+# Accede a Adminer en http://localhost:8080
+# Servidor: postgres
+# Usuario: postgres
+# Contraseña: postgres
+# Base de datos: backlog_pro
 ```
 
 ## Integración Continua (CI/CD)
@@ -195,7 +241,21 @@ Para CI/CD, configura las variables de entorno directamente en tu plataforma:
 - **GitHub Actions**: Usa secrets del repositorio
 - **GitLab CI**: Usa variables de entorno protegidas
 - **AWS**: Usa Parameter Store o Secrets Manager
-- **Heroku**: Usa Config Vars
 - **Render**: Usa Environment Variables en el dashboard del servicio
 
 No uses archivos `.env` en CI/CD, configura las variables directamente en la plataforma.
+
+### Render (Producción)
+
+En Render, configura estas variables en el dashboard del servicio:
+
+```
+NODE_ENV=production
+DATABASE_URL=postgresql://postgres:password@host:5432/backlog_pro
+JWT_SECRET=tu_secret_fuerte_32_caracteres
+JWT_EXPIRES_IN=1d
+```
+
+La aplicación usará automáticamente `DATABASE_URL` si está configurada.
+
+Para más detalles sobre el despliegue en Render, consulta [RENDER_DEPLOYMENT.md](./RENDER_DEPLOYMENT.md).

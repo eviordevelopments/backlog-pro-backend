@@ -19,6 +19,7 @@ import { SalaryResolver } from '@finances/resolvers/salary.resolver';
 import { ProjectsModule } from '@projects/projects.module';
 import { TimeEntriesModule } from '@time-entries/time-entries.module';
 import { UsersModule } from '@users/users.module';
+import { AuthModule } from '@auth/auth.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UsersModule } from '@users/users.module';
     ProjectsModule,
     TimeEntriesModule,
     UsersModule,
+    AuthModule,
   ],
   providers: [
     TransactionRepository,

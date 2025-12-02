@@ -35,13 +35,13 @@ export class TransactionMapper {
       currency: transaction.getCurrency().getValue(),
       date: transaction.getDate(),
       description: transaction.getDescription(),
-      clientId: transaction.getClientId(),
-      projectId: transaction.getProjectId(),
+      clientId: transaction.getClientId() ?? undefined,
+      projectId: transaction.getProjectId() ?? undefined,
       isRecurring: transaction.isRecurringTransaction(),
-      recurringFrequency: transaction.getRecurringFrequency(),
+      recurringFrequency: transaction.getRecurringFrequency() ?? undefined,
       createdAt: transaction.getCreatedAt(),
       updatedAt: transaction.getUpdatedAt(),
-      deletedAt: transaction.getDeletedAt(),
+      deletedAt: transaction.getDeletedAt() ?? undefined,
     };
   }
 }
