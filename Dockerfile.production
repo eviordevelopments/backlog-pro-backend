@@ -1,42 +1,40 @@
-# Etapa de compilación
+# ============================
+# 1️⃣ BUILD STAGE
+# ============================
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Instalar dependencias de compilación para bcrypt
-RUN apk add --no-cache python3 make g++
+# Solo curl si realmente lo usas
+RUN apk add --no-cache curl
 
-# Copiar archivos de dependencias
+# Copiar dependencias
 COPY package*.json ./
 
-# Instalar dependencias
+# Instalar TODAS las dependencias (incluidas dev) para compilar
 RUN npm ci
 
-# Copiar código fuente
+# Copiar código
 COPY . .
 
-# Compilar aplicación
+# Compilar NestJS
 RUN npm run build
 
-# Etapa de producción
+
+# ============================
+# 2️⃣ PRODUCTION STAGE
+# ============================
 FROM node:20-alpine AS production
 
 WORKDIR /app
 
-# Instalar dependencias de compilación para bcrypt en producción
-RUN apk add --no-cache curl python3 make g++
-
-# Copiar archivos de dependencias
+# Solo dependencias de producción
 COPY package*.json ./
+RUN npm ci --omit=dev
 
-# Instalar solo dependencias de producción
-RUN npm ci --only=production
-
-# Copiar aplicación compilada desde etapa builder
+# Copiar app compilada
 COPY --from=builder /app/dist ./dist
 
-# Exponer puerto (usa variable de entorno del .env.production, default 3000)
-EXPOSE ${PORT:-3000}
+EXPOSE ${PORT:-3002}
 
-# Iniciar aplicación
 CMD ["node", "dist/main"]

@@ -17,7 +17,7 @@ export const databaseConfig: DataSourceOptions = envs.database.url
       migrations: [__dirname + '/../../database/migrations/*{.ts,.js}'],
       synchronize: false, // NUNCA usar synchronize en producción
       dropSchema: false, // NUNCA usar dropSchema en producción
-      logging: false, // SOLO si quieres ver logs de las queries
+      logging: false, // SOLO si necesitas ver logs de las queries
     }
   : {
       // Configuración local (usando parámetros individuales)
