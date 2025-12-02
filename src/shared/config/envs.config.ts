@@ -20,10 +20,15 @@ const jwt = {
   expiresIn: parseInt(String(process.env.JWT_EXPIRES_IN)) * 60 * 60 * 24, // Conversión a horas
 };
 
+const frontend = {
+  url: process.env.FRONTEND_URL,
+};
+
 const config = {
   server,
   database,
   jwt,
+  frontend,
 };
 
 export const envs = config;

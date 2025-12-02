@@ -7,10 +7,24 @@ import { envs } from '@shared/config';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS for Apollo Sandbox
+  // Enable CORS
+  const corsOrigins = [
+    'https://studio.apollographql.com', // Apollo Server
+    'http://localhost:3000', // Frontend local
+    'http://localhost:3001', // Frontend local (alt)
+    'http://localhost:3002', // Frontend local (alt)
+  ];
+
+  // En producción, agregar origen del frontend si está configurado
+  if (envs.server.environment === 'production' && envs.frontend?.url) {
+    corsOrigins.push(envs.frontend.url);
+  }
+
   app.enableCors({
-    origin: ['https://studio.apollographql.com'],
+    origin: corsOrigins,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   app.useGlobalFilters(new GlobalExceptionFilter(), new GraphQLExceptionFilter());
