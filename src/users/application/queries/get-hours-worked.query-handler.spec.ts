@@ -35,7 +35,7 @@ describe('GetHoursWorkedQueryHandler', () => {
           fc.array(
             fc.record({
               taskId: fc.uuid(),
-              hours: fc.float({ min: 0.25, max: 8 }),
+              hours: fc.float({ min: 0.25, max: 8, noNaN: true }),
               date: fc.date(),
             }),
             { minLength: 1, maxLength: 20 },
@@ -96,8 +96,8 @@ describe('GetHoursWorkedQueryHandler', () => {
           fc.uuid(),
           fc.array(
             fc.record({
-              projectId: fc.uuid(),
-              hours: fc.float({ min: 0.25, max: 8 }),
+              taskId: fc.uuid(),
+              hours: fc.float({ min: 0.25, max: 8, noNaN: true }),
               date: fc.date(),
             }),
             { minLength: 1, maxLength: 20 },
@@ -106,7 +106,7 @@ describe('GetHoursWorkedQueryHandler', () => {
             const timeEntries = timeEntriesData.map(
               (data) =>
                 new TimeEntry(
-                  data.projectId,
+                  data.taskId,
                   userId,
                   data.hours,
                   data.date,
@@ -119,15 +119,15 @@ describe('GetHoursWorkedQueryHandler', () => {
             const query = new GetHoursWorkedQuery(userId);
             const result = await handler.execute(query);
 
-            // Verify each project's hours is the sum of its entries
-            const projectHoursMap: { [key: string]: number } = {};
+            // Verify each task's hours is the sum of its entries
+            const taskHoursMap: { [key: string]: number } = {};
             timeEntriesData.forEach((entry) => {
-              projectHoursMap[entry.projectId] =
-                (projectHoursMap[entry.projectId] || 0) + entry.hours;
+              taskHoursMap[entry.taskId] =
+                (taskHoursMap[entry.taskId] || 0) + entry.hours;
             });
 
-            Object.entries(projectHoursMap).forEach(([projectId, expectedHours]) => {
-              expect(result.byProject[projectId]).toBeCloseTo(expectedHours, 2);
+            Object.entries(taskHoursMap).forEach(([taskId, expectedHours]) => {
+              expect(result.byProject[taskId]).toBeCloseTo(expectedHours, 2);
             });
           },
         ),
