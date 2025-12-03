@@ -8,22 +8,18 @@ services:
     env_file: 
       - .env.local
     ports:
-      - '${PORT:-3001}:${PORT:-3001}'
+      - '${PORT:-3001}:${PORT:-3000}'
     depends_on:
       postgres:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: >
-        curl --fail --silent --show-error \
-          -X POST \
-          -H 'content-type: application/json' \
-          --data '{"query":"query Health{health{database{connected} status timestamp}}"}' \
-          http://localhost:${PORT:-3001}/graphql/health
+        curl --fail --silent http://localhost:${PORT:-3001}/health
       interval: 30s
-      timeout: 10s
+      timeout: 5s
       retries: 3
-      start_period: 40s
+      start_period: 20s
     develop:
       watch:
         - action: sync
@@ -44,11 +40,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - '${DB_PORT:-5433}:${DB_PORT:-5433}'
+      - '${DB_PORT:-5433}:${DB_PORT:-5432}'
     restart: unless-stopped
     healthcheck:
-      test: >
-        pg_isready -h 127.0.0.1 -U ${DB_USERNAME:-postgres}
+      test: > 
+        pg_isready -h localhost -U ${DB_USERNAME:-postgres}
       interval: 10s
       timeout: 5s
       retries: 5
@@ -58,13 +54,20 @@ services:
   adminer:
     image: adminer:latest
     ports:
-      - '8080:8080'
+      - '${ADMINER_PORT:-8080}:${ADMINER_PORT:-8080}'
     depends_on:
       postgres:
         condition: service_healthy
     restart: unless-stopped
     environment:
       ADMINER_DEFAULT_SERVER: postgres
+    healthcheck:
+      test: > 
+        curl --fail --silent http://localhost:8080
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
 volumes:
   postgres_data:

@@ -2,9 +2,8 @@ name: Keep Render Service Alive
 
 on:
   schedule:
-    # Ejecutar cada 14 minutos (cron: minuto hora día mes día-semana)
-    - cron: '*/14 * * * *'
-  workflow_dispatch: # Permite ejecutar manualmente
+    - cron: '*/14 * * * *'    # Ejecutar cada 14 minutos
+  workflow_dispatch:
 
 jobs:
   keep-alive:
@@ -15,26 +14,32 @@ jobs:
         run: |
           echo "🏓 Pinging Render service to keep it alive..."
           
-          # Reemplaza con tu URL de Render cuando la tengas
-          RENDER_URL="${{ secrets.RENDER_SERVICE_URL }}"
+          # URL base sin slash final
+          BASE_URL="${{ secrets.RENDER_SERVICE_URL }}"
           
-          if [ -z "$RENDER_URL" ]; then
+          if [ -z "$BASE_URL" ]; then
             echo "⚠️  RENDER_SERVICE_URL secret not set. Skipping ping."
             exit 0
           fi
-          
-          # Hacer request al health check GraphQL
-          response=$(curl -s -o /dev/null -w "%{http_code}" "$RENDER_URL/graphql" \
-            -H "Content-Type: application/json" \
-            -d '{"query":"{ hello }"}' \
-            --max-time 30)
-          
-          if [ "$response" -eq 200 ]; then
-            echo "✅ Service is alive! (HTTP $response)"
+
+          URL="$BASE_URL/health"
+
+          echo "👉 Hitting: $URL"
+
+          # Usamos curl y capturamos el código HTTP
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            --connect-timeout 5 \
+            --max-time 15 \
+            --retry 3 \
+            --retry-delay 5 \
+            "$URL")
+
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "✅ Service is alive (HTTP 200)"
           else
-            echo "⚠️  Service returned HTTP $response"
+            echo "⚠️ Service returned HTTP $HTTP_CODE"
           fi
-          
+
       - name: Log timestamp
         run: |
           echo "⏰ Keep-alive executed at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"

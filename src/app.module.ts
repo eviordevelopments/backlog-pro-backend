@@ -3,8 +3,6 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppService } from './app.service';
-import { AppResolver } from './app.resolver';
 import { SharedModule } from '@shared/shared.module';
 import { AuthModule } from '@auth/auth.module';
 import { UsersModule } from '@users/users.module';
@@ -23,6 +21,7 @@ import { FeedbackModule } from '@feedback/feedback.module';
 import { AchievementsModule } from '@achievements/achievements.module';
 import { NotificationsModule } from '@notifications/notifications.module';
 import { databaseConfig, envsConfig, graphqlConfig, validationSchemaConfig } from '@shared/config';
+import { HealthController } from './app.controller';
 
 @Module({
   imports: [
@@ -55,6 +54,6 @@ import { databaseConfig, envsConfig, graphqlConfig, validationSchemaConfig } fro
     AchievementsModule,
     NotificationsModule,
   ],
-  providers: [AppService, AppResolver],
+  controllers: [HealthController],
 })
 export class AppModule {}

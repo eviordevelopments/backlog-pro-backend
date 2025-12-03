@@ -37,7 +37,7 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(envs.server.port);
+  await app.listen(envs.server.port, '0.0.0.0');
 
   if (envs.server.environment !== 'production') {
     console.log('🚀 Application started successfully');
