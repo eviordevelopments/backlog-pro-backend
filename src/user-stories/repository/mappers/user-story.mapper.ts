@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { UserStory } from '@user-stories/domain/entities/user-story.entity';
-import { UserStoryTypeOrmEntity } from '@user-stories/repository/entities/user-story.typeorm-entity';
+
+import { UserStory } from '../../domain/entities/user-story.entity';
+import { UserStoryTypeOrmEntity } from '../entities/user-story.typeorm-entity';
 
 @Injectable()
 export class UserStoryMapper {

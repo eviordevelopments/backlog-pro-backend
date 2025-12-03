@@ -1,13 +1,14 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
-import { CreateUserStoryCommandHandler } from '@user-stories/application/commands/create-user-story.command-handler';
-import { CreateUserStoryCommand } from '@user-stories/application/commands/create-user-story.command';
-import { GetProjectBacklogQueryHandler } from '@user-stories/application/queries/get-project-backlog.query-handler';
-import { GetProjectBacklogQuery } from '@user-stories/application/queries/get-project-backlog.query';
-import { UserStoryRepository } from '@user-stories/repository/user-story.repository';
-import { CreateUserStoryDto } from '@user-stories/dto/request/create-user-story.dto';
-import { UserStoryResponseDto } from '@user-stories/dto/response/user-story.response.dto';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { CreateUserStoryCommand } from '../application/commands/create-user-story.command';
+import { CreateUserStoryCommandHandler } from '../application/commands/create-user-story.command-handler';
+import { GetProjectBacklogQuery } from '../application/queries/get-project-backlog.query';
+import { GetProjectBacklogQueryHandler } from '../application/queries/get-project-backlog.query-handler';
+import { CreateUserStoryDto } from '../dto/request/create-user-story.dto';
+import { UserStoryResponseDto } from '../dto/response/user-story.response.dto';
+import { UserStoryRepository } from '../repository/user-story.repository';
 
 @Resolver('UserStory')
 export class UserStoryResolver {
@@ -19,9 +20,7 @@ export class UserStoryResolver {
 
   @Mutation(() => UserStoryResponseDto)
   @UseGuards(JwtAuthGuard)
-  async createUserStory(
-    @Args('input') input: CreateUserStoryDto
-  ): Promise<UserStoryResponseDto> {
+  async createUserStory(@Args('input') input: CreateUserStoryDto): Promise<UserStoryResponseDto> {
     const command = new CreateUserStoryCommand(
       input.projectId,
       input.title,
@@ -33,7 +32,7 @@ export class UserStoryResolver {
       input.acceptanceCriteria,
       input.storyPoints,
       input.definitionOfDone,
-      input.impactMetrics
+      input.impactMetrics,
     );
 
     const userStory = await this.createUserStoryHandler.handle(command);
@@ -60,9 +59,7 @@ export class UserStoryResolver {
 
   @Query(() => [UserStoryResponseDto])
   @UseGuards(JwtAuthGuard)
-  async getProjectBacklog(
-    @Args('projectId') projectId: string
-  ): Promise<UserStoryResponseDto[]> {
+  async getProjectBacklog(@Args('projectId') projectId: string): Promise<UserStoryResponseDto[]> {
     const query = new GetProjectBacklogQuery(projectId);
     return this.getBacklogHandler.handle(query);
   }

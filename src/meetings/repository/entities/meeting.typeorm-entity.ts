@@ -1,11 +1,11 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
   DeleteDateColumn,
+  Entity,
   Index,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('meetings')
@@ -56,7 +56,7 @@ export class MeetingTypeOrmEntity {
   status!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  attendance?: any[];
+  attendance?: unknown[];
 
   @CreateDateColumn()
   createdAt!: Date;

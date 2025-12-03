@@ -1,6 +1,8 @@
-import * as fc from 'fast-check';
+import fc from 'fast-check';
+
+import { Task } from '../../../tasks/domain/entities/task.entity';
+
 import { TimeEntry } from './time-entry.entity';
-import { Task } from '@tasks/domain/entities/task.entity';
 
 describe('TimeEntry Entity - Property-Based Tests', () => {
   // Feature: backlog-pro-development, Property 14: Task hours consistency
@@ -17,7 +19,7 @@ describe('TimeEntry Entity - Property-Based Tests', () => {
                 hours: fc.float({ min: Math.fround(0.1), max: Math.fround(24), noNaN: true }),
                 date: fc.date(),
               }),
-              { minLength: 1, maxLength: 20 }
+              { minLength: 1, maxLength: 20 },
             ),
           }),
           (data) => {
@@ -25,20 +27,11 @@ describe('TimeEntry Entity - Property-Based Tests', () => {
             const task = new Task('Test Task', data.projectId);
 
             // Calculate total hours from time entries
-            const totalHours = data.timeEntries.reduce(
-              (sum, entry) => sum + entry.hours,
-              0
-            );
+            const totalHours = data.timeEntries.reduce((sum, entry) => sum + entry.hours, 0);
 
             // Create time entries
             const entries = data.timeEntries.map(
-              (entry) =>
-                new TimeEntry(
-                  data.taskId,
-                  entry.userId,
-                  entry.hours,
-                  entry.date
-                )
+              (entry) => new TimeEntry(data.taskId, entry.userId, entry.hours, entry.date),
             );
 
             // Update task with total hours
@@ -49,21 +42,15 @@ describe('TimeEntry Entity - Property-Based Tests', () => {
 
             // Verify all entries have correct hours
             entries.forEach((entry, index) => {
-              expect(entry.getHours()).toBeCloseTo(
-                data.timeEntries[index].hours,
-                2
-              );
+              expect(entry.getHours()).toBeCloseTo(data.timeEntries[index].hours, 2);
             });
 
             // Verify sum of entries equals task hours
-            const sumOfEntries = entries.reduce(
-              (sum, entry) => sum + entry.getHours(),
-              0
-            );
+            const sumOfEntries = entries.reduce((sum, entry) => sum + entry.getHours(), 0);
             expect(sumOfEntries).toBeCloseTo(task.getActualHours(), 2);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -75,11 +62,11 @@ describe('TimeEntry Entity - Property-Based Tests', () => {
             projectId: fc.uuid(),
             initialHours: fc.array(
               fc.float({ min: Math.fround(0.1), max: Math.fround(24), noNaN: true }),
-              { minLength: 1, maxLength: 5 }
+              { minLength: 1, maxLength: 5 },
             ),
             modifiedHours: fc.array(
               fc.float({ min: Math.fround(0.1), max: Math.fround(24), noNaN: true }),
-              { minLength: 1, maxLength: 5 }
+              { minLength: 1, maxLength: 5 },
             ),
           }),
           (data) => {
@@ -94,9 +81,9 @@ describe('TimeEntry Entity - Property-Based Tests', () => {
             const modifiedTotal = data.modifiedHours.reduce((a, b) => a + b, 0);
             task.setActualHours(modifiedTotal);
             expect(task.getActualHours()).toBeCloseTo(modifiedTotal, 2);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -109,19 +96,14 @@ describe('TimeEntry Entity - Property-Based Tests', () => {
           }),
           (data) => {
             const task = new Task('Test Task', data.projectId);
-            const entry = new TimeEntry(
-              data.taskId,
-              fc.sample(fc.uuid(), 1)[0],
-              0,
-              new Date()
-            );
+            const entry = new TimeEntry(data.taskId, fc.sample(fc.uuid(), 1)[0], 0, new Date());
 
             task.setActualHours(0);
             expect(task.getActualHours()).toBe(0);
             expect(entry.getHours()).toBe(0);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });
@@ -149,48 +131,27 @@ describe('TimeEntry Entity - Property-Based Tests', () => {
       const date = new Date('2024-01-15');
       const description = 'Implemented authentication module';
 
-      const entry = new TimeEntry(
-        taskId,
-        userId,
-        hours,
-        date,
-        description
-      );
+      const entry = new TimeEntry(taskId, userId, hours, date, description);
 
       expect(entry.getDescription()).toBe(description);
     });
 
     it('should update hours', () => {
-      const entry = new TimeEntry(
-        'task-123',
-        'user-456',
-        8,
-        new Date('2024-01-15')
-      );
+      const entry = new TimeEntry('task-123', 'user-456', 8, new Date('2024-01-15'));
 
       entry.setHours(10);
       expect(entry.getHours()).toBe(10);
     });
 
     it('should update description', () => {
-      const entry = new TimeEntry(
-        'task-123',
-        'user-456',
-        8,
-        new Date('2024-01-15')
-      );
+      const entry = new TimeEntry('task-123', 'user-456', 8, new Date('2024-01-15'));
 
       entry.setDescription('Updated description');
       expect(entry.getDescription()).toBe('Updated description');
     });
 
     it('should update date', () => {
-      const entry = new TimeEntry(
-        'task-123',
-        'user-456',
-        8,
-        new Date('2024-01-15')
-      );
+      const entry = new TimeEntry('task-123', 'user-456', 8, new Date('2024-01-15'));
 
       const newDate = new Date('2024-01-20');
       entry.setDate(newDate);
@@ -198,12 +159,7 @@ describe('TimeEntry Entity - Property-Based Tests', () => {
     });
 
     it('should support soft delete', () => {
-      const entry = new TimeEntry(
-        'task-123',
-        'user-456',
-        8,
-        new Date('2024-01-15')
-      );
+      const entry = new TimeEntry('task-123', 'user-456', 8, new Date('2024-01-15'));
 
       expect(entry.getDeletedAt()).toBeNull();
 
@@ -213,12 +169,7 @@ describe('TimeEntry Entity - Property-Based Tests', () => {
     });
 
     it('should track creation and update timestamps', () => {
-      const entry = new TimeEntry(
-        'task-123',
-        'user-456',
-        8,
-        new Date('2024-01-15')
-      );
+      const entry = new TimeEntry('task-123', 'user-456', 8, new Date('2024-01-15'));
 
       expect(entry.getCreatedAt()).toBeDefined();
       expect(entry.getUpdatedAt()).toBeDefined();
@@ -226,18 +177,11 @@ describe('TimeEntry Entity - Property-Based Tests', () => {
       const initialUpdatedAt = entry.getUpdatedAt();
       entry.setHours(10);
 
-      expect(entry.getUpdatedAt().getTime()).toBeGreaterThanOrEqual(
-        initialUpdatedAt.getTime()
-      );
+      expect(entry.getUpdatedAt().getTime()).toBeGreaterThanOrEqual(initialUpdatedAt.getTime());
     });
 
     it('should handle fractional hours', () => {
-      const entry = new TimeEntry(
-        'task-123',
-        'user-456',
-        2.5,
-        new Date('2024-01-15')
-      );
+      const entry = new TimeEntry('task-123', 'user-456', 2.5, new Date('2024-01-15'));
 
       expect(entry.getHours()).toBe(2.5);
 
@@ -264,18 +208,8 @@ describe('TimeEntry Entity - Property-Based Tests', () => {
     });
 
     it('should maintain independence between time entries', () => {
-      const entry1 = new TimeEntry(
-        'task-1',
-        'user-1',
-        8,
-        new Date('2024-01-15')
-      );
-      const entry2 = new TimeEntry(
-        'task-2',
-        'user-2',
-        6,
-        new Date('2024-01-16')
-      );
+      const entry1 = new TimeEntry('task-1', 'user-1', 8, new Date('2024-01-15'));
+      const entry2 = new TimeEntry('task-2', 'user-2', 6, new Date('2024-01-16'));
 
       entry1.setHours(10);
       expect(entry1.getHours()).toBe(10);

@@ -1,4 +1,4 @@
-import { Sprint } from '@sprints/domain/entities/sprint.entity';
+import type { Sprint } from '../entities/sprint.entity';
 
 export interface ISprintRepository {
   create(sprint: Sprint): Promise<Sprint>;

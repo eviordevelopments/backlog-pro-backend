@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
+
+import { UserAchievementResponseDto } from '../../dto/response/achievement.response.dto';
+import {
+  AchievementRepository,
+  UserAchievementRepository,
+} from '../../repository/achievement.repository';
+
 import { GetUserAchievementsQuery } from './get-user-achievements.query';
-import { UserAchievementRepository } from '@achievements/repository/achievement.repository';
-import { AchievementRepository } from '@achievements/repository/achievement.repository';
 
 @Injectable()
 export class GetUserAchievementsQueryHandler {
@@ -10,7 +15,7 @@ export class GetUserAchievementsQueryHandler {
     private readonly achievementRepository: AchievementRepository,
   ) {}
 
-  async handle(query: GetUserAchievementsQuery): Promise<any[]> {
+  async handle(query: GetUserAchievementsQuery): Promise<UserAchievementResponseDto[]> {
     const userAchievements = await this.userAchievementRepository.getByUserId(query.userId);
 
     const results = [];

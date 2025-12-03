@@ -1,10 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { RegisterTimeCommand } from '@time-entries/application/commands/register-time.command';
-import { TimeEntry } from '@time-entries/domain/entities/time-entry.entity';
-import { TimeEntryRepository } from '@time-entries/repository/time-entry.repository';
-import { TaskRepository } from '@tasks/repository/task.repository';
-import { InvalidTimeEntryAssignmentException } from '@time-entries/domain/exceptions';
 import { v4 as uuidv4 } from 'uuid';
+
+import { TaskRepository } from '../../../tasks/repository/task.repository';
+import { TimeEntry } from '../../domain/entities/time-entry.entity';
+import { InvalidTimeEntryAssignmentException } from '../../domain/exceptions/index';
+import { TimeEntryRepository } from '../../repository/time-entry.repository';
+
+import { RegisterTimeCommand } from './register-time.command';
 
 @Injectable()
 export class RegisterTimeCommandHandler {

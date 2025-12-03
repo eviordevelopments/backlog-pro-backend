@@ -1,17 +1,18 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SprintTypeOrmEntity } from '@sprints/repository/entities/sprint.typeorm-entity';
-import { SprintRepository } from '@sprints/repository/sprint.repository';
-import { SprintMapper } from '@sprints/repository/mappers/sprint.mapper';
-import { CreateSprintCommandHandler } from '@sprints/application/commands/create-sprint.command-handler';
-import { UpdateSprintCommandHandler } from '@sprints/application/commands/update-sprint.command-handler';
-import { ExtendSprintCommandHandler } from '@sprints/application/commands/extend-sprint.command-handler';
-import { CompleteSprintCommandHandler } from '@sprints/application/commands/complete-sprint.command-handler';
-import { RegisterRetrospectiveCommandHandler } from '@sprints/application/commands/register-retrospective.command-handler';
-import { GetSprintQueryHandler } from '@sprints/application/queries/get-sprint.query-handler';
-import { ListSprintsProjectQueryHandler } from '@sprints/application/queries/list-sprints-project.query-handler';
-import { SprintService } from '@sprints/application/services/sprint.service';
-import { SprintResolver } from '@sprints/resolvers/sprint.resolver';
+
+import { CompleteSprintCommandHandler } from './application/commands/complete-sprint.command-handler';
+import { CreateSprintCommandHandler } from './application/commands/create-sprint.command-handler';
+import { ExtendSprintCommandHandler } from './application/commands/extend-sprint.command-handler';
+import { RegisterRetrospectiveCommandHandler } from './application/commands/register-retrospective.command-handler';
+import { UpdateSprintCommandHandler } from './application/commands/update-sprint.command-handler';
+import { GetSprintQueryHandler } from './application/queries/get-sprint.query-handler';
+import { ListSprintsProjectQueryHandler } from './application/queries/list-sprints-project.query-handler';
+import { SprintService } from './application/services/sprint.service';
+import { SprintTypeOrmEntity } from './repository/entities/sprint.typeorm-entity';
+import { SprintMapper } from './repository/mappers/sprint.mapper';
+import { SprintRepository } from './repository/sprint.repository';
+import { SprintResolver } from './resolvers/sprint.resolver';
 
 @Module({
   imports: [TypeOrmModule.forFeature([SprintTypeOrmEntity])],

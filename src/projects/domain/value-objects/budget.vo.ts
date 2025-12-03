@@ -1,4 +1,4 @@
-import { InvalidBudgetException } from "@projects/domain/exceptions";
+import { InvalidBudgetException } from '../exceptions/index';
 
 export class Budget {
   private readonly value: number;

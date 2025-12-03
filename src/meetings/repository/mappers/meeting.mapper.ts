@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Meeting } from '@meetings/domain/entities/meeting.entity';
-import { MeetingTypeOrmEntity } from '@meetings/repository/entities/meeting.typeorm-entity';
+
+import { Meeting } from '../../domain/entities/meeting.entity';
+import { MeetingTypeOrmEntity } from '../entities/meeting.typeorm-entity';
 
 @Injectable()
 export class MeetingMapper {

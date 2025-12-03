@@ -1,6 +1,8 @@
-import * as fc from 'fast-check';
+import fc from 'fast-check';
+
+import { SprintStatus } from '../value-objects/sprint-status.vo';
+
 import { Sprint } from './sprint.entity';
-import { SprintStatus } from '@sprints/domain/value-objects/sprint-status.vo';
 
 describe('Sprint Entity - Property-Based Tests', () => {
   // Feature: backlog-pro-development, Property 10: Sprint date validation
@@ -24,15 +26,15 @@ describe('Sprint Entity - Property-Based Tests', () => {
               data.projectId,
               data.goal,
               data.startDate,
-              endDate
+              endDate,
             );
 
             // The entity allows creation, but handlers should validate
             expect(sprint.getStartDate()).toEqual(data.startDate);
             expect(sprint.getEndDate()).toEqual(endDate);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -47,27 +49,25 @@ describe('Sprint Entity - Property-Based Tests', () => {
             daysOffset: fc.integer({ min: 1, max: 365 }),
           }),
           (data) => {
-            const endDate = new Date(
-              data.startDate.getTime() + data.daysOffset * 86400000
-            );
+            const endDate = new Date(data.startDate.getTime() + data.daysOffset * 86400000);
 
             const sprint = new Sprint(
               data.name,
               data.projectId,
               data.goal,
               data.startDate,
-              endDate
+              endDate,
             );
 
             expect(sprint.getStatus().getValue()).toBe('planning');
             expect(sprint.getStartDate()).toEqual(data.startDate);
             expect(sprint.getEndDate()).toEqual(endDate);
             expect(sprint.getEndDate().getTime()).toBeGreaterThanOrEqual(
-              sprint.getStartDate().getTime()
+              sprint.getStartDate().getTime(),
             );
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });
@@ -86,9 +86,7 @@ describe('Sprint Entity - Property-Based Tests', () => {
             storyPointsCompleted: fc.integer({ min: 0, max: 500 }),
           }),
           (data) => {
-            const endDate = new Date(
-              data.startDate.getTime() + data.daysOffset * 86400000
-            );
+            const endDate = new Date(data.startDate.getTime() + data.daysOffset * 86400000);
 
             const sprint = new Sprint(
               data.name,
@@ -101,22 +99,18 @@ describe('Sprint Entity - Property-Based Tests', () => {
               SprintStatus.COMPLETED,
               0,
               0,
-              data.storyPointsCompleted
+              data.storyPointsCompleted,
             );
 
             // Set velocity to story points completed
             sprint.setVelocity(data.storyPointsCompleted);
 
             expect(sprint.getVelocity()).toBe(data.storyPointsCompleted);
-            expect(sprint.getStoryPointsCompleted()).toBe(
-              data.storyPointsCompleted
-            );
-            expect(sprint.getVelocity()).toBe(
-              sprint.getStoryPointsCompleted()
-            );
-          }
+            expect(sprint.getStoryPointsCompleted()).toBe(data.storyPointsCompleted);
+            expect(sprint.getVelocity()).toBe(sprint.getStoryPointsCompleted());
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -135,16 +129,14 @@ describe('Sprint Entity - Property-Based Tests', () => {
             }),
           }),
           (data) => {
-            const endDate = new Date(
-              data.startDate.getTime() + data.daysOffset * 86400000
-            );
+            const endDate = new Date(data.startDate.getTime() + data.daysOffset * 86400000);
 
             const sprint = new Sprint(
               data.name,
               data.projectId,
               data.goal,
               data.startDate,
-              endDate
+              endDate,
             );
 
             // Update velocity multiple times
@@ -156,9 +148,9 @@ describe('Sprint Entity - Property-Based Tests', () => {
             // Final velocity should be the last one set
             const lastVelocity = data.velocities[data.velocities.length - 1];
             expect(sprint.getVelocity()).toBe(lastVelocity);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });
@@ -173,7 +165,7 @@ describe('Sprint Entity - Property-Based Tests', () => {
         'project-123',
         'Complete core features',
         startDate,
-        endDate
+        endDate,
       );
 
       expect(sprint.getName()).toBe('Sprint 1');
@@ -194,7 +186,7 @@ describe('Sprint Entity - Property-Based Tests', () => {
         'project-123',
         'Complete core features',
         startDate,
-        endDate
+        endDate,
       );
 
       sprint.setName('Sprint 1 - Updated');
@@ -210,7 +202,7 @@ describe('Sprint Entity - Property-Based Tests', () => {
         'project-123',
         'Complete core features',
         startDate,
-        endDate
+        endDate,
       );
 
       sprint.setGoal('Complete core features and testing');
@@ -226,7 +218,7 @@ describe('Sprint Entity - Property-Based Tests', () => {
         'project-123',
         'Complete core features',
         startDate,
-        endDate
+        endDate,
       );
 
       sprint.setStatus(SprintStatus.ACTIVE);
@@ -245,7 +237,7 @@ describe('Sprint Entity - Property-Based Tests', () => {
         'project-123',
         'Complete core features',
         startDate,
-        endDate
+        endDate,
       );
 
       sprint.setStoryPointsCommitted(50);
@@ -264,7 +256,7 @@ describe('Sprint Entity - Property-Based Tests', () => {
         'project-123',
         'Complete core features',
         startDate,
-        endDate
+        endDate,
       );
 
       sprint.setVelocity(45);
@@ -280,7 +272,7 @@ describe('Sprint Entity - Property-Based Tests', () => {
         'project-123',
         'Complete core features',
         startDate,
-        endDate
+        endDate,
       );
 
       const teamMembers = ['user-1', 'user-2', 'user-3'];
@@ -299,7 +291,7 @@ describe('Sprint Entity - Property-Based Tests', () => {
         'project-123',
         'Complete core features',
         startDate,
-        endDate
+        endDate,
       );
 
       const notes = 'Good progress, need to improve testing';
@@ -318,7 +310,7 @@ describe('Sprint Entity - Property-Based Tests', () => {
         'project-123',
         'Complete core features',
         startDate,
-        endDate
+        endDate,
       );
 
       expect(sprint.getDeletedAt()).toBeNull();
@@ -336,7 +328,7 @@ describe('Sprint Entity - Property-Based Tests', () => {
         'project-123',
         'Complete core features',
         startDate,
-        endDate
+        endDate,
       );
 
       expect(sprint.getCreatedAt()).toBeDefined();
@@ -345,9 +337,7 @@ describe('Sprint Entity - Property-Based Tests', () => {
       const initialUpdatedAt = sprint.getUpdatedAt();
       sprint.setName('Updated Sprint');
 
-      expect(sprint.getUpdatedAt().getTime()).toBeGreaterThanOrEqual(
-        initialUpdatedAt.getTime()
-      );
+      expect(sprint.getUpdatedAt().getTime()).toBeGreaterThanOrEqual(initialUpdatedAt.getTime());
     });
   });
 });

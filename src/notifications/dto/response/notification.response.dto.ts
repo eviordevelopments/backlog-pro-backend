@@ -1,4 +1,4 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Transform } from 'class-transformer';
 
 @ObjectType()
@@ -19,7 +19,7 @@ export class NotificationResponseDto {
   message!: string;
 
   @Field({ nullable: true })
-  @Transform(({ value }) => value ? JSON.stringify(value) : undefined)
+  @Transform(({ value }) => (value ? JSON.stringify(value) : undefined))
   metadata?: string;
 
   @Field()

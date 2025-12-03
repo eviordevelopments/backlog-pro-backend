@@ -1,4 +1,4 @@
-import { Notification } from '@notifications/domain/entities/notification.entity';
+import type { Notification } from '../entities/notification.entity';
 
 export interface INotificationRepository {
   create(notification: Notification): Promise<Notification>;

@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
+
+import { GoalResponseDto } from '../../dto/response/goal.response.dto';
+import { GoalRepository } from '../../repository/goal.repository';
+
 import { GetUserGoalsQuery } from './get-user-goals.query';
-import { GoalRepository } from '@goals/repository/goal.repository';
 
 @Injectable()
 export class GetUserGoalsQueryHandler {
   constructor(private readonly goalRepository: GoalRepository) {}
 
-  async handle(query: GetUserGoalsQuery): Promise<any[]> {
+  async handle(query: GetUserGoalsQuery): Promise<GoalResponseDto[]> {
     const goals = await this.goalRepository.getByOwnerId(query.ownerId);
     return goals.map((g) => ({
       id: g.getId(),

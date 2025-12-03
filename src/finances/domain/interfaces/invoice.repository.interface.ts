@@ -1,4 +1,4 @@
-import { Invoice } from '@finances/domain/entities/invoice.entity';
+import type { Invoice } from '../entities/invoice.entity';
 
 export interface IInvoiceRepository {
   create(invoice: Invoice): Promise<Invoice>;

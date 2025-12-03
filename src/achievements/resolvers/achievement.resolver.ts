@@ -1,11 +1,15 @@
-import { Resolver, Query, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
-import { CurrentUser } from '@shared/decorators/current-user.decorator';
-import { GetUserAchievementsQueryHandler } from '@achievements/application/queries/get-user-achievements.query-handler';
-import { GetUserAchievementsQuery } from '@achievements/application/queries/get-user-achievements.query';
-import { AchievementRepository } from '@achievements/repository/achievement.repository';
-import { AchievementResponseDto, UserAchievementResponseDto } from '@achievements/dto/response/achievement.response.dto';
+import { Query, Resolver } from '@nestjs/graphql';
+
+import { CurrentUser } from '../../shared/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { GetUserAchievementsQuery } from '../application/queries/get-user-achievements.query';
+import { GetUserAchievementsQueryHandler } from '../application/queries/get-user-achievements.query-handler';
+import {
+  AchievementResponseDto,
+  UserAchievementResponseDto,
+} from '../dto/response/achievement.response.dto';
+import { AchievementRepository } from '../repository/achievement.repository';
 
 @Resolver('Achievement')
 export class AchievementResolver {
@@ -17,9 +21,9 @@ export class AchievementResolver {
   @Query(() => [UserAchievementResponseDto])
   @UseGuards(JwtAuthGuard)
   async getUserAchievements(
-    @CurrentUser() currentUser: any
+    @CurrentUser() currentUser: { sub: string; email: string },
   ): Promise<UserAchievementResponseDto[]> {
-    const query = new GetUserAchievementsQuery(currentUser.id);
+    const query = new GetUserAchievementsQuery(currentUser.sub);
     return this.getUserAchievementsHandler.handle(query);
   }
 

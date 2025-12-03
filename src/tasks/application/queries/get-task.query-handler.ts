@@ -1,8 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GetTaskQuery } from '@tasks/application/queries/get-task.query';
-import { Task } from '@tasks/domain/entities/task.entity';
-import { TaskRepository } from '@tasks/repository/task.repository';
-import { TaskNotFoundException } from '@tasks/domain/exceptions';
+
+import { Task } from '../../domain/entities/task.entity';
+import { TaskNotFoundException } from '../../domain/exceptions/index';
+import { TaskRepository } from '../../repository/task.repository';
+
+import { GetTaskQuery } from './get-task.query';
 
 @Injectable()
 export class GetTaskQueryHandler {

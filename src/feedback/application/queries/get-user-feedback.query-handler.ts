@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
+
+import { FeedbackResponseDto } from '../../dto/response/feedback.response.dto';
+import { FeedbackRepository } from '../../repository/feedback.repository';
+
 import { GetUserFeedbackQuery } from './get-user-feedback.query';
-import { FeedbackRepository } from '@feedback/repository/feedback.repository';
 
 @Injectable()
 export class GetUserFeedbackQueryHandler {
   constructor(private readonly feedbackRepository: FeedbackRepository) {}
 
-  async handle(query: GetUserFeedbackQuery): Promise<any[]> {
+  async handle(query: GetUserFeedbackQuery): Promise<FeedbackResponseDto[]> {
     const feedbacks = await this.feedbackRepository.getByToUserId(query.toUserId);
 
     return feedbacks.map((f) => ({

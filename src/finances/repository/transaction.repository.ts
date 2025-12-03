@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { Transaction } from '@finances/domain/entities/transaction.entity';
-import { TransactionTypeOrmEntity } from '@finances/repository/entities/transaction.typeorm-entity';
-import { TransactionMapper } from '@finances/repository/mappers/transaction.mapper';
-import { ITransactionRepository } from '@finances/domain/interfaces/transaction.repository.interface';
+import { IsNull, Repository } from 'typeorm';
+
+import { Transaction } from '../domain/entities/transaction.entity';
+import { ITransactionRepository } from '../domain/interfaces/transaction.repository.interface';
+
+import { TransactionTypeOrmEntity } from './entities/transaction.typeorm-entity';
+import { TransactionMapper } from './mappers/transaction.mapper';
 
 @Injectable()
 export class TransactionRepository implements ITransactionRepository {
@@ -15,17 +17,12 @@ export class TransactionRepository implements ITransactionRepository {
   ) {}
 
   async create(transaction: Transaction): Promise<Transaction> {
-    const entity = this.repository.create(
-      this.mapper.toPersistence(transaction)
-    );
+    const entity = this.repository.create(this.mapper.toPersistence(transaction));
     const saved = await this.repository.save(entity);
     return this.mapper.toDomain(saved);
   }
 
-  async update(
-    id: string,
-    transaction: Partial<Transaction>
-  ): Promise<Transaction> {
+  async update(id: string, transaction: Partial<Transaction>): Promise<Transaction> {
     await this.repository.update(id, this.mapper.toPersistence(transaction as Transaction));
     const updated = await this.repository.findOneBy({ id });
     if (!updated) {

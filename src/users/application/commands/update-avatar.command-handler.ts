@@ -1,9 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { UpdateAvatarCommand } from '@users/application/commands/update-avatar.command';
-import { UserProfile } from '@users/domain/entities/user-profile.entity';
-import { UserProfileNotFoundException } from '@users/domain/exceptions';
-import { InvalidAvatarUrlException } from '@users/domain/exceptions/invalid-avatar-url.exception';
-import { UserProfileRepository } from '@users/repository/user-profile.repository';
+
+import { UserProfile } from '../../domain/entities/user-profile.entity';
+import { UserProfileNotFoundException } from '../../domain/exceptions/index';
+import { InvalidAvatarUrlException } from '../../domain/exceptions/invalid-avatar-url.exception';
+import { UserProfileRepository } from '../../repository/user-profile.repository';
+
+import { UpdateAvatarCommand } from './update-avatar.command';
 
 @Injectable()
 export class UpdateAvatarCommandHandler {

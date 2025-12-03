@@ -1,5 +1,7 @@
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { envs } from '@shared/config';
+import type { DataSourceOptions } from 'typeorm';
+import { DataSource } from 'typeorm';
+
+import { envs } from './index';
 
 const isProduction = envs.server.environment === 'production';
 /**

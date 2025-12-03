@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
+
+import { ProjectRepository } from '../../../projects/repository/project.repository';
+import { Transaction } from '../../domain/entities/transaction.entity';
+import { Amount } from '../../domain/value-objects/amount.vo';
+import { Currency } from '../../domain/value-objects/currency.vo';
+import { TransactionType } from '../../domain/value-objects/transaction-type.vo';
+import { TransactionRepository } from '../../repository/transaction.repository';
+
 import { CreateTransactionCommand } from './create-transaction.command';
-import { Transaction } from '@finances/domain/entities/transaction.entity';
-import { Amount } from '@finances/domain/value-objects/amount.vo';
-import { Currency } from '@finances/domain/value-objects/currency.vo';
-import { TransactionType } from '@finances/domain/value-objects/transaction-type.vo';
-import { TransactionRepository } from '@finances/repository/transaction.repository';
-import { ProjectRepository } from '@projects/repository/project.repository';
 
 @Injectable()
 export class CreateTransactionCommandHandler {

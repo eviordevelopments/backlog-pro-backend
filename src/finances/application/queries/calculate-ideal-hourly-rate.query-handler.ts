@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+
+import { ProjectRepository } from '../../../projects/repository/project.repository';
+import { TimeEntryRepository } from '../../../time-entries/repository/time-entry.repository';
+
 import { CalculateIdealHourlyRateQuery } from './calculate-ideal-hourly-rate.query';
-import { ProjectRepository } from '@projects/repository/project.repository';
-import { TimeEntryRepository } from '@time-entries/repository/time-entry.repository';
 
 @Injectable()
 export class CalculateIdealHourlyRateQueryHandler {
@@ -17,9 +19,7 @@ export class CalculateIdealHourlyRateQueryHandler {
     }
 
     // Get all time entries for tasks in this project
-    const timeEntries = await this.timeEntryRepository.getByProjectId(
-      query.projectId
-    );
+    const timeEntries = await this.timeEntryRepository.getByProjectId(query.projectId);
 
     // Calculate total hours
     const totalHours = timeEntries.reduce((sum, entry) => {

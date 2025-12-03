@@ -1,9 +1,8 @@
-import * as fc from 'fast-check';
+import fc from 'fast-check';
+
+import { InvalidBudgetException, InvalidProgressException } from '../exceptions/index';
+
 import { Project } from './project.entity';
-import {
-  InvalidBudgetException,
-  InvalidProgressException,
-} from '@projects/domain/exceptions';
 
 describe('Project Entity - Property-Based Tests', () => {
   // Feature: backlog-pro-development, Property 6: Project creation with default state
@@ -30,9 +29,9 @@ describe('Project Entity - Property-Based Tests', () => {
             expect(project.name).toBe(projectData.name);
             expect(project.clientId).toBe(projectData.clientId);
             expect(project.budget).toBe(projectData.budget);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });
@@ -61,20 +60,15 @@ describe('Project Entity - Property-Based Tests', () => {
             });
 
             // Positive budget should succeed
-            const positiveBudget = fc.sample(
-              fc.integer({ min: 1, max: 1000000 }),
-              1
-            )[0];
+            const positiveBudget = fc.sample(fc.integer({ min: 1, max: 1000000 }), 1)[0];
             project.updateBudget(positiveBudget);
             expect(project.budget).toBe(positiveBudget);
 
             // Negative budget should throw
-            expect(() => project.updateBudget(-100)).toThrow(
-              InvalidBudgetException
-            );
-          }
+            expect(() => project.updateBudget(-100)).toThrow(InvalidBudgetException);
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });
@@ -106,9 +100,9 @@ describe('Project Entity - Property-Based Tests', () => {
             expect(project.deletedAt).toEqual(now);
             expect(project.id).toBeDefined();
             expect(project.name).toBe(projectData.name);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });
@@ -127,7 +121,7 @@ describe('Project Entity - Property-Based Tests', () => {
               progress: fc.integer({ min: 0, max: 100 }),
               isDeleted: fc.boolean(),
             }),
-            { minLength: 1, maxLength: 20 }
+            { minLength: 1, maxLength: 20 },
           ),
           (projectsData) => {
             const now = new Date();
@@ -150,9 +144,7 @@ describe('Project Entity - Property-Based Tests', () => {
             const deletedProjects = projects.filter((p) => p.deletedAt);
 
             // Verify separation
-            expect(activeProjects.length + deletedProjects.length).toBe(
-              projects.length
-            );
+            expect(activeProjects.length + deletedProjects.length).toBe(projects.length);
 
             // All active projects should have no deletedAt
             activeProjects.forEach((p) => {
@@ -163,9 +155,9 @@ describe('Project Entity - Property-Based Tests', () => {
             deletedProjects.forEach((p) => {
               expect(p.deletedAt).toBeDefined();
             });
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });
@@ -216,9 +208,7 @@ describe('Project Entity - Property-Based Tests', () => {
         updatedAt: new Date(),
       });
 
-      expect(() => project.updateBudget(-1000)).toThrow(
-        InvalidBudgetException
-      );
+      expect(() => project.updateBudget(-1000)).toThrow(InvalidBudgetException);
     });
 
     it('should update progress successfully with valid value', () => {
@@ -249,12 +239,8 @@ describe('Project Entity - Property-Based Tests', () => {
         updatedAt: new Date(),
       });
 
-      expect(() => project.updateProgress(150)).toThrow(
-        InvalidProgressException
-      );
-      expect(() => project.updateProgress(-10)).toThrow(
-        InvalidProgressException
-      );
+      expect(() => project.updateProgress(150)).toThrow(InvalidProgressException);
+      expect(() => project.updateProgress(-10)).toThrow(InvalidProgressException);
     });
 
     it('should add spent amount successfully', () => {

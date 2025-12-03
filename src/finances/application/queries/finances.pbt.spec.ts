@@ -1,17 +1,16 @@
-import * as fc from 'fast-check';
-import { Amount } from '@finances/domain/value-objects/amount.vo';
-import { Currency } from '@finances/domain/value-objects/currency.vo';
-import { TransactionType } from '@finances/domain/value-objects/transaction-type.vo';
-import { Transaction } from '@finances/domain/entities/transaction.entity';
-import { Invoice } from '@finances/domain/entities/invoice.entity';
-import { InvoiceStatus } from '@finances/domain/value-objects/invoice-status.vo';
-import { Project } from '@projects/domain/entities/project.entity';
-import { TimeEntry } from '@time-entries/domain/entities/time-entry.entity';
+import fc from 'fast-check';
+
+import { Project } from '../../../projects/domain/entities/project.entity';
+import { Invoice } from '../../domain/entities/invoice.entity';
+import { Transaction } from '../../domain/entities/transaction.entity';
+import { Amount } from '../../domain/value-objects/amount.vo';
+import { Currency } from '../../domain/value-objects/currency.vo';
+import { TransactionType } from '../../domain/value-objects/transaction-type.vo';
 
 /**
  * Property-Based Tests for Finances Module
  * Feature: backlog-pro-development
- * 
+ *
  * These tests verify the correctness properties of financial calculations
  * including transaction updates, hourly rate calculations, salary calculations,
  * and invoice total calculations.
@@ -20,10 +19,10 @@ import { TimeEntry } from '@time-entries/domain/entities/time-entry.entity';
 describe('Finances Module - Property-Based Tests', () => {
   /**
    * Feature: backlog-pro-development, Property 19: Transaction updates project spent
-   * 
+   *
    * Property: For any transaction associated to a project, creating the transaction
    * must increment the field spent of the project by the amount of the transaction.
-   * 
+   *
    * Validates: Requirements 7.1
    */
   describe('Property 19: Transaction updates project spent', () => {
@@ -67,46 +66,43 @@ describe('Finances Module - Property-Based Tests', () => {
             // Verify that project spent increased by transaction amount
             const expectedSpent = initialProjectSpent + transactionAmount;
             expect(project.spent).toBe(expectedSpent);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
     it('should reject negative transaction amounts', () => {
       fc.assert(
-        fc.property(
-          fc.integer({ min: -100000, max: -1 }),
-          (negativeAmount) => {
-            const project = new Project({
-              id: 'project-1',
-              name: 'Test Project',
-              clientId: 'client-1',
-              status: 'active',
-              budget: 100000,
-              spent: 0,
-              progress: 0,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            });
+        fc.property(fc.integer({ min: -100000, max: -1 }), (negativeAmount) => {
+          const project = new Project({
+            id: 'project-1',
+            name: 'Test Project',
+            clientId: 'client-1',
+            status: 'active',
+            budget: 100000,
+            spent: 0,
+            progress: 0,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          });
 
-            // Attempting to add negative amount should throw
-            expect(() => {
-              project.addSpent(negativeAmount);
-            }).toThrow();
-          }
-        ),
-        { numRuns: 100 }
+          // Attempting to add negative amount should throw
+          expect(() => {
+            project.addSpent(negativeAmount);
+          }).toThrow();
+        }),
+        { numRuns: 100 },
       );
     });
   });
 
   /**
    * Feature: backlog-pro-development, Property 20: Ideal hourly rate calculation
-   * 
+   *
    * Property: For any project with budget B and total hours H, the ideal hourly
    * rate must be equal to B ÷ H.
-   * 
+   *
    * Validates: Requirements 7.2
    */
   describe('Property 20: Ideal hourly rate calculation', () => {
@@ -124,26 +120,23 @@ describe('Finances Module - Property-Based Tests', () => {
             const expectedRounded = Math.round(expectedIdealRate * 100) / 100;
 
             expect(actualIdealRate).toBeCloseTo(expectedRounded, 2);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
     it('should return zero when total hours is zero', () => {
       fc.assert(
-        fc.property(
-          fc.integer({ min: 0, max: 1000000 }),
-          (budget) => {
-            const totalHours = 0;
+        fc.property(fc.integer({ min: 0, max: 1000000 }), (budget) => {
+          const totalHours = 0;
 
-            // When total hours is 0, ideal rate should be 0
-            const idealRate = totalHours === 0 ? 0 : budget / totalHours;
+          // When total hours is 0, ideal rate should be 0
+          const idealRate = totalHours === 0 ? 0 : budget / totalHours;
 
-            expect(idealRate).toBe(0);
-          }
-        ),
-        { numRuns: 100 }
+          expect(idealRate).toBe(0);
+        }),
+        { numRuns: 100 },
       );
     });
 
@@ -158,19 +151,19 @@ describe('Finances Module - Property-Based Tests', () => {
             // Verify that the result has at most 2 decimal places
             const decimalPlaces = (idealRate.toString().split('.')[1] || '').length;
             expect(decimalPlaces).toBeLessThanOrEqual(2);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });
 
   /**
    * Feature: backlog-pro-development, Property 21: Individual salary calculation
-   * 
+   *
    * Property: For any user with hours worked W and ideal hourly rate R of the project,
    * the salary calculated must be equal to W × R.
-   * 
+   *
    * Validates: Requirements 7.3
    */
   describe('Property 21: Individual salary calculation', () => {
@@ -188,26 +181,23 @@ describe('Finances Module - Property-Based Tests', () => {
             const expectedRounded = Math.round(expectedSalary * 100) / 100;
 
             expect(actualSalary).toBe(expectedRounded);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
     it('should return zero salary when hours worked is zero', () => {
       fc.assert(
-        fc.property(
-          fc.integer({ min: 10, max: 500 }),
-          (idealRate) => {
-            const hoursWorked = 0;
+        fc.property(fc.integer({ min: 10, max: 500 }), (idealRate) => {
+          const hoursWorked = 0;
 
-            // When hours worked is 0, salary should be 0
-            const salary = hoursWorked * idealRate;
+          // When hours worked is 0, salary should be 0
+          const salary = hoursWorked * idealRate;
 
-            expect(salary).toBe(0);
-          }
-        ),
-        { numRuns: 100 }
+          expect(salary).toBe(0);
+        }),
+        { numRuns: 100 },
       );
     });
 
@@ -217,14 +207,14 @@ describe('Finances Module - Property-Based Tests', () => {
           fc.integer({ min: 1, max: 1000 }),
           fc.integer({ min: 10, max: 500 }),
           (hoursWorked, idealRate) => {
-            const salary = Math.round((hoursWorked * idealRate) * 100) / 100;
+            const salary = Math.round(hoursWorked * idealRate * 100) / 100;
 
             // Verify that the result has at most 2 decimal places
             const decimalPlaces = (salary.toString().split('.')[1] || '').length;
             expect(decimalPlaces).toBeLessThanOrEqual(2);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -235,27 +225,27 @@ describe('Finances Module - Property-Based Tests', () => {
           fc.integer({ min: 10, max: 500 }),
           (baseHours, idealRate) => {
             // Calculate salary for base hours
-            const baseSalary = Math.round((baseHours * idealRate) * 100) / 100;
+            const baseSalary = Math.round(baseHours * idealRate * 100) / 100;
 
             // Calculate salary for double hours
             const doubleHours = baseHours * 2;
-            const doubleSalary = Math.round((doubleHours * idealRate) * 100) / 100;
+            const doubleSalary = Math.round(doubleHours * idealRate * 100) / 100;
 
             // Double hours should result in double salary (within rounding tolerance)
-            const expectedDoubleSalary = Math.round((baseSalary * 2) * 100) / 100;
+            const expectedDoubleSalary = Math.round(baseSalary * 2 * 100) / 100;
             expect(doubleSalary).toBe(expectedDoubleSalary);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });
 
   /**
    * Feature: backlog-pro-development, Property 22: Invoice total calculation
-   * 
+   *
    * Property: For any invoice with amount A and tax T, the total must be equal to A + T.
-   * 
+   *
    * Validates: Requirements 7.6
    */
   describe('Property 22: Invoice total calculation', () => {
@@ -284,59 +274,53 @@ describe('Finances Module - Property-Based Tests', () => {
             const actualTotal = invoice.getTotal().getValue();
 
             expect(actualTotal).toBe(expectedTotal);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
     it('should handle zero tax correctly', () => {
       fc.assert(
-        fc.property(
-          fc.integer({ min: 0, max: 100000 }),
-          (amount) => {
-            const amountVO = Amount.create(amount);
-            const taxVO = Amount.create(0);
+        fc.property(fc.integer({ min: 0, max: 100000 }), (amount) => {
+          const amountVO = Amount.create(amount);
+          const taxVO = Amount.create(0);
 
-            const invoice = new Invoice(
-              'INV-001',
-              'client-1',
-              amountVO,
-              taxVO,
-              new Date(),
-              new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-            );
+          const invoice = new Invoice(
+            'INV-001',
+            'client-1',
+            amountVO,
+            taxVO,
+            new Date(),
+            new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          );
 
-            // Total should equal amount when tax is zero
-            expect(invoice.getTotal().getValue()).toBe(amount);
-          }
-        ),
-        { numRuns: 100 }
+          // Total should equal amount when tax is zero
+          expect(invoice.getTotal().getValue()).toBe(amount);
+        }),
+        { numRuns: 100 },
       );
     });
 
     it('should handle zero amount correctly', () => {
       fc.assert(
-        fc.property(
-          fc.integer({ min: 0, max: 50000 }),
-          (tax) => {
-            const amountVO = Amount.create(0);
-            const taxVO = Amount.create(tax);
+        fc.property(fc.integer({ min: 0, max: 50000 }), (tax) => {
+          const amountVO = Amount.create(0);
+          const taxVO = Amount.create(tax);
 
-            const invoice = new Invoice(
-              'INV-001',
-              'client-1',
-              amountVO,
-              taxVO,
-              new Date(),
-              new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-            );
+          const invoice = new Invoice(
+            'INV-001',
+            'client-1',
+            amountVO,
+            taxVO,
+            new Date(),
+            new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          );
 
-            // Total should equal tax when amount is zero
-            expect(invoice.getTotal().getValue()).toBe(tax);
-          }
-        ),
-        { numRuns: 100 }
+          // Total should equal tax when amount is zero
+          expect(invoice.getTotal().getValue()).toBe(tax);
+        }),
+        { numRuns: 100 },
       );
     });
 
@@ -363,9 +347,9 @@ describe('Finances Module - Property-Based Tests', () => {
             // Verify that the result has at most 2 decimal places
             const decimalPlaces = (total.toString().split('.')[1] || '').length;
             expect(decimalPlaces).toBeLessThanOrEqual(2);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -400,12 +384,10 @@ describe('Finances Module - Property-Based Tests', () => {
             );
 
             // Both should have the same total
-            expect(invoice1.getTotal().getValue()).toBe(
-              invoice2.getTotal().getValue()
-            );
-          }
+            expect(invoice1.getTotal().getValue()).toBe(invoice2.getTotal().getValue());
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });

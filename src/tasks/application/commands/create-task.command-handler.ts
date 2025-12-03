@@ -1,8 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateTaskCommand } from '@tasks/application/commands/create-task.command';
-import { Task } from '@tasks/domain/entities/task.entity';
-import { TaskRepository } from '@tasks/repository/task.repository';
 import { v4 as uuidv4 } from 'uuid';
+
+import { Task } from '../../domain/entities/task.entity';
+import { TaskRepository } from '../../repository/task.repository';
+
+import { CreateTaskCommand } from './create-task.command';
 
 @Injectable()
 export class CreateTaskCommandHandler {

@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserProfile } from '@users/domain/entities/user-profile.entity';
-import { IUserProfileRepository } from '@users/domain/interfaces/user-profile.repository.interface';
-import { UserProfileTypeOrmEntity } from '@users/repository/entities/user-profile.typeorm-entity';
-import { UserProfileMapper } from '@users/repository/mappers/user-profile.mapper';
+
+import { UserProfile } from '../domain/entities/user-profile.entity';
+import { IUserProfileRepository } from '../domain/interfaces/user-profile.repository.interface';
+
+import { UserProfileTypeOrmEntity } from './entities/user-profile.typeorm-entity';
+import { UserProfileMapper } from './mappers/user-profile.mapper';
 
 @Injectable()
 export class UserProfileRepository implements IUserProfileRepository {
@@ -37,15 +39,15 @@ export class UserProfileRepository implements IUserProfileRepository {
     return UserProfileMapper.toDomain(updated);
   }
 
-  async getWorkedHoursByUserId(userId: string): Promise<number> {
+  getWorkedHoursByUserId(_userId: string): Promise<number> {
     // Esta consulta se implementará cuando se tenga el módulo de time-entries
     // Por ahora retorna 0
-    return 0;
+    return Promise.resolve(0);
   }
 
-  async getWorkedHoursByUserIdAndProject(userId: string, projectId: string): Promise<number> {
+  getWorkedHoursByUserIdAndProject(_userId: string, _projectId: string): Promise<number> {
     // Esta consulta se implementará cuando se tenga el módulo de time-entries
     // Por ahora retorna 0
-    return 0;
+    return Promise.resolve(0);
   }
 }

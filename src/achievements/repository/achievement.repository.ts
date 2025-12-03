@@ -1,10 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Achievement, UserAchievement } from '@achievements/domain/entities/achievement.entity';
-import { AchievementTypeOrmEntity, UserAchievementTypeOrmEntity } from '@achievements/repository/entities/achievement.typeorm-entity';
-import { AchievementMapper, UserAchievementMapper } from '@achievements/repository/mappers/achievement.mapper';
-import { IAchievementRepository, IUserAchievementRepository } from '@achievements/domain/interfaces/achievement.repository.interface';
+
+import { Achievement, UserAchievement } from '../domain/entities/achievement.entity';
+import {
+  IAchievementRepository,
+  IUserAchievementRepository,
+} from '../domain/interfaces/achievement.repository.interface';
+
+import {
+  AchievementTypeOrmEntity,
+  UserAchievementTypeOrmEntity,
+} from './entities/achievement.typeorm-entity';
+import { AchievementMapper, UserAchievementMapper } from './mappers/achievement.mapper';
 
 @Injectable()
 export class AchievementRepository implements IAchievementRepository {
@@ -50,7 +58,10 @@ export class UserAchievementRepository implements IUserAchievementRepository {
     return entities.map((entity) => this.mapper.toDomain(entity));
   }
 
-  async getByUserAndAchievement(userId: string, achievementId: string): Promise<UserAchievement | null> {
+  async getByUserAndAchievement(
+    userId: string,
+    achievementId: string,
+  ): Promise<UserAchievement | null> {
     const entity = await this.repository.findOneBy({ userId, achievementId });
     return entity ? this.mapper.toDomain(entity) : null;
   }

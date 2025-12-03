@@ -1,8 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { CreateSprintCommandHandler } from '@sprints/application/commands/create-sprint.command-handler';
-import { CreateSprintCommand } from '@sprints/application/commands/create-sprint.command';
-import { SprintRepository } from '@sprints/repository/sprint.repository';
-import { InvalidSprintDatesException } from '@sprints/domain/exceptions';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+
+import { InvalidSprintDatesException } from '../../domain/exceptions/index';
+import { SprintRepository } from '../../repository/sprint.repository';
+
+import { CreateSprintCommand } from './create-sprint.command';
+import { CreateSprintCommandHandler } from './create-sprint.command-handler';
 
 describe('CreateSprintCommandHandler', () => {
   let handler: CreateSprintCommandHandler;
@@ -23,9 +26,7 @@ describe('CreateSprintCommandHandler', () => {
       ],
     }).compile();
 
-    handler = module.get<CreateSprintCommandHandler>(
-      CreateSprintCommandHandler,
-    );
+    handler = module.get<CreateSprintCommandHandler>(CreateSprintCommandHandler);
   });
 
   describe('Unit Tests', () => {
@@ -58,9 +59,7 @@ describe('CreateSprintCommandHandler', () => {
         endDate,
       );
 
-      await expect(handler.handle(command)).rejects.toThrow(
-        InvalidSprintDatesException,
-      );
+      await expect(handler.handle(command)).rejects.toThrow(InvalidSprintDatesException);
     });
 
     it('should reject when endDate equals startDate', async () => {
@@ -73,9 +72,7 @@ describe('CreateSprintCommandHandler', () => {
         date,
       );
 
-      await expect(handler.handle(command)).rejects.toThrow(
-        InvalidSprintDatesException,
-      );
+      await expect(handler.handle(command)).rejects.toThrow(InvalidSprintDatesException);
     });
   });
 });

@@ -1,5 +1,5 @@
-import { IsString, IsUUID, IsDateString, IsOptional } from 'class-validator';
-import { InputType, Field } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsDateString, IsOptional, IsString, IsUUID } from 'class-validator';
 
 @InputType()
 export class CreateSprintDto {

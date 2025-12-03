@@ -1,5 +1,5 @@
-import { IsString, IsUUID, IsOptional, IsBoolean } from 'class-validator';
-import { InputType, Field } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsBoolean, IsOptional, IsString, IsUUID } from 'class-validator';
 
 @InputType()
 export class CreateRiskDto {

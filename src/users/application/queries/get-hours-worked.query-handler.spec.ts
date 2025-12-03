@@ -1,9 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { GetHoursWorkedQueryHandler } from '@users/application/queries/get-hours-worked.query-handler';
-import { GetHoursWorkedQuery } from '@users/application/queries/get-hours-worked.query';
-import { TimeEntryRepository } from '@time-entries/repository/time-entry.repository';
-import { TimeEntry } from '@time-entries/domain/entities/time-entry.entity';
-import * as fc from 'fast-check';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import fc from 'fast-check';
+
+import { TimeEntry } from '../../../time-entries/domain/entities/time-entry.entity';
+import { TimeEntryRepository } from '../../../time-entries/repository/time-entry.repository';
+
+import { GetHoursWorkedQuery } from './get-hours-worked.query';
+import { GetHoursWorkedQueryHandler } from './get-hours-worked.query-handler';
 
 describe('GetHoursWorkedQueryHandler', () => {
   let handler: GetHoursWorkedQueryHandler;
@@ -42,14 +45,7 @@ describe('GetHoursWorkedQueryHandler', () => {
           ),
           async (userId, timeEntriesData) => {
             const timeEntries = timeEntriesData.map(
-              (data) =>
-                new TimeEntry(
-                  data.taskId,
-                  userId,
-                  data.hours,
-                  data.date,
-                  'Test entry',
-                ),
+              (data) => new TimeEntry(data.taskId, userId, data.hours, data.date, 'Test entry'),
             );
 
             (timeEntryRepository.listByUser as jest.Mock).mockResolvedValue(timeEntries);
@@ -104,14 +100,7 @@ describe('GetHoursWorkedQueryHandler', () => {
           ),
           async (userId, timeEntriesData) => {
             const timeEntries = timeEntriesData.map(
-              (data) =>
-                new TimeEntry(
-                  data.taskId,
-                  userId,
-                  data.hours,
-                  data.date,
-                  'Test entry',
-                ),
+              (data) => new TimeEntry(data.taskId, userId, data.hours, data.date, 'Test entry'),
             );
 
             (timeEntryRepository.listByUser as jest.Mock).mockResolvedValue(timeEntries);
@@ -122,8 +111,7 @@ describe('GetHoursWorkedQueryHandler', () => {
             // Verify each task's hours is the sum of its entries
             const taskHoursMap: { [key: string]: number } = {};
             timeEntriesData.forEach((entry) => {
-              taskHoursMap[entry.taskId] =
-                (taskHoursMap[entry.taskId] || 0) + entry.hours;
+              taskHoursMap[entry.taskId] = (taskHoursMap[entry.taskId] || 0) + entry.hours;
             });
 
             Object.entries(taskHoursMap).forEach(([taskId, expectedHours]) => {

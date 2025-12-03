@@ -1,7 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ListSprintsProjectQuery } from '@sprints/application/queries/list-sprints-project.query';
-import { Sprint } from '@sprints/domain/entities/sprint.entity';
-import { SprintRepository } from '@sprints/repository/sprint.repository';
+
+import { Sprint } from '../../domain/entities/sprint.entity';
+import { SprintRepository } from '../../repository/sprint.repository';
+
+import { ListSprintsProjectQuery } from './list-sprints-project.query';
 
 @Injectable()
 export class ListSprintsProjectQueryHandler {

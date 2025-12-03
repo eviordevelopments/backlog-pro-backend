@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '@auth/domain/entities/user.entity';
-import { IUserRepository } from '@auth/domain/interfaces/user.repository.interface';
-import { UserTypeOrmEntity } from '@auth/repository/entities/user.typeorm-entity';
-import { UserMapper } from '@auth/repository/mappers/user.mapper';
-import { UserNotFoundException } from '@auth/domain/exceptions/user-not-found.exception';
+
+import { User } from '../domain/entities/user.entity';
+import { UserNotFoundException } from '../domain/exceptions/user-not-found.exception';
+import { IUserRepository } from '../domain/interfaces/user.repository.interface';
+
+import { UserTypeOrmEntity } from './entities/user.typeorm-entity';
+import { UserMapper } from './mappers/user.mapper';
 
 @Injectable()
 export class UserRepository implements IUserRepository {

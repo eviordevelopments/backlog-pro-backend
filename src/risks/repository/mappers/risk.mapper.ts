@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Risk } from '@risks/domain/entities/risk.entity';
-import { RiskTypeOrmEntity } from '@risks/repository/entities/risk.typeorm-entity';
+
+import { Risk } from '../../domain/entities/risk.entity';
+import { RiskTypeOrmEntity } from '../entities/risk.typeorm-entity';
 
 @Injectable()
 export class RiskMapper {

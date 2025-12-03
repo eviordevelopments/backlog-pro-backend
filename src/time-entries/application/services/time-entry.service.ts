@@ -1,9 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { RegisterTimeCommandHandler } from '@time-entries/application/commands/register-time.command-handler';
-import { ModifyTimeCommandHandler } from '@time-entries/application/commands/modify-time.command-handler';
-import { DeleteTimeCommandHandler } from '@time-entries/application/commands/delete-time.command-handler';
-import { GetTimeEntriesQueryHandler } from '@time-entries/application/queries/get-time-entries.query-handler';
-import { GetGroupedTimeEntriesQueryHandler } from '@time-entries/application/queries/get-grouped-time-entries.query-handler';
+
+import { DeleteTimeCommand } from '../commands/delete-time.command';
+import { DeleteTimeCommandHandler } from '../commands/delete-time.command-handler';
+import { ModifyTimeCommand } from '../commands/modify-time.command';
+import { ModifyTimeCommandHandler } from '../commands/modify-time.command-handler';
+import { RegisterTimeCommand } from '../commands/register-time.command';
+import { RegisterTimeCommandHandler } from '../commands/register-time.command-handler';
+import { GetGroupedTimeEntriesQuery } from '../queries/get-grouped-time-entries.query';
+import { GetGroupedTimeEntriesQueryHandler } from '../queries/get-grouped-time-entries.query-handler';
+import { GetTimeEntriesQuery } from '../queries/get-time-entries.query';
+import { GetTimeEntriesQueryHandler } from '../queries/get-time-entries.query-handler';
 
 @Injectable()
 export class TimeEntryService {
@@ -15,23 +21,23 @@ export class TimeEntryService {
     private readonly getGroupedTimeEntriesHandler: GetGroupedTimeEntriesQueryHandler,
   ) {}
 
-  async registerTime(command: any) {
+  async registerTime(command: RegisterTimeCommand) {
     return this.registerTimeHandler.handle(command);
   }
 
-  async modifyTime(command: any) {
+  async modifyTime(command: ModifyTimeCommand) {
     return this.modifyTimeHandler.handle(command);
   }
 
-  async deleteTime(command: any) {
+  async deleteTime(command: DeleteTimeCommand) {
     return this.deleteTimeHandler.handle(command);
   }
 
-  async getTimeEntries(query: any) {
+  async getTimeEntries(query: GetTimeEntriesQuery) {
     return this.getTimeEntriesHandler.handle(query);
   }
 
-  async getGroupedTimeEntries(query: any) {
+  async getGroupedTimeEntries(query: GetGroupedTimeEntriesQuery) {
     return this.getGroupedTimeEntriesHandler.handle(query);
   }
 }

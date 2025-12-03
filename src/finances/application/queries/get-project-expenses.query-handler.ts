@@ -1,15 +1,27 @@
 import { Injectable } from '@nestjs/common';
+
+import { TransactionRepository } from '../../repository/transaction.repository';
+
 import { GetProjectExpensesQuery } from './get-project-expenses.query';
-import { TransactionRepository } from '@finances/repository/transaction.repository';
 
 @Injectable()
 export class GetProjectExpensesQueryHandler {
   constructor(private readonly transactionRepository: TransactionRepository) {}
 
-  async handle(query: GetProjectExpensesQuery): Promise<any> {
-    const transactions = await this.transactionRepository.getByProjectId(
-      query.projectId
-    );
+  async handle(query: GetProjectExpensesQuery): Promise<
+    Record<
+      string,
+      Array<{
+        id: string;
+        type: string;
+        amount: number;
+        currency: string;
+        date: Date;
+        description: string;
+      }>
+    >
+  > {
+    const transactions = await this.transactionRepository.getByProjectId(query.projectId);
 
     // Group by category
     const grouped = transactions.reduce(
@@ -28,7 +40,17 @@ export class GetProjectExpensesQueryHandler {
         });
         return acc;
       },
-      {} as Record<string, any[]>
+      {} as Record<
+        string,
+        Array<{
+          id: string;
+          type: string;
+          amount: number;
+          currency: string;
+          date: Date;
+          description: string;
+        }>
+      >,
     );
 
     return grouped;

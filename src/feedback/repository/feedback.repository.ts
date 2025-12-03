@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { Feedback } from '@feedback/domain/entities/feedback.entity';
-import { FeedbackTypeOrmEntity } from '@feedback/repository/entities/feedback.typeorm-entity';
-import { FeedbackMapper } from '@feedback/repository/mappers/feedback.mapper';
-import { IFeedbackRepository } from '@feedback/domain/interfaces/feedback.repository.interface';
+import { IsNull, Repository } from 'typeorm';
+
+import { Feedback } from '../domain/entities/feedback.entity';
+import { IFeedbackRepository } from '../domain/interfaces/feedback.repository.interface';
+
+import { FeedbackTypeOrmEntity } from './entities/feedback.typeorm-entity';
+import { FeedbackMapper } from './mappers/feedback.mapper';
 
 @Injectable()
 export class FeedbackRepository implements IFeedbackRepository {

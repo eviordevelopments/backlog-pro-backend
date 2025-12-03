@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Notification } from '@notifications/domain/entities/notification.entity';
-import { NotificationTypeOrmEntity } from '@notifications/repository/entities/notification.typeorm-entity';
+
+import { Notification } from '../../domain/entities/notification.entity';
+import { NotificationTypeOrmEntity } from '../entities/notification.typeorm-entity';
 
 @Injectable()
 export class NotificationMapper {

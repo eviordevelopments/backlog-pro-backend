@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Goal } from '@goals/domain/entities/goal.entity';
-import { GoalTypeOrmEntity } from '@goals/repository/entities/goal.typeorm-entity';
+
+import { Goal } from '../../domain/entities/goal.entity';
+import { GoalTypeOrmEntity } from '../entities/goal.typeorm-entity';
 
 @Injectable()
 export class GoalMapper {

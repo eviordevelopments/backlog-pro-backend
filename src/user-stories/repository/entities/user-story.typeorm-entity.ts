@@ -1,11 +1,11 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
   DeleteDateColumn,
+  Entity,
   Index,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('user_stories')
@@ -35,7 +35,7 @@ export class UserStoryTypeOrmEntity {
   benefit!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  acceptanceCriteria?: any[];
+  acceptanceCriteria?: unknown[];
 
   @Column({ type: 'integer', default: 0 })
   storyPoints!: number;

@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { UserStory } from '@user-stories/domain/entities/user-story.entity';
-import { UserStoryTypeOrmEntity } from '@user-stories/repository/entities/user-story.typeorm-entity';
-import { UserStoryMapper } from '@user-stories/repository/mappers/user-story.mapper';
-import { IUserStoryRepository } from '@user-stories/domain/interfaces/user-story.repository.interface';
+import { IsNull, Repository } from 'typeorm';
+
+import { UserStory } from '../domain/entities/user-story.entity';
+import { IUserStoryRepository } from '../domain/interfaces/user-story.repository.interface';
+
+import { UserStoryTypeOrmEntity } from './entities/user-story.typeorm-entity';
+import { UserStoryMapper } from './mappers/user-story.mapper';
 
 @Injectable()
 export class UserStoryRepository implements IUserStoryRepository {

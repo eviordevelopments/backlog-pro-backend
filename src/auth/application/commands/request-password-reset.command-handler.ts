@@ -1,8 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { RequestPasswordResetCommand } from '@auth/application/commands/request-password-reset.command';
-import { UserNotFoundException } from '@auth/domain/exceptions';
-import { UserRepository } from '@auth/repository/user.repository';
-import { JwtService } from '@auth/application/services/jwt.service';
+
+import { UserNotFoundException } from '../../domain/exceptions/index';
+import { UserRepository } from '../../repository/user.repository';
+import { JwtService } from '../services/jwt.service';
+
+import { RequestPasswordResetCommand } from './request-password-reset.command';
 
 export interface PasswordResetResult {
   resetToken: string;

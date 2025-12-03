@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Transaction } from '@finances/domain/entities/transaction.entity';
-import { TransactionTypeOrmEntity } from '@finances/repository/entities/transaction.typeorm-entity';
-import { Amount } from '@finances/domain/value-objects/amount.vo';
-import { Currency } from '@finances/domain/value-objects/currency.vo';
-import { TransactionType } from '@finances/domain/value-objects/transaction-type.vo';
+
+import { Transaction } from '../../domain/entities/transaction.entity';
+import { Amount } from '../../domain/value-objects/amount.vo';
+import { Currency } from '../../domain/value-objects/currency.vo';
+import { TransactionType } from '../../domain/value-objects/transaction-type.vo';
+import { TransactionTypeOrmEntity } from '../entities/transaction.typeorm-entity';
 
 @Injectable()
 export class TransactionMapper {

@@ -1,8 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Client } from '@clients/domain/entities/client.entity';
-import { ClientRepository } from '@clients/repository/client.repository';
-import { ClientNotFoundException } from '@clients/domain/exceptions';
-import { GetClientQuery, ListClientsQuery, GetClientProjectsQuery } from './index';
+
+import { Client } from '../../domain/entities/client.entity';
+import { ClientNotFoundException } from '../../domain/exceptions/index';
+import { ClientRepository } from '../../repository/client.repository';
+
+import { GetClientProjectsQuery, GetClientQuery, ListClientsQuery } from './index';
 
 @Injectable()
 export class GetClientQueryHandler {
@@ -28,8 +30,8 @@ export class ListClientsQueryHandler {
 
   constructor(private readonly clientRepository: ClientRepository) {}
 
-  async handle(query: ListClientsQuery): Promise<Client[]> {
-    this.logger.log(`Listing clients`);
+  async handle(_query: ListClientsQuery): Promise<Client[]> {
+    this.logger.log('Listing clients');
     return this.clientRepository.list();
   }
 }
@@ -40,7 +42,7 @@ export class GetClientProjectsQueryHandler {
 
   constructor(private readonly clientRepository: ClientRepository) {}
 
-  async handle(query: GetClientProjectsQuery): Promise<any[]> {
+  async handle(query: GetClientProjectsQuery): Promise<unknown[]> {
     this.logger.log(`Getting projects for client: ${query.clientId}`);
 
     const client = await this.clientRepository.getById(query.clientId);

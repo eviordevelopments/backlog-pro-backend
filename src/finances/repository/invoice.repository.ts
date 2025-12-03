@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { Invoice } from '@finances/domain/entities/invoice.entity';
-import { InvoiceTypeOrmEntity } from '@finances/repository/entities/invoice.typeorm-entity';
-import { InvoiceMapper } from '@finances/repository/mappers/invoice.mapper';
-import { IInvoiceRepository } from '@finances/domain/interfaces/invoice.repository.interface';
+import { IsNull, Repository } from 'typeorm';
+
+import { Invoice } from '../domain/entities/invoice.entity';
+import { IInvoiceRepository } from '../domain/interfaces/invoice.repository.interface';
+
+import { InvoiceTypeOrmEntity } from './entities/invoice.typeorm-entity';
+import { InvoiceMapper } from './mappers/invoice.mapper';
 
 @Injectable()
 export class InvoiceRepository implements IInvoiceRepository {

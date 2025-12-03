@@ -1,4 +1,4 @@
-import { InvalidHourlyRateException } from '@users/domain/exceptions/invalid-hourly-rate.exception';
+import { InvalidHourlyRateException } from '../exceptions/invalid-hourly-rate.exception';
 
 export class HourlyRate {
   private readonly value: number;

@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { AddDependencyCommand } from '@tasks/application/commands/add-dependency.command';
-import { Task } from '@tasks/domain/entities/task.entity';
-import { TaskRepository } from '@tasks/repository/task.repository';
-import { TaskNotFoundException, CycleDetectedException } from '@tasks/domain/exceptions';
+import { TaskRepository } from 'src/tasks/repository/task.repository';
+import { Task } from '../../domain/entities/task.entity';
+import { CycleDetectedException, TaskNotFoundException } from '../../domain/exceptions/index';
+import { AddDependencyCommand } from './add-dependency.command';
 
 @Injectable()
 export class AddDependencyCommandHandler {

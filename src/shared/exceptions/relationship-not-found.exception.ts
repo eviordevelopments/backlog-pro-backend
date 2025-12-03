@@ -1,4 +1,4 @@
-import { BaseDomainException } from '@shared/exceptions/base-domain.exception';
+import { BaseDomainException } from './base-domain.exception';
 
 export class RelationshipNotFoundException extends BaseDomainException {
   constructor(entityType: string, entityId: string, relationshipType: string) {

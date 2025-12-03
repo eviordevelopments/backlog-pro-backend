@@ -1,4 +1,4 @@
-import { Meeting } from '@meetings/domain/entities/meeting.entity';
+import type { Meeting } from '../entities/meeting.entity';
 
 export interface IMeetingRepository {
   create(meeting: Meeting): Promise<Meeting>;

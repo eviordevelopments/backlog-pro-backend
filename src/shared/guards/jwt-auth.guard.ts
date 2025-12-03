@@ -1,4 +1,10 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, Logger } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 
@@ -10,10 +16,16 @@ export class JwtAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
-    const request = ctx.getContext().req;
+    const gqlContext = ctx.getContext<{
+      req: {
+        headers: { authorization?: string };
+        user?: { sub: string; email: string; role?: string };
+      };
+    }>();
+    const request = gqlContext.req;
 
     const authHeader = request.headers.authorization;
-    this.logger.debug(`Authorization header: ${authHeader}`);
+    this.logger.debug(`Authorization header: ${authHeader ?? 'none'}`);
 
     if (!authHeader) {
       this.logger.warn('No authorization header provided');
@@ -29,11 +41,16 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     try {
-      const decoded = await this.jwtService.verifyAsync(token);
+      const decoded = await this.jwtService.verifyAsync<{
+        sub?: string;
+        userId?: string;
+        email: string;
+        role?: string;
+      }>(token);
       this.logger.debug(`Token verificado correctamente. Usuario: ${decoded.email}`);
 
       request.user = {
-        sub: decoded.sub || decoded.userId,
+        sub: decoded.sub ?? decoded.userId ?? '',
         email: decoded.email,
         role: decoded.role,
       };
