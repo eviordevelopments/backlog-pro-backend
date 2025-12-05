@@ -1,8 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { RegisterRetrospectiveCommand } from '@sprints/application/commands/register-retrospective.command';
-import { Sprint } from '@sprints/domain/entities/sprint.entity';
-import { SprintRepository } from '@sprints/repository/sprint.repository';
-import { SprintNotFoundException } from '@sprints/domain/exceptions';
+
+import { Sprint } from '../../domain/entities/sprint.entity';
+import { SprintNotFoundException } from '../../domain/exceptions/index';
+import { SprintRepository } from '../../repository/sprint.repository';
+
+import { RegisterRetrospectiveCommand } from './register-retrospective.command';
 
 @Injectable()
 export class RegisterRetrospectiveCommandHandler {

@@ -1,13 +1,14 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
-import { CreateMeetingCommandHandler } from '@meetings/application/commands/create-meeting.command-handler';
-import { CreateMeetingCommand } from '@meetings/application/commands/create-meeting.command';
-import { GetSprintMeetingsQueryHandler } from '@meetings/application/queries/get-sprint-meetings.query-handler';
-import { GetSprintMeetingsQuery } from '@meetings/application/queries/get-sprint-meetings.query';
-import { MeetingRepository } from '@meetings/repository/meeting.repository';
-import { CreateMeetingDto } from '@meetings/dto/request/create-meeting.dto';
-import { MeetingResponseDto } from '@meetings/dto/response/meeting.response.dto';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { CreateMeetingCommand } from '../application/commands/create-meeting.command';
+import { CreateMeetingCommandHandler } from '../application/commands/create-meeting.command-handler';
+import { GetSprintMeetingsQuery } from '../application/queries/get-sprint-meetings.query';
+import { GetSprintMeetingsQueryHandler } from '../application/queries/get-sprint-meetings.query-handler';
+import { CreateMeetingDto } from '../dto/request/create-meeting.dto';
+import { MeetingResponseDto } from '../dto/response/meeting.response.dto';
+import { MeetingRepository } from '../repository/meeting.repository';
 
 @Resolver('Meeting')
 export class MeetingResolver {
@@ -19,9 +20,7 @@ export class MeetingResolver {
 
   @Mutation(() => MeetingResponseDto)
   @UseGuards(JwtAuthGuard)
-  async createMeeting(
-    @Args('input') input: CreateMeetingDto
-  ): Promise<MeetingResponseDto> {
+  async createMeeting(@Args('input') input: CreateMeetingDto): Promise<MeetingResponseDto> {
     const command = new CreateMeetingCommand(
       input.title,
       input.type,
@@ -34,7 +33,7 @@ export class MeetingResolver {
       input.sprintId,
       input.participants,
       input.isRecurring,
-      input.recurringPattern
+      input.recurringPattern,
     );
 
     const meeting = await this.createMeetingHandler.handle(command);
@@ -62,9 +61,7 @@ export class MeetingResolver {
 
   @Query(() => [MeetingResponseDto])
   @UseGuards(JwtAuthGuard)
-  async getSprintMeetings(
-    @Args('sprintId') sprintId: string
-  ): Promise<MeetingResponseDto[]> {
+  async getSprintMeetings(@Args('sprintId') sprintId: string): Promise<MeetingResponseDto[]> {
     const query = new GetSprintMeetingsQuery(sprintId);
     const meetings = await this.sprintMeetingsHandler.handle(query);
     return meetings;

@@ -9,11 +9,11 @@ services:
     env_file:
       - .env.production
     ports:
-      - '${PORT:-3002}:${PORT:-3000}'
+      - '${PORT}:3000'
     restart: always
     healthcheck:
       test: >
-        curl --fail --silent http://localhost:${PORT:-3002}/health
+        curl --fail --silent http://localhost:${PORT}/healthz
       interval: 30s
       timeout: 5s
       retries: 3
@@ -23,17 +23,17 @@ services:
   postgres:
     image: postgres:15-alpine
     environment:
-      POSTGRES_USER: ${DB_USERNAME:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-      POSTGRES_DB: ${DB_DATABASE:-backlog_pro}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - '${DB_PORT:-5434}:${DB_PORT:-5432}'
+      - '${DB_PORT}:5432'
     restart: unless-stopped
     healthcheck:
       test: > 
-        pg_isready -h localhost -U ${DB_USERNAME:-postgres}
+        pg_isready -h localhost -U ${DB_USERNAME}
       interval: 10s
       timeout: 5s
       retries: 5
@@ -43,7 +43,7 @@ services:
   adminer:
     image: adminer:latest
     ports:
-      - '8081:8080'
+      - '${ADMINER_PORT}:8080'
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,8 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateSprintCommand } from '@sprints/application/commands/create-sprint.command';
-import { Sprint } from '@sprints/domain/entities/sprint.entity';
-import { SprintRepository } from '@sprints/repository/sprint.repository';
-import { InvalidSprintDatesException } from '@sprints/domain/exceptions';
+
+import { Sprint } from '../../domain/entities/sprint.entity';
+import { InvalidSprintDatesException } from '../../domain/exceptions/index';
+import { SprintRepository } from '../../repository/sprint.repository';
+
+import { CreateSprintCommand } from './create-sprint.command';
 
 @Injectable()
 export class CreateSprintCommandHandler {

@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CalculateSalariesQuery } from './calculate-salaries.query';
-import { CalculateIdealHourlyRateQueryHandler } from './calculate-ideal-hourly-rate.query-handler';
+
+import { UserRepository } from '../../../auth/repository/user.repository';
+import { TimeEntryRepository } from '../../../time-entries/repository/time-entry.repository';
+import { SalaryResponseDto } from '../../dto/response/salary.response.dto';
+
 import { CalculateIdealHourlyRateQuery } from './calculate-ideal-hourly-rate.query';
-import { TimeEntryRepository } from '@time-entries/repository/time-entry.repository';
-import { UserRepository } from '@auth/repository/user.repository';
+import { CalculateIdealHourlyRateQueryHandler } from './calculate-ideal-hourly-rate.query-handler';
+import { CalculateSalariesQuery } from './calculate-salaries.query';
 
 @Injectable()
 export class CalculateSalariesQueryHandler {
@@ -13,16 +16,14 @@ export class CalculateSalariesQueryHandler {
     private readonly idealRateHandler: CalculateIdealHourlyRateQueryHandler,
   ) {}
 
-  async handle(query: CalculateSalariesQuery): Promise<any[]> {
+  async handle(query: CalculateSalariesQuery): Promise<SalaryResponseDto[]> {
     // Get ideal hourly rate
     const idealRate = await this.idealRateHandler.handle(
-      new CalculateIdealHourlyRateQuery(query.projectId)
+      new CalculateIdealHourlyRateQuery(query.projectId),
     );
 
     // Get all time entries for this project
-    const timeEntries = await this.timeEntryRepository.getByProjectId(
-      query.projectId
-    );
+    const timeEntries = await this.timeEntryRepository.getByProjectId(query.projectId);
 
     // Group by user and calculate salary
     const salariesByUser = new Map<string, number>();

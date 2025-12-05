@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MeetingTypeOrmEntity } from '@meetings/repository/entities/meeting.typeorm-entity';
-import { MeetingRepository } from '@meetings/repository/meeting.repository';
-import { MeetingMapper } from '@meetings/repository/mappers/meeting.mapper';
-import { CreateMeetingCommandHandler } from '@meetings/application/commands/create-meeting.command-handler';
-import { GetSprintMeetingsQueryHandler } from '@meetings/application/queries/get-sprint-meetings.query-handler';
-import { MeetingResolver } from '@meetings/resolvers/meeting.resolver';
+
+import { CreateMeetingCommandHandler } from './application/commands/create-meeting.command-handler';
+import { GetSprintMeetingsQueryHandler } from './application/queries/get-sprint-meetings.query-handler';
+import { MeetingTypeOrmEntity } from './repository/entities/meeting.typeorm-entity';
+import { MeetingMapper } from './repository/mappers/meeting.mapper';
+import { MeetingRepository } from './repository/meeting.repository';
+import { MeetingResolver } from './resolvers/meeting.resolver';
 
 @Module({
   imports: [TypeOrmModule.forFeature([MeetingTypeOrmEntity])],

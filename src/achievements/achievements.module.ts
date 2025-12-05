@@ -1,10 +1,17 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AchievementTypeOrmEntity, UserAchievementTypeOrmEntity } from '@achievements/repository/entities/achievement.typeorm-entity';
-import { AchievementRepository, UserAchievementRepository } from '@achievements/repository/achievement.repository';
-import { AchievementMapper, UserAchievementMapper } from '@achievements/repository/mappers/achievement.mapper';
-import { GetUserAchievementsQueryHandler } from '@achievements/application/queries/get-user-achievements.query-handler';
-import { AchievementResolver } from '@achievements/resolvers/achievement.resolver';
+
+import { GetUserAchievementsQueryHandler } from './application/queries/get-user-achievements.query-handler';
+import {
+  AchievementRepository,
+  UserAchievementRepository,
+} from './repository/achievement.repository';
+import {
+  AchievementTypeOrmEntity,
+  UserAchievementTypeOrmEntity,
+} from './repository/entities/achievement.typeorm-entity';
+import { AchievementMapper, UserAchievementMapper } from './repository/mappers/achievement.mapper';
+import { AchievementResolver } from './resolvers/achievement.resolver';
 
 @Module({
   imports: [TypeOrmModule.forFeature([AchievementTypeOrmEntity, UserAchievementTypeOrmEntity])],

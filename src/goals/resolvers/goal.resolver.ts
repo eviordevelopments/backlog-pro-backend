@@ -1,14 +1,15 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
-import { CreateGoalCommandHandler } from '@goals/application/commands/create-goal.command-handler';
-import { CreateGoalCommand } from '@goals/application/commands/create-goal.command';
-import { UpdateGoalProgressCommandHandler } from '@goals/application/commands/update-goal-progress.command-handler';
-import { UpdateGoalProgressCommand } from '@goals/application/commands/update-goal-progress.command';
-import { GetUserGoalsQueryHandler } from '@goals/application/queries/get-user-goals.query-handler';
-import { GetUserGoalsQuery } from '@goals/application/queries/get-user-goals.query';
-import { CreateGoalDto } from '@goals/dto/request/create-goal.dto';
-import { GoalResponseDto } from '@goals/dto/response/goal.response.dto';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { CreateGoalCommand } from '../application/commands/create-goal.command';
+import { CreateGoalCommandHandler } from '../application/commands/create-goal.command-handler';
+import { UpdateGoalProgressCommand } from '../application/commands/update-goal-progress.command';
+import { UpdateGoalProgressCommandHandler } from '../application/commands/update-goal-progress.command-handler';
+import { GetUserGoalsQuery } from '../application/queries/get-user-goals.query';
+import { GetUserGoalsQueryHandler } from '../application/queries/get-user-goals.query-handler';
+import { CreateGoalDto } from '../dto/request/create-goal.dto';
+import { GoalResponseDto } from '../dto/response/goal.response.dto';
 
 @Resolver('Goal')
 export class GoalResolver {
@@ -21,7 +22,7 @@ export class GoalResolver {
   @Mutation(() => GoalResponseDto)
   @UseGuards(JwtAuthGuard)
   async createGoal(
-    @Args('input', { description: 'Datos del objetivo a crear' }) input: CreateGoalDto
+    @Args('input', { description: 'Datos del objetivo a crear' }) input: CreateGoalDto,
   ): Promise<GoalResponseDto> {
     const command = new CreateGoalCommand(
       input.title,
@@ -33,7 +34,7 @@ export class GoalResolver {
       input.ownerId,
       input.startDate,
       input.endDate,
-      input.description
+      input.description,
     );
 
     const goal = await this.createGoalHandler.handle(command);
@@ -62,7 +63,8 @@ export class GoalResolver {
   @UseGuards(JwtAuthGuard)
   async updateGoalProgress(
     @Args('goalId', { description: 'UUID del objetivo a actualizar' }) goalId: string,
-    @Args('currentValue', { description: 'Valor actual alcanzado del objetivo' }) currentValue: number
+    @Args('currentValue', { description: 'Valor actual alcanzado del objetivo' })
+    currentValue: number,
   ): Promise<GoalResponseDto> {
     const command = new UpdateGoalProgressCommand(goalId, currentValue);
     const goal = await this.updateProgressHandler.handle(command);
@@ -90,7 +92,7 @@ export class GoalResolver {
   @Query(() => [GoalResponseDto])
   @UseGuards(JwtAuthGuard)
   async getUserGoals(
-    @Args('ownerId', { description: 'UUID del propietario de los objetivos' }) ownerId: string
+    @Args('ownerId', { description: 'UUID del propietario de los objetivos' }) ownerId: string,
   ): Promise<GoalResponseDto[]> {
     const query = new GetUserGoalsQuery(ownerId);
     return this.userGoalsHandler.handle(query);

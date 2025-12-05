@@ -1,13 +1,18 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { Logger, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
-import { CreateClientDto } from '@clients/dto/request/create-client.dto';
-import { UpdateClientDto } from '@clients/dto/request/update-client.dto';
-import { ClientResponseDto } from '@clients/dto/response/client.response.dto';
-import { ClientService } from '@clients/application/services/client.service';
-import { CreateClientCommand, UpdateClientCommand, DeleteClientCommand } from '@clients/application/commands';
-import { GetClientQuery, ListClientsQuery } from '@clients/application/queries';
-import { Client } from '@clients/domain/entities/client.entity';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import {
+  CreateClientCommand,
+  DeleteClientCommand,
+  UpdateClientCommand,
+} from '../application/commands/index';
+import { GetClientQuery, ListClientsQuery } from '../application/queries/index';
+import { ClientService } from '../application/services/client.service';
+import { Client } from '../domain/entities/client.entity';
+import { CreateClientDto } from '../dto/request/create-client.dto';
+import { UpdateClientDto } from '../dto/request/update-client.dto';
+import { ClientResponseDto } from '../dto/response/client.response.dto';
 
 @Resolver()
 @UseGuards(JwtAuthGuard)
@@ -47,7 +52,7 @@ export class ClientResolver {
     description: 'Lista todos los clientes',
   })
   async listClients(): Promise<ClientResponseDto[]> {
-    this.logger.log(`Listing clients`);
+    this.logger.log('Listing clients');
     const query = new ListClientsQuery();
     const clients = await this.clientService.listClients(query);
     return clients.map((c) => this.mapToResponse(c));

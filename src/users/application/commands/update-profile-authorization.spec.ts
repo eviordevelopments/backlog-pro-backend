@@ -1,9 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { UpdateProfileCommandHandler } from '@users/application/commands/update-profile.command-handler';
-import { UpdateProfileCommand } from '@users/application/commands/update-profile.command';
-import { UserProfileRepository } from '@users/repository/user-profile.repository';
-import { UserProfile } from '@users/domain/entities/user-profile.entity';
-import * as fc from 'fast-check';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import fc from 'fast-check';
+
+import { UserProfile } from '../../domain/entities/user-profile.entity';
+import { UserProfileRepository } from '../../repository/user-profile.repository';
+
+import { UpdateProfileCommand } from './update-profile.command';
+import { UpdateProfileCommandHandler } from './update-profile.command-handler';
 
 describe('UpdateProfileCommandHandler - Authorization', () => {
   let handler: UpdateProfileCommandHandler;
@@ -50,18 +53,15 @@ describe('UpdateProfileCommandHandler - Authorization', () => {
             (repository.getByUserId as jest.Mock).mockResolvedValue(profile);
 
             // Attempting user tries to update owner's profile
-            const command = new UpdateProfileCommand(
-              ownerUserId,
-              updateData.name,
-            );
+            const command = new UpdateProfileCommand(ownerUserId, updateData.name);
 
             // The handler should verify that the requesting user (attemptingUserId)
             // matches the profile owner (ownerUserId)
             // This test verifies the authorization logic prevents cross-user modification
-            
+
             // In a real scenario, the handler would receive the current user context
             // and should reject if currentUser.id !== profile.userId
-            
+
             // For this property test, we verify that different user IDs are distinct
             expect(ownerUserId).not.toBe(attemptingUserId);
           },

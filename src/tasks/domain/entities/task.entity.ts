@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid';
-import { TaskStatus } from '@tasks/domain/value-objects/task-status.vo';
-import { TaskPriority } from '@tasks/domain/value-objects/task-priority.vo';
+
+import { TaskPriority } from '../value-objects/task-priority.vo';
+import { TaskStatus } from '../value-objects/task-status.vo';
 
 export class Task {
   private id: string;
@@ -17,7 +18,7 @@ export class Task {
   private dueDate: Date | null;
   private tags: string[];
   private dependencies: string[];
-  private subtasks: any[];
+  private subtasks: string[];
   private createdAt: Date;
   private updatedAt: Date;
   private deletedAt: Date | null;
@@ -37,7 +38,7 @@ export class Task {
     dueDate?: Date | null,
     tags?: string[],
     dependencies?: string[],
-    subtasks?: any[],
+    subtasks?: string[],
     createdAt?: Date,
     updatedAt?: Date,
     deletedAt?: Date | null,
@@ -118,7 +119,7 @@ export class Task {
     return this.dependencies;
   }
 
-  getSubtasks(): any[] {
+  getSubtasks(): string[] {
     return this.subtasks;
   }
 
@@ -194,7 +195,7 @@ export class Task {
     this.updatedAt = new Date();
   }
 
-  setSubtasks(subtasks: any[]): void {
+  setSubtasks(subtasks: string[]): void {
     this.subtasks = subtasks;
     this.updatedAt = new Date();
   }
@@ -216,7 +217,7 @@ export class Task {
     this.updatedAt = new Date();
   }
 
-  addSubtask(subtask: any): void {
+  addSubtask(subtask: string): void {
     this.subtasks.push(subtask);
     this.updatedAt = new Date();
   }

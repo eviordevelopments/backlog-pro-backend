@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Invoice } from '@finances/domain/entities/invoice.entity';
-import { InvoiceTypeOrmEntity } from '@finances/repository/entities/invoice.typeorm-entity';
-import { Amount } from '@finances/domain/value-objects/amount.vo';
-import { InvoiceStatus } from '@finances/domain/value-objects/invoice-status.vo';
+
+import { Invoice, InvoiceItem } from '../../domain/entities/invoice.entity';
+import { Amount } from '../../domain/value-objects/amount.vo';
+import { InvoiceStatus } from '../../domain/value-objects/invoice-status.vo';
+import { InvoiceTypeOrmEntity } from '../entities/invoice.typeorm-entity';
 
 @Injectable()
 export class InvoiceMapper {
@@ -17,7 +18,7 @@ export class InvoiceMapper {
       InvoiceStatus.create(raw.status),
       raw.projectId,
       raw.paidDate,
-      raw.items || [],
+      (raw.items as InvoiceItem[]) || [],
       raw.notes || '',
       raw.id,
       raw.createdAt,

@@ -1,10 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { UpdateProfileCommandHandler } from '@users/application/commands/update-profile.command-handler';
-import { UpdateProfileCommand } from '@users/application/commands/update-profile.command';
-import { UserProfileRepository } from '@users/repository/user-profile.repository';
-import { UserProfile } from '@users/domain/entities/user-profile.entity';
-import { UserProfileNotFoundException } from '@users/domain/exceptions';
-import * as fc from 'fast-check';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import fc from 'fast-check';
+
+import { UserProfile } from '../../domain/entities/user-profile.entity';
+import { UserProfileNotFoundException } from '../../domain/exceptions/index';
+import { UserProfileRepository } from '../../repository/user-profile.repository';
+
+import { UpdateProfileCommand } from './update-profile.command';
+import { UpdateProfileCommandHandler } from './update-profile.command-handler';
 
 describe('UpdateProfileCommandHandler', () => {
   let handler: UpdateProfileCommandHandler;
@@ -98,14 +101,9 @@ describe('UpdateProfileCommandHandler', () => {
           async (updateData) => {
             (repository.getByUserId as jest.Mock).mockResolvedValue(null);
 
-            const command = new UpdateProfileCommand(
-              updateData.userId,
-              updateData.name,
-            );
+            const command = new UpdateProfileCommand(updateData.userId, updateData.name);
 
-            await expect(handler.handle(command)).rejects.toThrow(
-              UserProfileNotFoundException,
-            );
+            await expect(handler.handle(command)).rejects.toThrow(UserProfileNotFoundException);
           },
         ),
         { numRuns: 100 },

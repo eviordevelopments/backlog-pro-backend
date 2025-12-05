@@ -1,12 +1,5 @@
-import {
-  IsString,
-  IsOptional,
-  IsDateString,
-  IsNumber,
-  IsArray,
-  Min,
-} from 'class-validator';
-import { InputType, Field } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsArray, IsDateString, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
 @InputType()
 export class UpdateSprintDto {

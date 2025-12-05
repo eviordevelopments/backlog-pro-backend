@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Notification } from '@notifications/domain/entities/notification.entity';
-import { NotificationTypeOrmEntity } from '@notifications/repository/entities/notification.typeorm-entity';
-import { NotificationMapper } from '@notifications/repository/mappers/notification.mapper';
-import { INotificationRepository } from '@notifications/domain/interfaces/notification.repository.interface';
+
+import { Notification } from '../domain/entities/notification.entity';
+import { INotificationRepository } from '../domain/interfaces/notification.repository.interface';
+
+import { NotificationTypeOrmEntity } from './entities/notification.typeorm-entity';
+import { NotificationMapper } from './mappers/notification.mapper';
 
 @Injectable()
 export class NotificationRepository implements INotificationRepository {
@@ -21,7 +23,8 @@ export class NotificationRepository implements INotificationRepository {
   }
 
   async update(id: string, notification: Partial<Notification>): Promise<Notification> {
-    await this.repository.update(id, this.mapper.toPersistence(notification as Notification));
+    const persistence = this.mapper.toPersistence(notification as Notification);
+    await this.repository.update(id, persistence as Parameters<typeof this.repository.update>[1]);
     const updated = await this.repository.findOneBy({ id });
     if (!updated) {
       throw new Error(`Notification with id ${id} not found`);

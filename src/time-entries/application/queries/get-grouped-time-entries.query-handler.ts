@@ -1,7 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GetGroupedTimeEntriesQuery } from '@time-entries/application/queries/get-grouped-time-entries.query';
-import { TimeEntry } from '@time-entries/domain/entities/time-entry.entity';
-import { TimeEntryRepository } from '@time-entries/repository/time-entry.repository';
+
+import { TimeEntry } from '../../domain/entities/time-entry.entity';
+import { TimeEntryRepository } from '../../repository/time-entry.repository';
+
+import { GetGroupedTimeEntriesQuery } from './get-grouped-time-entries.query';
 
 @Injectable()
 export class GetGroupedTimeEntriesQueryHandler {
@@ -9,7 +11,7 @@ export class GetGroupedTimeEntriesQueryHandler {
 
   constructor(private readonly timeEntryRepository: TimeEntryRepository) {}
 
-  async handle(query: GetGroupedTimeEntriesQuery): Promise<any> {
+  async handle(query: GetGroupedTimeEntriesQuery): Promise<Record<string, TimeEntry[]>> {
     this.logger.log(
       `Getting grouped time entries for user: ${query.userId}, grouped by: ${query.groupBy}`,
     );
@@ -25,8 +27,8 @@ export class GetGroupedTimeEntriesQueryHandler {
     }
   }
 
-  private groupByDate(entries: TimeEntry[]): any {
-    const grouped: { [key: string]: TimeEntry[] } = {};
+  private groupByDate(entries: TimeEntry[]): Record<string, TimeEntry[]> {
+    const grouped: Record<string, TimeEntry[]> = {};
     entries.forEach((entry) => {
       const dateKey = entry.getDate().toISOString().split('T')[0];
       if (!grouped[dateKey]) {
@@ -37,8 +39,8 @@ export class GetGroupedTimeEntriesQueryHandler {
     return grouped;
   }
 
-  private groupByTask(entries: TimeEntry[]): any {
-    const grouped: { [key: string]: TimeEntry[] } = {};
+  private groupByTask(entries: TimeEntry[]): Record<string, TimeEntry[]> {
+    const grouped: Record<string, TimeEntry[]> = {};
     entries.forEach((entry) => {
       const taskId = entry.getTaskId();
       if (!grouped[taskId]) {
@@ -49,7 +51,7 @@ export class GetGroupedTimeEntriesQueryHandler {
     return grouped;
   }
 
-  private groupByProject(entries: TimeEntry[]): any {
+  private groupByProject(entries: TimeEntry[]): Record<string, TimeEntry[]> {
     // This would require joining with tasks to get project info
     // For now, we'll group by task and return the structure
     return this.groupByTask(entries);

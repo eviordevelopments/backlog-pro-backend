@@ -1,5 +1,5 @@
-import { IsString, IsOptional, IsNumber, Min, MaxLength, IsArray } from 'class-validator';
-import { InputType, Field, Float, Int } from '@nestjs/graphql';
+import { Field, Float, InputType, Int } from '@nestjs/graphql';
+import { IsArray, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
 
 @InputType()
 export class UpdateTaskDto {

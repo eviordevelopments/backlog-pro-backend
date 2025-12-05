@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
-import { envs } from '@shared/config';
+
+import { envs } from '../../../shared/config/index';
 
 export interface JwtPayload {
   sub: string;

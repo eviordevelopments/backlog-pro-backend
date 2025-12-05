@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+
+import { Meeting } from '../../domain/entities/meeting.entity';
+import { MeetingRepository } from '../../repository/meeting.repository';
+
 import { CreateMeetingCommand } from './create-meeting.command';
-import { Meeting } from '@meetings/domain/entities/meeting.entity';
-import { MeetingRepository } from '@meetings/repository/meeting.repository';
 
 @Injectable()
 export class CreateMeetingCommandHandler {

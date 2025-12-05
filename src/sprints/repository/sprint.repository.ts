@@ -1,10 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { Sprint } from '@sprints/domain/entities/sprint.entity';
-import { SprintTypeOrmEntity } from '@sprints/repository/entities/sprint.typeorm-entity';
-import { SprintMapper } from '@sprints/repository/mappers/sprint.mapper';
-import { ISprintRepository } from '@sprints/domain/interfaces/sprint.repository.interface';
+import { IsNull, Repository } from 'typeorm';
+
+import { Sprint } from '../domain/entities/sprint.entity';
+import { ISprintRepository } from '../domain/interfaces/sprint.repository.interface';
+
+import { SprintTypeOrmEntity } from './entities/sprint.typeorm-entity';
+import { SprintMapper } from './mappers/sprint.mapper';
 
 @Injectable()
 export class SprintRepository implements ISprintRepository {

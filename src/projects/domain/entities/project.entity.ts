@@ -1,6 +1,6 @@
-import { InvalidBudgetException } from '@projects/domain/exceptions/invalid-budget.exception';
-import { InvalidSpentAmountException } from '@projects/domain/exceptions/invalid-spent-amount.exception';
-import { InvalidProgressException } from '@projects/domain/exceptions/invalid-progress.exception';
+import { InvalidBudgetException } from '../exceptions/invalid-budget.exception';
+import { InvalidProgressException } from '../exceptions/invalid-progress.exception';
+import { InvalidSpentAmountException } from '../exceptions/invalid-spent-amount.exception';
 
 export class Project {
   id!: string;

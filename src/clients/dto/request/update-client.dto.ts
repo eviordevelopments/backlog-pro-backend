@@ -1,5 +1,5 @@
-import { IsString, IsEmail, IsOptional, IsNumber, Min, MaxLength } from 'class-validator';
-import { InputType, Field, Float } from '@nestjs/graphql';
+import { Field, Float, InputType } from '@nestjs/graphql';
+import { IsEmail, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
 
 @InputType()
 export class UpdateClientDto {

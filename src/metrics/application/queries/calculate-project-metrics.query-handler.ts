@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
+
+import { ProjectRepository } from '../../../projects/repository/project.repository';
+import { SprintRepository } from '../../../sprints/repository/sprint.repository';
+import { TaskRepository } from '../../../tasks/repository/task.repository';
+
 import { CalculateProjectMetricsQuery } from './calculate-project-metrics.query';
-import { ProjectRepository } from '@projects/repository/project.repository';
-import { SprintRepository } from '@sprints/repository/sprint.repository';
-import { TaskRepository } from '@tasks/repository/task.repository';
 
 @Injectable()
 export class CalculateProjectMetricsQueryHandler {
@@ -12,7 +14,23 @@ export class CalculateProjectMetricsQueryHandler {
     private readonly taskRepository: TaskRepository,
   ) {}
 
-  async handle(query: CalculateProjectMetricsQuery): Promise<any> {
+  async handle(query: CalculateProjectMetricsQuery): Promise<{
+    projectId: string;
+    projectName: string;
+    status: string;
+    progress: number;
+    totalTasks: number;
+    completedTasks: number;
+    totalStoryPoints: number;
+    completedStoryPoints: number;
+    budget: number;
+    spent: number;
+    remaining: number;
+    budgetUtilization: number;
+    totalSprints: number;
+    completedSprints: number;
+    averageVelocity: number;
+  }> {
     const project = await this.projectRepository.getById(query.projectId);
     if (!project) {
       throw new Error(`Project with id ${query.projectId} not found`);

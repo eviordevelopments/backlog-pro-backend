@@ -1,4 +1,4 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 export interface RiskCommentResponse {
   userId: string;

@@ -1,9 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { AssignTaskCommand } from '@tasks/application/commands/assign-task.command';
-import { Task } from '@tasks/domain/entities/task.entity';
-import { TaskRepository } from '@tasks/repository/task.repository';
-import { TaskNotFoundException, InvalidTaskAssignmentException } from '@tasks/domain/exceptions';
-import { ProjectMemberRepository } from '@projects/repository/project-member.repository';
+
+import { ProjectMemberRepository } from '../../../projects/repository/project-member.repository';
+import { Task } from '../../domain/entities/task.entity';
+import {
+  InvalidTaskAssignmentException,
+  TaskNotFoundException,
+} from '../../domain/exceptions/index';
+import { TaskRepository } from '../../repository/task.repository';
+
+import { AssignTaskCommand } from './assign-task.command';
 
 @Injectable()
 export class AssignTaskCommandHandler {

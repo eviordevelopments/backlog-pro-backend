@@ -1,4 +1,4 @@
-import { ProjectMember } from '@projects/domain/entities/project-member.entity';
+import type { ProjectMember } from '../entities/project-member.entity';
 
 export interface IProjectMemberRepository {
   create(projectMember: ProjectMember): Promise<ProjectMember>;

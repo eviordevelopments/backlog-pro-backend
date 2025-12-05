@@ -1,13 +1,14 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
-import { CurrentUser } from '@shared/decorators/current-user.decorator';
-import { CreateFeedbackCommandHandler } from '@feedback/application/commands/create-feedback.command-handler';
-import { CreateFeedbackCommand } from '@feedback/application/commands/create-feedback.command';
-import { GetUserFeedbackQueryHandler } from '@feedback/application/queries/get-user-feedback.query-handler';
-import { GetUserFeedbackQuery } from '@feedback/application/queries/get-user-feedback.query';
-import { CreateFeedbackDto } from '@feedback/dto/request/create-feedback.dto';
-import { FeedbackResponseDto } from '@feedback/dto/response/feedback.response.dto';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+
+import { CurrentUser } from '../../shared/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { CreateFeedbackCommand } from '../application/commands/create-feedback.command';
+import { CreateFeedbackCommandHandler } from '../application/commands/create-feedback.command-handler';
+import { GetUserFeedbackQuery } from '../application/queries/get-user-feedback.query';
+import { GetUserFeedbackQueryHandler } from '../application/queries/get-user-feedback.query-handler';
+import { CreateFeedbackDto } from '../dto/request/create-feedback.dto';
+import { FeedbackResponseDto } from '../dto/response/feedback.response.dto';
 
 @Resolver('Feedback')
 export class FeedbackResolver {
@@ -19,18 +20,18 @@ export class FeedbackResolver {
   @Mutation(() => FeedbackResponseDto)
   @UseGuards(JwtAuthGuard)
   async sendFeedback(
-    @CurrentUser() currentUser: any,
-    @Args('input') input: CreateFeedbackDto
+    @CurrentUser() currentUser: { sub: string; email: string },
+    @Args('input') input: CreateFeedbackDto,
   ): Promise<FeedbackResponseDto> {
     const command = new CreateFeedbackCommand(
-      currentUser.id,
+      currentUser.sub,
       input.toUserId,
       input.type,
       input.category,
       input.rating,
       input.comment,
       input.isAnonymous,
-      input.sprintId
+      input.sprintId,
     );
 
     const feedback = await this.createFeedbackHandler.handle(command);
@@ -53,9 +54,9 @@ export class FeedbackResolver {
   @Query(() => [FeedbackResponseDto])
   @UseGuards(JwtAuthGuard)
   async getUserFeedback(
-    @CurrentUser() currentUser: any
+    @CurrentUser() currentUser: { sub: string; email: string },
   ): Promise<FeedbackResponseDto[]> {
-    const query = new GetUserFeedbackQuery(currentUser.id);
+    const query = new GetUserFeedbackQuery(currentUser.sub);
     return this.getUserFeedbackHandler.handle(query);
   }
 }

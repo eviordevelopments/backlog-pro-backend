@@ -1,7 +1,9 @@
-import * as fc from 'fast-check';
+import fc from 'fast-check';
+
+import { TaskPriority } from '../value-objects/task-priority.vo';
+import { TaskStatus } from '../value-objects/task-status.vo';
+
 import { Task } from './task.entity';
-import { TaskStatus } from '@tasks/domain/value-objects/task-status.vo';
-import { TaskPriority } from '@tasks/domain/value-objects/task-priority.vo';
 
 describe('Task Entity - Property-Based Tests', () => {
   // Feature: backlog-pro-development, Property 12: Task creation with default state
@@ -15,11 +17,7 @@ describe('Task Entity - Property-Based Tests', () => {
             description: fc.string({ maxLength: 1000 }),
           }),
           (taskData) => {
-            const task = new Task(
-              taskData.title,
-              taskData.projectId,
-              taskData.description
-            );
+            const task = new Task(taskData.title, taskData.projectId, taskData.description);
 
             expect(task.getStatus().getValue()).toBe('todo');
             expect(task.getTitle()).toBe(taskData.title);
@@ -27,9 +25,9 @@ describe('Task Entity - Property-Based Tests', () => {
             expect(task.getDescription()).toBe(taskData.description);
             expect(task.getActualHours()).toBe(0);
             expect(task.getStoryPoints()).toBe(0);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });
@@ -49,9 +47,9 @@ describe('Task Entity - Property-Based Tests', () => {
 
             task.setAssignedTo(data.assignedTo);
             expect(task.getAssignedTo()).toBe(data.assignedTo);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -71,9 +69,9 @@ describe('Task Entity - Property-Based Tests', () => {
 
             task.setAssignedTo(null);
             expect(task.getAssignedTo()).toBeNull();
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });
@@ -86,10 +84,7 @@ describe('Task Entity - Property-Based Tests', () => {
           fc.record({
             title: fc.string({ minLength: 1, maxLength: 255 }),
             projectId: fc.uuid(),
-            timeEntries: fc.array(
-              fc.integer({ min: 1, max: 24 }),
-              { minLength: 1, maxLength: 20 }
-            ),
+            timeEntries: fc.array(fc.integer({ min: 1, max: 24 }), { minLength: 1, maxLength: 20 }),
           }),
           (data) => {
             const task = new Task(data.title, data.projectId);
@@ -99,9 +94,9 @@ describe('Task Entity - Property-Based Tests', () => {
             task.setActualHours(totalHours);
 
             expect(task.getActualHours()).toBeCloseTo(totalHours, 2);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -111,10 +106,7 @@ describe('Task Entity - Property-Based Tests', () => {
           fc.record({
             title: fc.string({ minLength: 1, maxLength: 255 }),
             projectId: fc.uuid(),
-            hours: fc.array(
-              fc.integer({ min: 1, max: 24 }),
-              { minLength: 1, maxLength: 5 }
-            ),
+            hours: fc.array(fc.integer({ min: 1, max: 24 }), { minLength: 1, maxLength: 5 }),
           }),
           (data) => {
             const task = new Task(data.title, data.projectId);
@@ -127,9 +119,9 @@ describe('Task Entity - Property-Based Tests', () => {
             // Final value should be the last one set
             const lastHours = data.hours[data.hours.length - 1];
             expect(task.getActualHours()).toBeCloseTo(lastHours, 2);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });
@@ -157,9 +149,9 @@ describe('Task Entity - Property-Based Tests', () => {
             data.dependencies.forEach((depId) => {
               expect(task.getDependencies()).toContain(depId);
             });
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -182,9 +174,9 @@ describe('Task Entity - Property-Based Tests', () => {
             // Should only have one instance
             expect(task.getDependencies().length).toBe(1);
             expect(task.getDependencies()[0]).toBe(data.dependencyId);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -210,9 +202,9 @@ describe('Task Entity - Property-Based Tests', () => {
 
             expect(task.getDependencies()).not.toContain(firstDep);
             expect(task.getDependencies().length).toBe(data.dependencies.length - 1);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });
@@ -358,9 +350,7 @@ describe('Task Entity - Property-Based Tests', () => {
       const initialUpdatedAt = task.getUpdatedAt();
       task.setTitle('Updated title');
 
-      expect(task.getUpdatedAt().getTime()).toBeGreaterThanOrEqual(
-        initialUpdatedAt.getTime()
-      );
+      expect(task.getUpdatedAt().getTime()).toBeGreaterThanOrEqual(initialUpdatedAt.getTime());
     });
   });
 });

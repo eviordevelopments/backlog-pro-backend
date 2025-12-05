@@ -1,5 +1,5 @@
-import { IsString, IsNumber, IsDate, IsOptional, IsUUID, IsBoolean } from 'class-validator';
-import { InputType, Field } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsBoolean, IsDate, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
 @InputType()
 export class CreateTransactionDto {

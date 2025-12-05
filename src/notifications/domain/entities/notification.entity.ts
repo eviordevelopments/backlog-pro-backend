@@ -6,7 +6,7 @@ export class Notification {
   private type: string; // 'task_assigned', 'task_updated', 'mention', 'deadline', 'sprint_started', 'sprint_ended'
   private title: string;
   private message: string;
-  private metadata: Record<string, any>;
+  private metadata: Record<string, unknown>;
   private isRead: boolean;
   private createdAt: Date;
   private updatedAt: Date;
@@ -16,7 +16,7 @@ export class Notification {
     type: string,
     title: string,
     message: string,
-    metadata?: Record<string, any>,
+    metadata?: Record<string, unknown>,
     isRead?: boolean,
     id?: string,
     createdAt?: Date,
@@ -53,7 +53,7 @@ export class Notification {
     return this.message;
   }
 
-  getMetadata(): Record<string, any> {
+  getMetadata(): Record<string, unknown> {
     return this.metadata;
   }
 

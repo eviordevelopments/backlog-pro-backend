@@ -1,4 +1,4 @@
-import { Project } from '@projects/domain/entities/project.entity';
+import type { Project } from '../entities/project.entity';
 
 export interface IProjectRepository {
   create(project: Project): Promise<Project>;

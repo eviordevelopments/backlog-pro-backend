@@ -1,11 +1,11 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
   DeleteDateColumn,
+  Entity,
   Index,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('invoices')
@@ -48,7 +48,7 @@ export class InvoiceTypeOrmEntity {
   paidDate?: Date;
 
   @Column({ type: 'jsonb', nullable: true })
-  items?: any[];
+  items?: unknown[];
 
   @Column({ type: 'text', nullable: true })
   notes?: string;

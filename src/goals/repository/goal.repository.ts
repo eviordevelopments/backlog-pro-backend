@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { Goal } from '@goals/domain/entities/goal.entity';
-import { GoalTypeOrmEntity } from '@goals/repository/entities/goal.typeorm-entity';
-import { GoalMapper } from '@goals/repository/mappers/goal.mapper';
-import { IGoalRepository } from '@goals/domain/interfaces/goal.repository.interface';
+import { IsNull, Repository } from 'typeorm';
+
+import { Goal } from '../domain/entities/goal.entity';
+import { IGoalRepository } from '../domain/interfaces/goal.repository.interface';
+
+import { GoalTypeOrmEntity } from './entities/goal.typeorm-entity';
+import { GoalMapper } from './mappers/goal.mapper';
 
 @Injectable()
 export class GoalRepository implements IGoalRepository {

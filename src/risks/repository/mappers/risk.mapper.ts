@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Risk } from '@risks/domain/entities/risk.entity';
-import { RiskTypeOrmEntity } from '@risks/repository/entities/risk.typeorm-entity';
+
+import { Risk, RiskComment } from '../../domain/entities/risk.entity';
+import { RiskTypeOrmEntity } from '../entities/risk.typeorm-entity';
 
 @Injectable()
 export class RiskMapper {
@@ -16,7 +17,7 @@ export class RiskMapper {
       raw.mitigationStrategy,
       raw.isCore,
       raw.status,
-      raw.comments || [],
+      (raw.comments as RiskComment[]) || [],
       raw.id,
       raw.createdAt,
       raw.updatedAt,

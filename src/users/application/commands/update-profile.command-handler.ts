@@ -1,9 +1,11 @@
-import { Injectable, Logger, ForbiddenException } from '@nestjs/common';
-import { UpdateProfileCommand } from '@users/application/commands/update-profile.command';
-import { UserProfile } from '@users/domain/entities/user-profile.entity';
-import { HourlyRate } from '@users/domain/value-objects/hourly-rate.vo';
-import { UserProfileNotFoundException } from '@users/domain/exceptions';
-import { UserProfileRepository } from '@users/repository/user-profile.repository';
+import { Injectable, Logger } from '@nestjs/common';
+
+import { UserProfile } from '../../domain/entities/user-profile.entity';
+import { UserProfileNotFoundException } from '../../domain/exceptions/index';
+import { HourlyRate } from '../../domain/value-objects/hourly-rate.vo';
+import { UserProfileRepository } from '../../repository/user-profile.repository';
+
+import { UpdateProfileCommand } from './update-profile.command';
 
 @Injectable()
 export class UpdateProfileCommandHandler {

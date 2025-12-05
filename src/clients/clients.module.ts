@@ -1,12 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ClientTypeOrmEntity } from '@clients/repository/entities/client.typeorm-entity';
-import { ClientRepository } from '@clients/repository/client.repository';
-import { ClientMapper } from '@clients/repository/mappers/client.mapper';
-import { CreateClientCommandHandler, UpdateClientCommandHandler, DeleteClientCommandHandler } from '@clients/application/commands/handlers';
-import { GetClientQueryHandler, ListClientsQueryHandler, GetClientProjectsQueryHandler } from '@clients/application/queries/handlers';
-import { ClientService } from '@clients/application/services/client.service';
-import { ClientResolver } from '@clients/resolvers/client.resolver';
+
+import {
+  CreateClientCommandHandler,
+  DeleteClientCommandHandler,
+  UpdateClientCommandHandler,
+} from './application/commands/handlers';
+import {
+  GetClientProjectsQueryHandler,
+  GetClientQueryHandler,
+  ListClientsQueryHandler,
+} from './application/queries/handlers';
+import { ClientService } from './application/services/client.service';
+import { ClientRepository } from './repository/client.repository';
+import { ClientTypeOrmEntity } from './repository/entities/client.typeorm-entity';
+import { ClientMapper } from './repository/mappers/client.mapper';
+import { ClientResolver } from './resolvers/client.resolver';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ClientTypeOrmEntity])],

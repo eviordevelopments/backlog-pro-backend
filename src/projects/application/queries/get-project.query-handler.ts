@@ -1,8 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GetProjectQuery } from '@projects/application/queries/get-project.query';
-import { Project } from '@projects/domain/entities/project.entity';
-import { ProjectNotFoundException } from '@projects/domain/exceptions';
-import { ProjectRepository } from '@projects/repository/project.repository';
+
+import { Project } from '../../domain/entities/project.entity';
+import { ProjectNotFoundException } from '../../domain/exceptions/index';
+import { ProjectRepository } from '../../repository/project.repository';
+
+import { GetProjectQuery } from './get-project.query';
 
 @Injectable()
 export class GetProjectQueryHandler {
