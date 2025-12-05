@@ -48,7 +48,9 @@ async function bootstrap() {
     console.log(`🔌 Port: ${envs.server.port}`);
     console.log(`🅰️ Apollo Server: http://localhost:${envs.server.port}/graphql`);
     console.log(`💾 Adminer: http://localhost:${envs.adminer.port}`);
-    console.log(`📊 Cronitor: ${envs.cronitor?.apiKey ? '✅ Enabled' : '⚠️  Disabled (no API key)'}`);
+    console.log(
+      `📊 Cronitor: ${envs.cronitor?.apiKey ? '✅ Enabled' : '⚠️  Disabled (no API key)'}`,
+    );
   } else {
     console.log('Application started successfully');
     console.log(`Cronitor: ${envs.cronitor?.apiKey ? 'Enabled' : 'Disabled'}`);

@@ -138,12 +138,12 @@ export class CronitorService {
 
     try {
       const monitor = new this.cronitor.Monitor(monitorName);
-      
+
       // Construir el mensaje con metadata si existe
       let message = options?.message || 'Alive';
       if (options?.metadata) {
         const metadataStr = Object.entries(options.metadata)
-          .map(([key, value]) => `${key}=${value}`)
+          .map(([key, value]) => `${key}=${String(value)}`)
           .join(', ');
         message = `${message} | ${metadataStr}`;
       }

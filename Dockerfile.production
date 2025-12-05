@@ -35,10 +35,13 @@ COPY --from=builder /app/dist ./dist
 
 # Copiar entrypoint
 COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
 
-# Exponer puerto (usa variable de entorno del .env.production)
-EXPOSE ${PORT}
+# Convertir line endings de Windows a Unix y dar permisos de ejecución
+RUN sed -i 's/\r$//' entrypoint.sh && \
+    chmod +x entrypoint.sh
+
+# Exponer puerto (Render asignará dinámicamente)
+EXPOSE 10000
 
 # ENTRYPOINT
 ENTRYPOINT ["./entrypoint.sh"]

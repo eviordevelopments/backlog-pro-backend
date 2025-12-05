@@ -14,7 +14,7 @@ RUN npm ci
 COPY . .
 
 # Exponer puerto (usa variable de entorno del .env.local)
-EXPOSE ${PORT}
+EXPOSE 3000
 
 # Iniciar en modo desarrollo con hot reload
 # NestJS detectará cambios automáticamente con docker compose watch
