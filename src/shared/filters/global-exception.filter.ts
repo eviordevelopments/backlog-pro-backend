@@ -1,7 +1,9 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { GqlContextType } from '@nestjs/graphql';
 import { GraphQLError } from 'graphql';
-import { BaseDomainException } from '@shared/exceptions';
+
+import { BaseDomainException } from '../exceptions/index';
+import { cronitorService } from '../services';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -19,7 +21,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       }
 
       const ctx = host.switchToHttp();
-      const response = ctx.getResponse();
+      const response = ctx.getResponse<{
+        status: (code: number) => { json: (body: unknown) => void };
+      }>();
       return response.status(HttpStatus.BAD_REQUEST).json({
         codigo: exception.codigo,
         mensaje: exception.mensaje,
@@ -33,10 +37,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
       // Extraer detalles de validación
       let message = exception.message;
-      let validationErrors = null;
+      let validationErrors: string[] | null = null;
 
       if (typeof responseData === 'object' && responseData !== null) {
-        const responseObj = responseData as any;
+        const responseObj = responseData as { message?: string | string[] };
         if (Array.isArray(responseObj.message)) {
           validationErrors = responseObj.message;
           message = 'Errores de validación';
@@ -59,7 +63,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       }
 
       const ctx = host.switchToHttp();
-      const response = ctx.getResponse();
+      const response = ctx.getResponse<{
+        status: (code: number) => { json: (body: unknown) => void };
+      }>();
       return response.status(status).json({
         codigo: 'HTTP_ERROR',
         mensaje: message,
@@ -67,6 +73,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         timestamp: new Date().toISOString(),
       });
     }
+
+    // Trackear error inesperado en Cronitor
+    const error = exception instanceof Error ? exception : new Error(String(exception));
+    cronitorService.trackError('unhandled-exception', error, {
+      type: isGraphQL ? 'graphql' : 'http',
+      timestamp: new Date().toISOString(),
+    });
 
     // No exponer stack traces al cliente
     if (isGraphQL) {
@@ -79,7 +92,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
 
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse();
+    const response = ctx.getResponse<{
+      status: (code: number) => { json: (body: unknown) => void };
+    }>();
     return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       codigo: 'INTERNAL_ERROR',
       mensaje: 'Error interno del servidor',

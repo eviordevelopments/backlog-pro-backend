@@ -1,8 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { DeleteTimeCommand } from '@time-entries/application/commands/delete-time.command';
-import { TimeEntryRepository } from '@time-entries/repository/time-entry.repository';
-import { TaskRepository } from '@tasks/repository/task.repository';
-import { TimeEntryNotFoundException } from '@time-entries/domain/exceptions';
+
+import { TaskRepository } from '../../../tasks/repository/task.repository';
+import { TimeEntryNotFoundException } from '../../domain/exceptions/index';
+import { TimeEntryRepository } from '../../repository/time-entry.repository';
+
+import { DeleteTimeCommand } from './delete-time.command';
 
 @Injectable()
 export class DeleteTimeCommandHandler {

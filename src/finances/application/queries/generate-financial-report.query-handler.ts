@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { GenerateFinancialReportQuery } from './generate-financial-report.query';
-import { ProjectRepository } from '@projects/repository/project.repository';
-import { TransactionRepository } from '@finances/repository/transaction.repository';
-import { InvoiceRepository } from '@finances/repository/invoice.repository';
-import { CalculateSalariesQueryHandler } from './calculate-salaries.query-handler';
+
+import { ProjectRepository } from '../../../projects/repository/project.repository';
+import { InvoiceRepository } from '../../repository/invoice.repository';
+import { TransactionRepository } from '../../repository/transaction.repository';
+
 import { CalculateSalariesQuery } from './calculate-salaries.query';
+import { CalculateSalariesQueryHandler } from './calculate-salaries.query-handler';
+import { GenerateFinancialReportQuery } from './generate-financial-report.query';
 
 @Injectable()
 export class GenerateFinancialReportQueryHandler {
@@ -15,32 +17,34 @@ export class GenerateFinancialReportQueryHandler {
     private readonly salariesHandler: CalculateSalariesQueryHandler,
   ) {}
 
-  async handle(query: GenerateFinancialReportQuery): Promise<any> {
+  async handle(query: GenerateFinancialReportQuery): Promise<{
+    projectId: string;
+    projectName: string;
+    budget: number;
+    spent: number;
+    totalIncome: number;
+    totalExpenses: number;
+    totalSalaries: number;
+    netProfit: number;
+    invoices: number;
+    transactions: number;
+    teamMembers: number;
+    salaries: Array<{ userId: string; userName: string; salary: number; idealHourlyRate: number }>;
+  }> {
     const project = await this.projectRepository.getById(query.projectId);
     if (!project) {
       throw new Error(`Project with id ${query.projectId} not found`);
     }
 
-    const transactions = await this.transactionRepository.getByProjectId(
-      query.projectId
-    );
-    const invoices = await this.invoiceRepository.getByProjectId(
-      query.projectId
-    );
-    const salaries = await this.salariesHandler.handle(
-      new CalculateSalariesQuery(query.projectId)
-    );
+    const transactions = await this.transactionRepository.getByProjectId(query.projectId);
+    const invoices = await this.invoiceRepository.getByProjectId(query.projectId);
+    const salaries = await this.salariesHandler.handle(new CalculateSalariesQuery(query.projectId));
 
-    const totalIncome = invoices.reduce(
-      (sum, inv) => sum + inv.getTotal().getValue(),
-      0
-    );
+    const totalIncome = invoices.reduce((sum, inv) => sum + inv.getTotal().getValue(), 0);
     const totalExpenses = transactions.reduce((sum, trans) => {
-      return trans.getType().getValue() === 'expense'
-        ? sum + trans.getAmount().getValue()
-        : sum;
+      return trans.getType().getValue() === 'expense' ? sum + trans.getAmount().getValue() : sum;
     }, 0);
-    const totalSalaries = salaries.reduce((sum, s) => sum + s.salary, 0);
+    const totalSalaries = salaries.reduce((sum, s: { salary: number }) => sum + s.salary, 0);
 
     return {
       projectId: query.projectId,

@@ -1,17 +1,18 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { Logger, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
-import { CreateProjectDto } from '@projects/dto/request/create-project.dto';
-import { UpdateProjectDto } from '@projects/dto/request/update-project.dto';
-import { AddMemberDto } from '@projects/dto/request/add-member.dto';
-import { AssignMembersDto } from '@projects/dto/request/assign-members.dto';
-import { ProjectResponseDto } from '@projects/dto/response/project.response.dto';
-import { ProjectMemberResponseDto } from '@projects/dto/response/project-member.response.dto';
-import { ProjectService } from '@projects/application/services/project.service';
-import { AssignMembersCommandHandler } from '@projects/application/commands/assign-members.command-handler';
-import { AssignMembersCommand } from '@projects/application/commands/assign-members.command';
-import { Project } from '@projects/domain/entities/project.entity';
-import { ProjectMember } from '@projects/domain/entities/project-member.entity';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { AssignMembersCommand } from '../application/commands/assign-members.command';
+import { AssignMembersCommandHandler } from '../application/commands/assign-members.command-handler';
+import { ProjectService } from '../application/services/project.service';
+import { ProjectMember } from '../domain/entities/project-member.entity';
+import { Project } from '../domain/entities/project.entity';
+import { AddMemberDto } from '../dto/request/add-member.dto';
+import { AssignMembersDto } from '../dto/request/assign-members.dto';
+import { CreateProjectDto } from '../dto/request/create-project.dto';
+import { UpdateProjectDto } from '../dto/request/update-project.dto';
+import { ProjectMemberResponseDto } from '../dto/response/project-member.response.dto';
+import { ProjectResponseDto } from '../dto/response/project.response.dto';
 
 @Resolver()
 @UseGuards(JwtAuthGuard)
@@ -26,7 +27,9 @@ export class ProjectResolver {
   @Mutation(() => ProjectResponseDto, {
     description: 'Crea un nuevo proyecto',
   })
-  async createProject(@Args('input', { description: 'Datos del proyecto a crear' }) input: CreateProjectDto): Promise<ProjectResponseDto> {
+  async createProject(
+    @Args('input', { description: 'Datos del proyecto a crear' }) input: CreateProjectDto,
+  ): Promise<ProjectResponseDto> {
     this.logger.log(`Creando proyecto: ${input.name}`);
     const project = await this.projectService.createProject(
       input.name,
@@ -41,7 +44,9 @@ export class ProjectResolver {
   @Query(() => ProjectResponseDto, {
     description: 'Obtiene un proyecto por ID',
   })
-  async getProject(@Args('projectId', { description: 'UUID del proyecto' }) projectId: string): Promise<ProjectResponseDto> {
+  async getProject(
+    @Args('projectId', { description: 'UUID del proyecto' }) projectId: string,
+  ): Promise<ProjectResponseDto> {
     this.logger.log(`Obteniendo proyecto: ${projectId}`);
     const project = await this.projectService.getProject(projectId);
     return this.mapProjectToResponse(project);

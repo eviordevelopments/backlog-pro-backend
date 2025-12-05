@@ -1,10 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { GetProfileQueryHandler } from '@users/application/queries/get-profile.query-handler';
-import { GetProfileQuery } from '@users/application/queries/get-profile.query';
-import { UserProfileRepository } from '@users/repository/user-profile.repository';
-import { UserProfile } from '@users/domain/entities/user-profile.entity';
-import { UserProfileNotFoundException } from '@users/domain/exceptions';
-import * as fc from 'fast-check';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import fc from 'fast-check';
+
+import { UserProfile } from '../../domain/entities/user-profile.entity';
+import { UserProfileNotFoundException } from '../../domain/exceptions/index';
+import { UserProfileRepository } from '../../repository/user-profile.repository';
+
+import { GetProfileQuery } from './get-profile.query';
+import { GetProfileQueryHandler } from './get-profile.query-handler';
 
 describe('GetProfileQueryHandler', () => {
   let handler: GetProfileQueryHandler;
@@ -85,9 +88,7 @@ describe('GetProfileQueryHandler', () => {
 
           const query = new GetProfileQuery(userId);
 
-          await expect(handler.handle(query)).rejects.toThrow(
-            UserProfileNotFoundException,
-          );
+          await expect(handler.handle(query)).rejects.toThrow(UserProfileNotFoundException);
         }),
         { numRuns: 100 },
       );

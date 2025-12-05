@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { RelationshipNotFoundException } from '@shared/exceptions/relationship-not-found.exception';
+
+import { RelationshipNotFoundException } from '../exceptions/relationship-not-found.exception';
 
 /**
  * Servicio para validar la existencia de relaciones entre entidades
@@ -15,17 +16,13 @@ export class RelationshipValidatorService {
    * @param relationshipType Tipo de relación (ej: "Project", "User")
    */
   validateRelationshipExists(
-    entity: any,
+    entity: unknown,
     entityType: string,
     entityId: string,
     relationshipType: string,
   ): void {
     if (!entity) {
-      throw new RelationshipNotFoundException(
-        entityType,
-        entityId,
-        relationshipType,
-      );
+      throw new RelationshipNotFoundException(entityType, entityId, relationshipType);
     }
   }
 
@@ -33,9 +30,7 @@ export class RelationshipValidatorService {
    * Valida múltiples relaciones a la vez
    * @param relationships Array de tuplas [entity, entityType, entityId, relationshipType]
    */
-  validateMultipleRelationships(
-    relationships: Array<[any, string, string, string]>,
-  ): void {
+  validateMultipleRelationships(relationships: Array<[unknown, string, string, string]>): void {
     for (const [entity, entityType, entityId, relationshipType] of relationships) {
       this.validateRelationshipExists(entity, entityType, entityId, relationshipType);
     }

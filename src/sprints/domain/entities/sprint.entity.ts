@@ -1,5 +1,6 @@
 import { v4 as uuid } from 'uuid';
-import { SprintStatus } from '@sprints/domain/value-objects/sprint-status.vo';
+
+import { SprintStatus } from '../value-objects/sprint-status.vo';
 
 export class Sprint {
   private id: string;

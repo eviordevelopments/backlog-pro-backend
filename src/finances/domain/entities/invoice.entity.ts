@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid';
-import { Amount } from '@finances/domain/value-objects/amount.vo';
-import { InvoiceStatus } from '@finances/domain/value-objects/invoice-status.vo';
+
+import type { Amount } from '../value-objects/amount.vo';
+import { InvoiceStatus } from '../value-objects/invoice-status.vo';
 
 export interface InvoiceItem {
   description: string;

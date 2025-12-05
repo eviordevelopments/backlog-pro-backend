@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+
+import { SprintRepository } from '../../../sprints/repository/sprint.repository';
+import { TaskRepository } from '../../../tasks/repository/task.repository';
+
 import { CalculateSprintMetricsQuery } from './calculate-sprint-metrics.query';
-import { SprintRepository } from '@sprints/repository/sprint.repository';
-import { TaskRepository } from '@tasks/repository/task.repository';
 
 @Injectable()
 export class CalculateSprintMetricsQueryHandler {
@@ -10,7 +12,20 @@ export class CalculateSprintMetricsQueryHandler {
     private readonly taskRepository: TaskRepository,
   ) {}
 
-  async handle(query: CalculateSprintMetricsQuery): Promise<any> {
+  async handle(query: CalculateSprintMetricsQuery): Promise<{
+    sprintId: string;
+    sprintName: string;
+    status: string;
+    storyPointsCommitted: number;
+    storyPointsCompleted: number;
+    velocity: number;
+    completionRate: number;
+    totalTasks: number;
+    completedTasks: number;
+    averageCycleTime: number;
+    startDate: Date;
+    endDate: Date;
+  }> {
     const sprint = await this.sprintRepository.getById(query.sprintId);
     if (!sprint) {
       throw new Error(`Sprint with id ${query.sprintId} not found`);
@@ -25,7 +40,7 @@ export class CalculateSprintMetricsQueryHandler {
 
     // Calculate cycle time (average days from creation to completion)
     const completedTasks = tasks.filter((t) => t.getStatus().getValue() === 'done');
-    let cycleTimes: number[] = [];
+    const cycleTimes: number[] = [];
 
     completedTasks.forEach((task) => {
       const createdAt = task.getCreatedAt();
@@ -35,9 +50,7 @@ export class CalculateSprintMetricsQueryHandler {
     });
 
     const averageCycleTime =
-      cycleTimes.length > 0
-        ? cycleTimes.reduce((a, b) => a + b, 0) / cycleTimes.length
-        : 0;
+      cycleTimes.length > 0 ? cycleTimes.reduce((a, b) => a + b, 0) / cycleTimes.length : 0;
 
     return {
       sprintId: query.sprintId,

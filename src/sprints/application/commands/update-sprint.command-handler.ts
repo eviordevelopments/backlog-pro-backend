@@ -1,9 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { UpdateSprintCommand } from '@sprints/application/commands/update-sprint.command';
-import { Sprint } from '@sprints/domain/entities/sprint.entity';
-import { SprintRepository } from '@sprints/repository/sprint.repository';
-import { SprintNotFoundException, InvalidSprintDatesException } from '@sprints/domain/exceptions';
-import { SprintStatus } from '@sprints/domain/value-objects/sprint-status.vo';
+
+import { Sprint } from '../../domain/entities/sprint.entity';
+import {
+  InvalidSprintDatesException,
+  SprintNotFoundException,
+} from '../../domain/exceptions/index';
+import { SprintStatus } from '../../domain/value-objects/sprint-status.vo';
+import { SprintRepository } from '../../repository/sprint.repository';
+
+import { UpdateSprintCommand } from './update-sprint.command';
 
 @Injectable()
 export class UpdateSprintCommandHandler {

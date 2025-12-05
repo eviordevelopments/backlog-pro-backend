@@ -1,11 +1,11 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
   DeleteDateColumn,
+  Entity,
   Index,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('risks')
@@ -46,7 +46,7 @@ export class RiskTypeOrmEntity {
   isCore!: boolean;
 
   @Column({ type: 'jsonb', nullable: true })
-  comments?: any[];
+  comments?: unknown[];
 
   @CreateDateColumn()
   createdAt!: Date;

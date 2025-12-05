@@ -1,13 +1,14 @@
 import {
-  Entity,
-  PrimaryColumn,
   Column,
-  ManyToOne,
-  JoinColumn,
   CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { TaskTypeOrmEntity } from '@tasks/repository/entities/task.typeorm-entity';
+
+import { TaskTypeOrmEntity } from '../../../tasks/repository/entities/task.typeorm-entity';
 
 @Entity('time_entries')
 export class TimeEntryTypeOrmEntity {

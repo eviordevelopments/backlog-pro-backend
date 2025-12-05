@@ -1,10 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { TimeEntry } from '@time-entries/domain/entities/time-entry.entity';
-import { TimeEntryTypeOrmEntity } from '@time-entries/repository/entities/time-entry.typeorm-entity';
-import { TimeEntryMapper } from '@time-entries/repository/mappers/time-entry.mapper';
-import { ITimeEntryRepository } from '@time-entries/domain/interfaces/time-entry.repository.interface';
+import { IsNull, Repository } from 'typeorm';
+
+import { TimeEntry } from '../domain/entities/time-entry.entity';
+import { ITimeEntryRepository } from '../domain/interfaces/time-entry.repository.interface';
+
+import { TimeEntryTypeOrmEntity } from './entities/time-entry.typeorm-entity';
+import { TimeEntryMapper } from './mappers/time-entry.mapper';
 
 @Injectable()
 export class TimeEntryRepository implements ITimeEntryRepository {
@@ -73,15 +75,16 @@ export class TimeEntryRepository implements ITimeEntryRepository {
 
   async getByProjectId(projectId: string): Promise<TimeEntry[]> {
     this.logger.log(`Listing time entries for project: ${projectId}`);
-    // This would require joining with tasks table
-    // For now, return empty array - this needs to be implemented with proper joins
-    const entities = await this.repository.query(`
-      SELECT te.* FROM time_entry te
-      JOIN task t ON te.task_id = t.id
-      WHERE t.project_id = $1 AND te.deleted_at IS NULL
-      ORDER BY te.date DESC
-    `, [projectId]);
-    return entities.map((e: TimeEntryTypeOrmEntity) => this.mapper.toDomain(e));
+
+    const entities = await this.repository
+      .createQueryBuilder('timeEntry')
+      .innerJoin('timeEntry.task', 'task')
+      .where('task.projectId = :projectId', { projectId })
+      .andWhere('timeEntry.deletedAt IS NULL')
+      .orderBy('timeEntry.date', 'DESC')
+      .getMany();
+
+    return entities.map((e) => this.mapper.toDomain(e));
   }
 
   async delete(id: string): Promise<void> {

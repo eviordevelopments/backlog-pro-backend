@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+
+import { Goal } from '../../domain/entities/goal.entity';
+import { GoalRepository } from '../../repository/goal.repository';
+
 import { CreateGoalCommand } from './create-goal.command';
-import { Goal } from '@goals/domain/entities/goal.entity';
-import { GoalRepository } from '@goals/repository/goal.repository';
 
 @Injectable()
 export class CreateGoalCommandHandler {

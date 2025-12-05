@@ -1,4 +1,4 @@
-import { Task } from '@tasks/domain/entities/task.entity';
+import type { Task } from '../entities/task.entity';
 
 export interface ITaskRepository {
   create(task: Task): Promise<Task>;

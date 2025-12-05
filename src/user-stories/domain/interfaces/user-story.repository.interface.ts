@@ -1,4 +1,4 @@
-import { UserStory } from '@user-stories/domain/entities/user-story.entity';
+import type { UserStory } from '../entities/user-story.entity';
 
 export interface IUserStoryRepository {
   create(userStory: UserStory): Promise<UserStory>;

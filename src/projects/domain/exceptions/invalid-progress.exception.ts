@@ -1,4 +1,4 @@
-import { BaseDomainException } from '@shared/exceptions';
+import { BaseDomainException } from '../../../shared/exceptions/index';
 
 export class InvalidProgressException extends BaseDomainException {
   constructor(progress: number) {

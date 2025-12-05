@@ -1,5 +1,5 @@
-import { IsNumber, Min, Max, IsOptional, IsString } from 'class-validator';
-import { InputType, Field, Float } from '@nestjs/graphql';
+import { Field, Float, InputType } from '@nestjs/graphql';
+import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 
 @InputType()
 export class ModifyTimeDto {

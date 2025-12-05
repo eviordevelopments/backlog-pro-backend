@@ -37,8 +37,8 @@ COPY --from=builder /app/dist ./dist
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
 
-# Exponer puerto (usa variable de entorno del .env.production, default 3002)
-EXPOSE ${PORT:-3002}
+# Exponer puerto (usa variable de entorno del .env.production)
+EXPOSE ${PORT}
 
 # ENTRYPOINT
 ENTRYPOINT ["./entrypoint.sh"]

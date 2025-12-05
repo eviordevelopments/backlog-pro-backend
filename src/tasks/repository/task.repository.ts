@@ -1,10 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { Task } from '@tasks/domain/entities/task.entity';
-import { TaskTypeOrmEntity } from '@tasks/repository/entities/task.typeorm-entity';
-import { TaskMapper } from '@tasks/repository/mappers/task.mapper';
-import { ITaskRepository } from '@tasks/domain/interfaces/task.repository.interface';
+import { IsNull, Repository } from 'typeorm';
+
+import { Task } from '../domain/entities/task.entity';
+import { ITaskRepository } from '../domain/interfaces/task.repository.interface';
+
+import { TaskTypeOrmEntity } from './entities/task.typeorm-entity';
+import { TaskMapper } from './mappers/task.mapper';
 
 @Injectable()
 export class TaskRepository implements ITaskRepository {

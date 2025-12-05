@@ -1,4 +1,4 @@
-import { TimeEntry } from '@time-entries/domain/entities/time-entry.entity';
+import type { TimeEntry } from '../entities/time-entry.entity';
 
 export interface ITimeEntryRepository {
   create(timeEntry: TimeEntry): Promise<TimeEntry>;

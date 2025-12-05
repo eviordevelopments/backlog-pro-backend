@@ -1,4 +1,4 @@
-import { Goal } from '@goals/domain/entities/goal.entity';
+import type { Goal } from '../entities/goal.entity';
 
 export interface IGoalRepository {
   create(goal: Goal): Promise<Goal>;

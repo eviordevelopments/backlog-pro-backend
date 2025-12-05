@@ -1,9 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { JwtService } from '@nestjs/jwt';
-import { UnauthorizedException, ExecutionContext, Logger } from '@nestjs/common';
+import type { ExecutionContext } from '@nestjs/common';
+import { Logger, UnauthorizedException } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
-import * as fc from 'fast-check';
+import { JwtService } from '@nestjs/jwt';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import fc from 'fast-check';
+
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 describe('JwtAuthGuard', () => {
   let guard: JwtAuthGuard;
@@ -92,9 +95,7 @@ describe('JwtAuthGuard', () => {
             .spyOn(GqlExecutionContext, 'create')
             .mockReturnValue(mockContext);
 
-          (jwtService.verifyAsync as jest.Mock).mockRejectedValue(
-            new Error('Invalid token'),
-          );
+          (jwtService.verifyAsync as jest.Mock).mockRejectedValue(new Error('Invalid token'));
 
           await expect(guard.canActivate(mockContext as ExecutionContext)).rejects.toThrow(
             UnauthorizedException,

@@ -1,8 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GetProfileQuery } from '@users/application/queries/get-profile.query';
-import { UserProfile } from '@users/domain/entities/user-profile.entity';
-import { UserProfileNotFoundException } from '@users/domain/exceptions';
-import { UserProfileRepository } from '@users/repository/user-profile.repository';
+
+import { UserProfile } from '../../domain/entities/user-profile.entity';
+import { UserProfileNotFoundException } from '../../domain/exceptions/index';
+import { UserProfileRepository } from '../../repository/user-profile.repository';
+
+import { GetProfileQuery } from './get-profile.query';
 
 @Injectable()
 export class GetProfileQueryHandler {

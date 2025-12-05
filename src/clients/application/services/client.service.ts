@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreateClientCommandHandler } from '@clients/application/commands/handlers';
-import { UpdateClientCommandHandler } from '@clients/application/commands/handlers';
-import { DeleteClientCommandHandler } from '@clients/application/commands/handlers';
-import { GetClientQueryHandler } from '@clients/application/queries/handlers';
-import { ListClientsQueryHandler } from '@clients/application/queries/handlers';
+
+import {
+  CreateClientCommandHandler,
+  DeleteClientCommandHandler,
+  UpdateClientCommandHandler,
+} from '../commands/handlers';
+import { CreateClientCommand, DeleteClientCommand, UpdateClientCommand } from '../commands/index';
+import { GetClientQueryHandler, ListClientsQueryHandler } from '../queries/handlers';
+import { GetClientQuery, ListClientsQuery } from '../queries/index';
 
 @Injectable()
 export class ClientService {
@@ -15,23 +19,23 @@ export class ClientService {
     private readonly listClientsHandler: ListClientsQueryHandler,
   ) {}
 
-  async createClient(command: any) {
+  async createClient(command: CreateClientCommand) {
     return this.createClientHandler.handle(command);
   }
 
-  async updateClient(command: any) {
+  async updateClient(command: UpdateClientCommand) {
     return this.updateClientHandler.handle(command);
   }
 
-  async deleteClient(command: any) {
+  async deleteClient(command: DeleteClientCommand) {
     return this.deleteClientHandler.handle(command);
   }
 
-  async getClient(query: any) {
+  async getClient(query: GetClientQuery) {
     return this.getClientHandler.handle(query);
   }
 
-  async listClients(query: any) {
+  async listClients(query: ListClientsQuery) {
     return this.listClientsHandler.handle(query);
   }
 }

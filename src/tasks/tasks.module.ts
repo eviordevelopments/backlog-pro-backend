@@ -1,18 +1,20 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TaskTypeOrmEntity } from '@tasks/repository/entities/task.typeorm-entity';
-import { TaskRepository } from '@tasks/repository/task.repository';
-import { TaskMapper } from '@tasks/repository/mappers/task.mapper';
-import { CreateTaskCommandHandler } from '@tasks/application/commands/create-task.command-handler';
-import { UpdateTaskCommandHandler } from '@tasks/application/commands/update-task.command-handler';
-import { AssignTaskCommandHandler } from '@tasks/application/commands/assign-task.command-handler';
-import { AddSubtasksCommandHandler } from '@tasks/application/commands/add-subtasks.command-handler';
-import { AddDependencyCommandHandler } from '@tasks/application/commands/add-dependency.command-handler';
-import { GetTaskQueryHandler } from '@tasks/application/queries/get-task.query-handler';
-import { ListTasksSprintQueryHandler } from '@tasks/application/queries/list-tasks-sprint.query-handler';
-import { TaskService } from '@tasks/application/services/task.service';
-import { TaskResolver } from '@tasks/resolvers/task.resolver';
-import { ProjectsModule } from '@projects/projects.module';
+
+import { ProjectsModule } from '../projects/projects.module';
+
+import { AddDependencyCommandHandler } from './application/commands/add-dependency.command-handler';
+import { AddSubtasksCommandHandler } from './application/commands/add-subtasks.command-handler';
+import { AssignTaskCommandHandler } from './application/commands/assign-task.command-handler';
+import { CreateTaskCommandHandler } from './application/commands/create-task.command-handler';
+import { UpdateTaskCommandHandler } from './application/commands/update-task.command-handler';
+import { GetTaskQueryHandler } from './application/queries/get-task.query-handler';
+import { ListTasksSprintQueryHandler } from './application/queries/list-tasks-sprint.query-handler';
+import { TaskService } from './application/services/task.service';
+import { TaskTypeOrmEntity } from './repository/entities/task.typeorm-entity';
+import { TaskMapper } from './repository/mappers/task.mapper';
+import { TaskRepository } from './repository/task.repository';
+import { TaskResolver } from './resolvers/task.resolver';
 
 @Module({
   imports: [TypeOrmModule.forFeature([TaskTypeOrmEntity]), ProjectsModule],

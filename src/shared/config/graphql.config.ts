@@ -1,9 +1,11 @@
-import { ApolloDriverConfig } from '@nestjs/apollo';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
-import { GraphQLError, GraphQLFormattedError } from 'graphql';
-import { Request } from 'express';
 import { join } from 'path';
-import { envs } from '@shared/config';
+
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import type { ApolloDriverConfig } from '@nestjs/apollo';
+import type { Request } from 'express';
+import type { GraphQLError, GraphQLFormattedError } from 'graphql';
+
+import { envs } from './index';
 
 interface GraphQLContext {
   req?: Request;
@@ -42,9 +44,7 @@ export const graphqlConfig: ApolloDriverConfig = {
     const graphQLError = error as GraphQLError;
     const extensions: Record<string, unknown> = {
       code:
-        formattedError.extensions?.code ||
-        graphQLError.extensions?.code ||
-        'INTERNAL_SERVER_ERROR',
+        formattedError.extensions?.code || graphQLError.extensions?.code || 'INTERNAL_SERVER_ERROR',
       timestamp: new Date().toISOString(),
     };
 

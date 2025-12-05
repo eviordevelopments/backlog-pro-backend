@@ -1,4 +1,4 @@
-import { Feedback } from '@feedback/domain/entities/feedback.entity';
+import type { Feedback } from '../entities/feedback.entity';
 
 export interface IFeedbackRepository {
   create(feedback: Feedback): Promise<Feedback>;

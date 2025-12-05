@@ -1,4 +1,4 @@
-import { Achievement, UserAchievement } from '@achievements/domain/entities/achievement.entity';
+import type { Achievement, UserAchievement } from '../entities/achievement.entity';
 
 export interface IAchievementRepository {
   create(achievement: Achievement): Promise<Achievement>;

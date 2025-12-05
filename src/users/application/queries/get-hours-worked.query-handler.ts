@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
+
+import { TimeEntryRepository } from '../../../time-entries/repository/time-entry.repository';
+
 import { GetHoursWorkedQuery } from './get-hours-worked.query';
-import { TimeEntryRepository } from '@time-entries/repository/time-entry.repository';
 
 @Injectable()
 export class GetHoursWorkedQueryHandler {
   constructor(private readonly timeEntryRepository: TimeEntryRepository) {}
 
-  async execute(query: GetHoursWorkedQuery): Promise<{ totalHours: number; byProject: Record<string, number> }> {
+  async execute(
+    query: GetHoursWorkedQuery,
+  ): Promise<{ totalHours: number; byProject: Record<string, number> }> {
     const timeEntries = await this.timeEntryRepository.listByUser(query.userId);
 
     let totalHours = 0;

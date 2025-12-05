@@ -1,10 +1,11 @@
 import { Plugin } from '@nestjs/apollo';
 import { GraphQLError } from 'graphql';
-import { BaseDomainException } from '@shared/exceptions';
+
+import { BaseDomainException } from '../exceptions/index';
 
 @Plugin()
 export class GraphQLErrorPlugin {
-  async didResolveOperation(requestContext: any): Promise<void> {
+  didResolveOperation(requestContext: { errors?: GraphQLError[] }): void {
     const { errors } = requestContext;
 
     if (errors) {

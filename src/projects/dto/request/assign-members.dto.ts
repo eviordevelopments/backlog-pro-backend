@@ -1,6 +1,6 @@
-import { IsUUID, IsArray, ValidateNested, IsString, IsIn } from 'class-validator';
+import { Field, InputType } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
-import { InputType, Field } from '@nestjs/graphql';
+import { IsArray, IsIn, IsString, IsUUID, ValidateNested } from 'class-validator';
 
 @InputType()
 export class MemberAssignmentDto {
@@ -10,7 +10,9 @@ export class MemberAssignmentDto {
 
   @Field()
   @IsString({ message: 'El rol debe ser un texto' })
-  @IsIn(['owner', 'lead', 'developer', 'viewer'], { message: 'El rol debe ser uno de: owner, lead, developer, viewer' })
+  @IsIn(['owner', 'lead', 'developer', 'viewer'], {
+    message: 'El rol debe ser uno de: owner, lead, developer, viewer',
+  })
   role!: string;
 }
 

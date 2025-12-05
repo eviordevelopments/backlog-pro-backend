@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Feedback } from '@feedback/domain/entities/feedback.entity';
-import { FeedbackTypeOrmEntity } from '@feedback/repository/entities/feedback.typeorm-entity';
+
+import { Feedback } from '../../domain/entities/feedback.entity';
+import { FeedbackTypeOrmEntity } from '../entities/feedback.typeorm-entity';
 
 @Injectable()
 export class FeedbackMapper {

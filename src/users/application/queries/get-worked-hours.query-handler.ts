@@ -1,6 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GetWorkedHoursQuery } from '@users/application/queries/get-worked-hours.query';
-import { UserProfileRepository } from '@users/repository/user-profile.repository';
+
+import { UserProfileRepository } from '../../repository/user-profile.repository';
+
+import { GetWorkedHoursQuery } from './get-worked-hours.query';
 
 export interface WorkedHoursResult {
   userId: string;

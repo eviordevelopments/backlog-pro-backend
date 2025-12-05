@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+
+import { Notification } from '../../domain/entities/notification.entity';
+import { NotificationRepository } from '../../repository/notification.repository';
+
 import { MarkNotificationAsReadCommand } from './mark-notification-as-read.command';
-import { Notification } from '@notifications/domain/entities/notification.entity';
-import { NotificationRepository } from '@notifications/repository/notification.repository';
 
 @Injectable()
 export class MarkNotificationAsReadCommandHandler {

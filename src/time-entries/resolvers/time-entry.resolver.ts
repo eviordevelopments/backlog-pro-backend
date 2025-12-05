@@ -1,17 +1,18 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { Logger, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
-import { RegisterTimeDto } from '@time-entries/dto/request/register-time.dto';
-import { ModifyTimeDto } from '@time-entries/dto/request/modify-time.dto';
-import { TimeEntryResponseDto } from '@time-entries/dto/response/time-entry.response.dto';
-import { TimeEntryService } from '@time-entries/application/services/time-entry.service';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import {
-  RegisterTimeCommand,
-  ModifyTimeCommand,
   DeleteTimeCommand,
-} from '@time-entries/application/commands';
-import { GetTimeEntriesQuery, GetGroupedTimeEntriesQuery } from '@time-entries/application/queries';
-import { TimeEntry } from '@time-entries/domain/entities/time-entry.entity';
+  ModifyTimeCommand,
+  RegisterTimeCommand,
+} from '../application/commands/index';
+import { GetGroupedTimeEntriesQuery, GetTimeEntriesQuery } from '../application/queries/index';
+import { TimeEntryService } from '../application/services/time-entry.service';
+import { TimeEntry } from '../domain/entities/time-entry.entity';
+import { ModifyTimeDto } from '../dto/request/modify-time.dto';
+import { RegisterTimeDto } from '../dto/request/register-time.dto';
+import { TimeEntryResponseDto } from '../dto/response/time-entry.response.dto';
 
 @Resolver()
 @UseGuards(JwtAuthGuard)

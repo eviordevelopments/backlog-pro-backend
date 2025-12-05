@@ -1,27 +1,37 @@
+import { ApolloServerPlugin, GraphQLRequestContext, GraphQLRequestListener } from '@apollo/server';
 import { Plugin } from '@nestjs/apollo';
 import { Logger } from '@nestjs/common';
-import { ApolloServerPlugin, GraphQLRequestListener, GraphQLRequestContext } from '@apollo/server';
-import { envs } from '@shared/config';
+
+import { envs } from '../config/index';
 
 @Plugin()
 export class GraphQLLoggerPlugin implements ApolloServerPlugin {
   private readonly logger = new Logger('GraphQL');
 
-  async requestDidStart(
-    requestContext: GraphQLRequestContext<any>,
-  ): Promise<GraphQLRequestListener<any>> {
+  requestDidStart(
+    requestContext: GraphQLRequestContext<Record<string, unknown>>,
+  ): Promise<GraphQLRequestListener<Record<string, unknown>>> {
     const start = Date.now();
     const { request } = requestContext;
     const logger = this.logger; // Capturar referencia al logger
 
     // Extraer información de la query
-    let operationName = request.operationName;
-    
+    const operationName = request.operationName;
+
+    return Promise.resolve(this.createListener(start, request, operationName, logger));
+  }
+
+  private createListener(
+    start: number,
+    request: { operationName?: string; query?: string; variables?: Record<string, unknown> },
+    operationName: string | undefined,
+    logger: Logger,
+  ): GraphQLRequestListener<Record<string, unknown>> {
     // Si no hay operationName, intentar extraerlo del query string
     if (!operationName && request.query) {
       // Primero intentar extraer nombre de operación explícito: mutation NombreOp { ... }
-      let match = request.query.match(/(?:query|mutation|subscription)\s+(\w+)\s*[\({]/i);
-      
+      let match = request.query.match(/(?:query|mutation|subscription)\s+(\w+)\s*[({]/i);
+
       if (match) {
         operationName = match[1];
       } else {
@@ -30,7 +40,7 @@ export class GraphQLLoggerPlugin implements ApolloServerPlugin {
         operationName = match ? match[1] : 'Anonymous';
       }
     }
-    
+
     operationName = operationName || 'Anonymous';
     const query = request.query?.replace(/\s+/g, ' ').trim().substring(0, 100);
 
@@ -43,7 +53,7 @@ export class GraphQLLoggerPlugin implements ApolloServerPlugin {
     return {
       async willSendResponse(requestContext) {
         const duration = Date.now() - start;
-        const { response, errors } = requestContext;
+        const { errors } = requestContext;
 
         if (errors && errors.length > 0) {
           // Log de errores
@@ -59,18 +69,21 @@ export class GraphQLLoggerPlugin implements ApolloServerPlugin {
 
         // Log detallado en desarrollo
         if (envs.server.environment !== 'production') {
-          logger.debug(`   Query: ${query}`);
+          logger.debug(`Query: ${query}`);
 
           // Opcional: Log de variables
           if (request.variables && Object.keys(request.variables).length > 0) {
-            logger.debug(`   Variables: ${JSON.stringify(request.variables)}`);
+            logger.debug(`Variables: ${JSON.stringify(request.variables)}`);
           }
         }
+
+        return Promise.resolve();
       },
 
       async didEncounterErrors(requestContext) {
         const { errors } = requestContext;
         logger.error(`Encountered ${errors.length} error(s)`);
+        return Promise.resolve();
       },
     };
   }

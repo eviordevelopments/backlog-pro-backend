@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Achievement, UserAchievement } from '@achievements/domain/entities/achievement.entity';
-import { AchievementTypeOrmEntity, UserAchievementTypeOrmEntity } from '@achievements/repository/entities/achievement.typeorm-entity';
+
+import { Achievement, UserAchievement } from '../../domain/entities/achievement.entity';
+import {
+  AchievementTypeOrmEntity,
+  UserAchievementTypeOrmEntity,
+} from '../entities/achievement.typeorm-entity';
 
 @Injectable()
 export class AchievementMapper {

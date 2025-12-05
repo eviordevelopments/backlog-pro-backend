@@ -1,4 +1,4 @@
-import { BaseDomainException } from '@shared/exceptions';
+import { BaseDomainException } from '../../../shared/exceptions/index';
 
 export class UserNotFoundException extends BaseDomainException {
   constructor(email: string) {

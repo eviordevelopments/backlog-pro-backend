@@ -1,4 +1,4 @@
-import { UserProfile } from '@users/domain/entities/user-profile.entity';
+import type { UserProfile } from '../entities/user-profile.entity';
 
 export interface IUserProfileRepository {
   create(userProfile: UserProfile): Promise<UserProfile>;
