@@ -23,7 +23,8 @@ export class NotificationRepository implements INotificationRepository {
   }
 
   async update(id: string, notification: Partial<Notification>): Promise<Notification> {
-    await this.repository.update(id, this.mapper.toPersistence(notification as Notification));
+    const persistence = this.mapper.toPersistence(notification as Notification);
+    await this.repository.update(id, persistence as Parameters<typeof this.repository.update>[1]);
     const updated = await this.repository.findOneBy({ id });
     if (!updated) {
       throw new Error(`Notification with id ${id} not found`);

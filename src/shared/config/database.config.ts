@@ -1,9 +1,11 @@
 import type { DataSourceOptions } from 'typeorm';
 import { DataSource } from 'typeorm';
 
-import { envs } from './index';
+import { envs } from './envs.config';
 
-const isProduction = envs.server.environment === 'production';
+const isProduction = envs.server.environment === 'production' && envs.database.url;
+const isCompiled = __filename.endsWith('.js'); // Detecta si estamos usando código compilado
+
 /**
  * Configuración de TypeORM para PostgreSQL
  * Soporta tanto DATABASE_URL (Render) como parámetros individuales (local)
@@ -31,8 +33,9 @@ export const databaseConfig: DataSourceOptions = isProduction
       password: envs.database.password,
       database: envs.database.database,
       ssl: false,
-      entities: [__dirname + '/../../**/*.typeorm-entity.ts'],
-      migrations: [__dirname + '/../../database/migrations/*.ts'],
+      // Usa .js si está compilado (Docker), .ts si es desarrollo local
+      entities: [__dirname + `/../../**/*.typeorm-entity.${isCompiled ? 'js' : 'ts'}`],
+      migrations: [__dirname + `/../../database/migrations/*.${isCompiled ? 'js' : 'ts'}`],
       synchronize: true, // Activo en desarrollo para sincronizar automaticamente las entidades
       dropSchema: true, // Activo en desarrollo para testear con la DB
       logging: true, // Activo en desarrollo para ver logs de las queries

@@ -20,6 +20,9 @@ export class ListTransactionsQueryHandler {
           currency: t.getCurrency().getValue(),
           date: t.getDate(),
           description: t.getDescription(),
+          isRecurring: t.isRecurringTransaction(),
+          createdAt: t.getCreatedAt(),
+          updatedAt: t.getUpdatedAt(),
         }),
       );
     }
@@ -33,6 +36,9 @@ export class ListTransactionsQueryHandler {
         currency: t.getCurrency().getValue(),
         date: t.getDate(),
         description: t.getDescription(),
+        isRecurring: t.isRecurringTransaction(),
+        createdAt: t.getCreatedAt(),
+        updatedAt: t.getUpdatedAt(),
       }));
     }
 
@@ -44,6 +50,9 @@ export class ListTransactionsQueryHandler {
       currency: t.getCurrency().getValue(),
       date: t.getDate(),
       description: t.getDescription(),
+      isRecurring: t.isRecurringTransaction(),
+      createdAt: t.getCreatedAt(),
+      updatedAt: t.getUpdatedAt(),
     }));
   }
 }

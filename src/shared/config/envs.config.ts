@@ -15,6 +15,10 @@ const database = {
   database: process.env.DB_DATABASE || 'backlog_pro',
 };
 
+const adminer = {
+  port: process.env.ADMINER_PORT || 8080,
+};
+
 const jwt = {
   secret: process.env.JWT_SECRET || 'default_jwt_secret_change_in_production',
   expiresIn: parseInt(String(process.env.JWT_EXPIRES_IN || '1d'), 10) * 60 * 60 * 24, // Conversión a días
@@ -24,11 +28,17 @@ const frontend = {
   url: process.env.FRONTEND_URL || 'http://localhost:4200',
 };
 
+const cronitor = {
+  apiKey: process.env.CRONITOR_API_KEY,
+};
+
 const config = {
   server,
   database,
+  adminer,
   jwt,
   frontend,
+  cronitor,
 };
 
 export const envs = config;

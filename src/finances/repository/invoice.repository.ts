@@ -23,7 +23,8 @@ export class InvoiceRepository implements IInvoiceRepository {
   }
 
   async update(id: string, invoice: Partial<Invoice>): Promise<Invoice> {
-    await this.repository.update(id, this.mapper.toPersistence(invoice as Invoice));
+    const persistence = this.mapper.toPersistence(invoice as Invoice);
+    await this.repository.update(id, persistence as Parameters<typeof this.repository.update>[1]);
     const updated = await this.repository.findOneBy({ id });
     if (!updated) {
       throw new Error(`Invoice with id ${id} not found`);

@@ -21,6 +21,9 @@ export class GetSprintMeetingsQueryHandler {
       ownerId: m.getOwnerId(),
       status: m.getStatus(),
       attendance: m.getAttendance(),
+      isRecurring: m.isRecurringMeeting(),
+      createdAt: m.getCreatedAt(),
+      updatedAt: m.getUpdatedAt(),
     }));
   }
 }

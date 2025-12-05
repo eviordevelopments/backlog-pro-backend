@@ -23,7 +23,8 @@ export class RiskRepository implements IRiskRepository {
   }
 
   async update(id: string, risk: Partial<Risk>): Promise<Risk> {
-    await this.repository.update(id, this.mapper.toPersistence(risk as Risk));
+    const persistence = this.mapper.toPersistence(risk as Risk);
+    await this.repository.update(id, persistence as Parameters<typeof this.repository.update>[1]);
     const updated = await this.repository.findOneBy({ id });
     if (!updated) {
       throw new Error(`Risk with id ${id} not found`);

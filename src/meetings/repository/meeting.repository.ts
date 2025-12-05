@@ -23,7 +23,8 @@ export class MeetingRepository implements IMeetingRepository {
   }
 
   async update(id: string, meeting: Partial<Meeting>): Promise<Meeting> {
-    await this.repository.update(id, this.mapper.toPersistence(meeting as Meeting));
+    const persistence = this.mapper.toPersistence(meeting as Meeting);
+    await this.repository.update(id, persistence as Parameters<typeof this.repository.update>[1]);
     const updated = await this.repository.findOneBy({ id });
     if (!updated) {
       throw new Error(`Meeting with id ${id} not found`);

@@ -14,10 +14,14 @@ export class GetProjectExpensesQueryHandler {
       Array<{
         id: string;
         type: string;
+        category: string;
         amount: number;
         currency: string;
         date: Date;
         description: string;
+        isRecurring: boolean;
+        createdAt: Date;
+        updatedAt: Date;
       }>
     >
   > {
@@ -33,10 +37,14 @@ export class GetProjectExpensesQueryHandler {
         acc[category].push({
           id: transaction.getId(),
           type: transaction.getType().getValue(),
+          category: transaction.getCategory(),
           amount: transaction.getAmount().getValue(),
           currency: transaction.getCurrency().getValue(),
           date: transaction.getDate(),
           description: transaction.getDescription(),
+          isRecurring: transaction.isRecurringTransaction(),
+          createdAt: transaction.getCreatedAt(),
+          updatedAt: transaction.getUpdatedAt(),
         });
         return acc;
       },
@@ -45,10 +53,14 @@ export class GetProjectExpensesQueryHandler {
         Array<{
           id: string;
           type: string;
+          category: string;
           amount: number;
           currency: string;
           date: Date;
           description: string;
+          isRecurring: boolean;
+          createdAt: Date;
+          updatedAt: Date;
         }>
       >,
     );

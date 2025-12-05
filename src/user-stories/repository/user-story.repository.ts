@@ -23,7 +23,8 @@ export class UserStoryRepository implements IUserStoryRepository {
   }
 
   async update(id: string, userStory: Partial<UserStory>): Promise<UserStory> {
-    await this.repository.update(id, this.mapper.toPersistence(userStory as UserStory));
+    const persistence = this.mapper.toPersistence(userStory as UserStory);
+    await this.repository.update(id, persistence as Parameters<typeof this.repository.update>[1]);
     const updated = await this.repository.findOneBy({ id });
     if (!updated) {
       throw new Error(`UserStory with id ${id} not found`);

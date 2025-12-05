@@ -14,6 +14,7 @@ export class GetProjectBacklogQueryHandler {
 
     return userStories.map((us) => ({
       id: us.getId(),
+      projectId: us.getProjectId(),
       title: us.getTitle(),
       userType: us.getUserType(),
       action: us.getAction(),
@@ -22,6 +23,8 @@ export class GetProjectBacklogQueryHandler {
       storyPoints: us.getStoryPoints(),
       status: us.getStatus(),
       acceptanceCriteria: us.getAcceptanceCriteria(),
+      createdAt: us.getCreatedAt(),
+      updatedAt: us.getUpdatedAt(),
     }));
   }
 }

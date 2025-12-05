@@ -51,7 +51,7 @@ export class GraphQLLoggerPlugin implements ApolloServerPlugin {
     }
 
     return {
-      willSendResponse(requestContext) {
+      async willSendResponse(requestContext) {
         const duration = Date.now() - start;
         const { errors } = requestContext;
 
@@ -69,18 +69,21 @@ export class GraphQLLoggerPlugin implements ApolloServerPlugin {
 
         // Log detallado en desarrollo
         if (envs.server.environment !== 'production') {
-          logger.debug(`   Query: ${query}`);
+          logger.debug(`Query: ${query}`);
 
           // Opcional: Log de variables
           if (request.variables && Object.keys(request.variables).length > 0) {
-            logger.debug(`   Variables: ${JSON.stringify(request.variables)}`);
+            logger.debug(`Variables: ${JSON.stringify(request.variables)}`);
           }
         }
+
+        return Promise.resolve();
       },
 
-      didEncounterErrors(requestContext) {
+      async didEncounterErrors(requestContext) {
         const { errors } = requestContext;
         logger.error(`Encountered ${errors.length} error(s)`);
+        return Promise.resolve();
       },
     };
   }

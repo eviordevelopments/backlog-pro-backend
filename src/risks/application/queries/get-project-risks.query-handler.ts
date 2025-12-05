@@ -17,6 +17,7 @@ export class GetProjectRisksQueryHandler {
 
     return sorted.map((r) => ({
       id: r.getId(),
+      projectId: r.getProjectId(),
       title: r.getTitle(),
       category: r.getCategory(),
       probability: r.getProbability(),
@@ -24,8 +25,11 @@ export class GetProjectRisksQueryHandler {
       severity: r.getSeverity(),
       status: r.getStatus(),
       mitigationStrategy: r.getMitigationStrategy(),
+      responsibleId: r.getResponsibleId(),
       isCore: r.isCorRisk(),
       comments: r.getComments(),
+      createdAt: r.getCreatedAt(),
+      updatedAt: r.getUpdatedAt(),
     }));
   }
 }

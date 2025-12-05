@@ -34,8 +34,12 @@ export class GetUserAchievementsQueryHandler {
             category: achievement.getCategory(),
             points: achievement.getPoints(),
             rarity: achievement.getRarity(),
+            requirement: achievement.getRequirement(),
+            createdAt: achievement.getCreatedAt(),
+            updatedAt: achievement.getUpdatedAt(),
           },
           unlockedAt: ua.getUnlockedAt(),
+          createdAt: ua.getCreatedAt(),
         });
       }
     }

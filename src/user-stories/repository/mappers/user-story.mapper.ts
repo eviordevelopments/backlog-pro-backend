@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { UserStory } from '../../domain/entities/user-story.entity';
+import { AcceptanceCriteria, UserStory } from '../../domain/entities/user-story.entity';
 import { UserStoryTypeOrmEntity } from '../entities/user-story.typeorm-entity';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class UserStoryMapper {
       raw.benefit,
       raw.priority,
       raw.sprintId,
-      raw.acceptanceCriteria || [],
+      (raw.acceptanceCriteria as AcceptanceCriteria[]) || [],
       raw.storyPoints,
       raw.status,
       raw.assignedTo,

@@ -21,8 +21,12 @@ export class GetUserGoalsQueryHandler {
       progress: g.getProgress(),
       unit: g.getUnit(),
       status: g.getStatus(),
+      period: g.getPeriod(),
+      ownerId: g.getOwnerId(),
       startDate: g.getStartDate(),
       endDate: g.getEndDate(),
+      createdAt: g.getCreatedAt(),
+      updatedAt: g.getUpdatedAt(),
     }));
   }
 }

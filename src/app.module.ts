@@ -27,6 +27,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { TimeEntriesModule } from './time-entries/time-entries.module';
 import { UserStoriesModule } from './user-stories/user-stories.module';
 import { UsersModule } from './users/users.module';
+import { HealthModule } from './health/health.moudule';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { UsersModule } from './users/users.module';
     }),
     TypeOrmModule.forRoot(databaseConfig),
     SharedModule,
+    HealthModule,
     AuthModule,
     UsersModule,
     ProjectsModule,

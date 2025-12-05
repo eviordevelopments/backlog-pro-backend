@@ -3,6 +3,7 @@ import { GqlContextType } from '@nestjs/graphql';
 import { GraphQLError } from 'graphql';
 
 import { BaseDomainException } from '../exceptions/index';
+import { cronitorService } from '../services';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -72,6 +73,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         timestamp: new Date().toISOString(),
       });
     }
+
+    // Trackear error inesperado en Cronitor
+    const error = exception instanceof Error ? exception : new Error(String(exception));
+    cronitorService.trackError('unhandled-exception', error, {
+      type: isGraphQL ? 'graphql' : 'http',
+      timestamp: new Date().toISOString(),
+    });
 
     // No exponer stack traces al cliente
     if (isGraphQL) {

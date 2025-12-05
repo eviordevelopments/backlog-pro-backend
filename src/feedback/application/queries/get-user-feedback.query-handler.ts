@@ -14,7 +14,7 @@ export class GetUserFeedbackQueryHandler {
 
     return feedbacks.map((f) => ({
       id: f.getId(),
-      fromUserId: f.isAnon() ? null : f.getFromUserId(),
+      fromUserId: f.isAnon() ? undefined : f.getFromUserId(),
       toUserId: f.getToUserId(),
       type: f.getType(),
       category: f.getCategory(),
@@ -23,6 +23,7 @@ export class GetUserFeedbackQueryHandler {
       sprintId: f.getSprintId(),
       isAnonymous: f.isAnon(),
       createdAt: f.getCreatedAt(),
+      updatedAt: f.getUpdatedAt(),
     }));
   }
 }

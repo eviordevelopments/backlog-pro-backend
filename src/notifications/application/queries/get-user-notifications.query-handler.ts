@@ -17,12 +17,14 @@ export class GetUserNotificationsQueryHandler {
 
     return notifications.map((n) => ({
       id: n.getId(),
+      userId: n.getUserId(),
       type: n.getType(),
       title: n.getTitle(),
       message: n.getMessage(),
-      metadata: n.getMetadata(),
+      metadata: JSON.stringify(n.getMetadata()),
       isRead: n.isNotificationRead(),
       createdAt: n.getCreatedAt(),
+      updatedAt: n.getUpdatedAt(),
     }));
   }
 }
@@ -36,12 +38,14 @@ export class GetUnreadNotificationsQueryHandler {
 
     return notifications.map((n) => ({
       id: n.getId(),
+      userId: n.getUserId(),
       type: n.getType(),
       title: n.getTitle(),
       message: n.getMessage(),
-      metadata: n.getMetadata(),
+      metadata: JSON.stringify(n.getMetadata()),
       isRead: n.isNotificationRead(),
       createdAt: n.getCreatedAt(),
+      updatedAt: n.getUpdatedAt(),
     }));
   }
 }
