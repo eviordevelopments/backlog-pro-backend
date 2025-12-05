@@ -1,10 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { Client } from '@clients/domain/entities/client.entity';
-import { ClientTypeOrmEntity } from '@clients/repository/entities/client.typeorm-entity';
-import { ClientMapper } from '@clients/repository/mappers/client.mapper';
-import { IClientRepository } from '@clients/domain/interfaces/client.repository.interface';
+import { IsNull, Repository } from 'typeorm';
+
+import { Client } from '../domain/entities/client.entity';
+import { IClientRepository } from '../domain/interfaces/client.repository.interface';
+
+import { ClientTypeOrmEntity } from './entities/client.typeorm-entity';
+import { ClientMapper } from './mappers/client.mapper';
 
 @Injectable()
 export class ClientRepository implements IClientRepository {
@@ -87,7 +89,7 @@ export class ClientRepository implements IClientRepository {
   }
 
   async list(): Promise<Client[]> {
-    this.logger.log(`Listing clients`);
+    this.logger.log('Listing clients');
     const entities = await this.repository.find({
       where: { deletedAt: IsNull() },
       order: { createdAt: 'DESC' },

@@ -1,21 +1,19 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { SprintService } from '@sprints/application/services/sprint.service';
-import { SprintResponseDto } from '@sprints/dto/response/sprint.response.dto';
-import { CreateSprintDto } from '@sprints/dto/request/create-sprint.dto';
-import { UpdateSprintDto } from '@sprints/dto/request/update-sprint.dto';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import {
-  CreateSprintCommand,
-  UpdateSprintCommand,
-  ExtendSprintCommand,
   CompleteSprintCommand,
+  CreateSprintCommand,
+  ExtendSprintCommand,
   RegisterRetrospectiveCommand,
-} from '@sprints/application/commands';
-import {
-  GetSprintQuery,
-  ListSprintsProjectQuery,
-} from '@sprints/application/queries';
+  UpdateSprintCommand,
+} from '../application/commands/index';
+import { GetSprintQuery, ListSprintsProjectQuery } from '../application/queries/index';
+import { SprintService } from '../application/services/sprint.service';
+import { CreateSprintDto } from '../dto/request/create-sprint.dto';
+import { UpdateSprintDto } from '../dto/request/update-sprint.dto';
+import { SprintResponseDto } from '../dto/response/sprint.response.dto';
 
 @Resolver(() => SprintResponseDto)
 @UseGuards(JwtAuthGuard)
@@ -23,9 +21,7 @@ export class SprintResolver {
   constructor(private readonly sprintService: SprintService) {}
 
   @Mutation(() => SprintResponseDto)
-  async createSprint(
-    @Args('input') input: CreateSprintDto,
-  ): Promise<SprintResponseDto> {
+  async createSprint(@Args('input') input: CreateSprintDto): Promise<SprintResponseDto> {
     const command = new CreateSprintCommand(
       input.name,
       input.projectId,
@@ -97,15 +93,32 @@ export class SprintResolver {
   }
 
   @Query(() => [SprintResponseDto])
-  async listSprintsByProject(
-    @Args('projectId') projectId: string,
-  ): Promise<SprintResponseDto[]> {
+  async listSprintsByProject(@Args('projectId') projectId: string): Promise<SprintResponseDto[]> {
     const query = new ListSprintsProjectQuery(projectId);
     const sprints = await this.sprintService.listSprintsByProject(query);
     return sprints.map((sprint) => this.mapToResponse(sprint));
   }
 
-  private mapToResponse(sprint: any): SprintResponseDto {
+  private mapToResponse(sprint: {
+    getId: () => string;
+    getName: () => string;
+    getProjectId: () => string;
+    getGoal: () => string;
+    getStartDate: () => Date;
+    getEndDate: () => Date;
+    getStatus: () => { getValue: () => string };
+    getVelocity: () => number;
+    getStoryPointsCommitted: () => number;
+    getStoryPointsCompleted: () => number;
+    getTeamMembers: () => string[];
+    getSprintPlanningDate: () => Date | null;
+    getSprintReviewDate: () => Date | null;
+    getSprintRetrospectiveDate: () => Date | null;
+    getDailyStandupTime: () => string;
+    getRetrospectiveNotes: () => string | null;
+    getCreatedAt: () => Date;
+    getUpdatedAt: () => Date;
+  }): SprintResponseDto {
     return {
       id: sprint.getId(),
       name: sprint.getName(),

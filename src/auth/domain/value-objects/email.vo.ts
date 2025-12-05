@@ -1,4 +1,4 @@
-import { InvalidEmailException } from '@auth/domain/exceptions';
+import { InvalidEmailException } from '../exceptions/index';
 
 export class Email {
   private readonly value: string;

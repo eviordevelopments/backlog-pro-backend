@@ -1,4 +1,4 @@
-import { BaseDomainException } from '@shared/exceptions/base-domain.exception';
+import { BaseDomainException } from '../../../shared/exceptions/base-domain.exception';
 
 export class InvalidClientMetricsException extends BaseDomainException {
   constructor(metric: string) {

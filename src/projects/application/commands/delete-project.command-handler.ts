@@ -1,7 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { DeleteProjectCommand } from '@projects/application/commands/delete-project.command';
-import { ProjectNotFoundException } from '@projects/domain/exceptions';
-import { ProjectRepository } from '@projects/repository/project.repository';
+
+import { ProjectNotFoundException } from '../../domain/exceptions/index';
+import { ProjectRepository } from '../../repository/project.repository';
+
+import { DeleteProjectCommand } from './delete-project.command';
 
 @Injectable()
 export class DeleteProjectCommandHandler {

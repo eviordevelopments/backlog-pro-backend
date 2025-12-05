@@ -1,14 +1,15 @@
 import {
-  Entity,
-  PrimaryColumn,
   Column,
-  ManyToOne,
-  JoinColumn,
   CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ProjectTypeOrmEntity } from '@projects/repository/entities/project.typeorm-entity';
-import { SprintTypeOrmEntity } from '@sprints/repository/entities/sprint.typeorm-entity';
+
+import { ProjectTypeOrmEntity } from '../../../projects/repository/entities/project.typeorm-entity';
+import { SprintTypeOrmEntity } from '../../../sprints/repository/entities/sprint.typeorm-entity';
 
 @Entity('tasks')
 export class TaskTypeOrmEntity {
@@ -63,7 +64,7 @@ export class TaskTypeOrmEntity {
   dependencies!: string[];
 
   @Column('jsonb', { default: '[]' })
-  subtasks!: any[];
+  subtasks!: string[];
 
   @CreateDateColumn()
   createdAt!: Date;

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Client } from '@clients/domain/entities/client.entity';
-import { ClientTypeOrmEntity } from '@clients/repository/entities/client.typeorm-entity';
+
+import { Client } from '../../domain/entities/client.entity';
+import { ClientTypeOrmEntity } from '../entities/client.typeorm-entity';
 
 @Injectable()
 export class ClientMapper {

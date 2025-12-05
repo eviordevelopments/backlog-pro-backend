@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+
+import { Risk } from '../../domain/entities/risk.entity';
+import { RiskRepository } from '../../repository/risk.repository';
+
 import { CreateRiskCommand } from './create-risk.command';
-import { Risk } from '@risks/domain/entities/risk.entity';
-import { RiskRepository } from '@risks/repository/risk.repository';
 
 @Injectable()
 export class CreateRiskCommandHandler {

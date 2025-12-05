@@ -1,5 +1,5 @@
-import { IsString, IsNumber, IsDate, IsOptional, IsUUID, IsArray } from 'class-validator';
-import { InputType, Field } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsArray, IsDate, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export interface InvoiceItemInput {
   description: string;

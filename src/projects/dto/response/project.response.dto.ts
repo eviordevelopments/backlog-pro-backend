@@ -1,4 +1,4 @@
-import { ObjectType, Field, Float, Int } from '@nestjs/graphql';
+import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class ProjectResponseDto {

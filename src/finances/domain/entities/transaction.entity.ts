@@ -1,7 +1,8 @@
 import { v4 as uuid } from 'uuid';
-import { Amount } from '@finances/domain/value-objects/amount.vo';
-import { Currency } from '@finances/domain/value-objects/currency.vo';
-import { TransactionType } from '@finances/domain/value-objects/transaction-type.vo';
+
+import type { Amount } from '../value-objects/amount.vo';
+import type { Currency } from '../value-objects/currency.vo';
+import type { TransactionType } from '../value-objects/transaction-type.vo';
 
 export class Transaction {
   private id: string;

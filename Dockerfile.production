@@ -5,20 +5,18 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Solo curl si realmente lo usas
-RUN apk add --no-cache curl
-
-# Copiar dependencias
+# Optimiza la cache: primero solo las dependencias
 COPY package*.json ./
 
-# Instalar TODAS las dependencias (incluidas dev) para compilar
+# Instala todas las dependencias (incluye dev)
 RUN npm ci
 
-# Copiar código
+# Copiar el resto del código
 COPY . .
 
 # Compilar NestJS
 RUN npm run build
+
 
 
 # ============================
@@ -28,13 +26,19 @@ FROM node:20-alpine AS production
 
 WORKDIR /app
 
-# Solo dependencias de producción
+# Instalar solo dependencias de producción
 COPY package*.json ./
 RUN npm ci --omit=dev
 
-# Copiar app compilada
+# Copiar dist compilado
 COPY --from=builder /app/dist ./dist
 
-EXPOSE ${PORT:-3002}
+# Copiar entrypoint
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
 
-CMD ["node", "dist/main"]
+# Exponer puerto (usa variable de entorno del .env.production)
+EXPOSE ${PORT}
+
+# ENTRYPOINT
+ENTRYPOINT ["./entrypoint.sh"]

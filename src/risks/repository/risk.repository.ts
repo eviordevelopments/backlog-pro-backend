@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, IsNull } from 'typeorm';
-import { Risk } from '@risks/domain/entities/risk.entity';
-import { RiskTypeOrmEntity } from '@risks/repository/entities/risk.typeorm-entity';
-import { RiskMapper } from '@risks/repository/mappers/risk.mapper';
-import { IRiskRepository } from '@risks/domain/interfaces/risk.repository.interface';
+import { IsNull, Repository } from 'typeorm';
+
+import { Risk } from '../domain/entities/risk.entity';
+import { IRiskRepository } from '../domain/interfaces/risk.repository.interface';
+
+import { RiskTypeOrmEntity } from './entities/risk.typeorm-entity';
+import { RiskMapper } from './mappers/risk.mapper';
 
 @Injectable()
 export class RiskRepository implements IRiskRepository {
@@ -21,7 +23,8 @@ export class RiskRepository implements IRiskRepository {
   }
 
   async update(id: string, risk: Partial<Risk>): Promise<Risk> {
-    await this.repository.update(id, this.mapper.toPersistence(risk as Risk));
+    const persistence = this.mapper.toPersistence(risk as Risk);
+    await this.repository.update(id, persistence as Parameters<typeof this.repository.update>[1]);
     const updated = await this.repository.findOneBy({ id });
     if (!updated) {
       throw new Error(`Risk with id ${id} not found`);

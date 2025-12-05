@@ -1,5 +1,5 @@
-import { Project } from '@projects/domain/entities/project.entity';
-import { ProjectTypeOrmEntity } from '@projects/repository/entities/project.typeorm-entity';
+import { Project } from '../../domain/entities/project.entity';
+import { ProjectTypeOrmEntity } from '../entities/project.typeorm-entity';
 
 export class ProjectMapper {
   static toDomain(raw: ProjectTypeOrmEntity): Project {

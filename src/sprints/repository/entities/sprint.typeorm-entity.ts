@@ -1,13 +1,14 @@
 import {
-  Entity,
-  PrimaryColumn,
   Column,
-  ManyToOne,
-  JoinColumn,
   CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ProjectTypeOrmEntity } from '@projects/repository/entities/project.typeorm-entity';
+
+import { ProjectTypeOrmEntity } from '../../../projects/repository/entities/project.typeorm-entity';
 
 @Entity('sprints')
 export class SprintTypeOrmEntity {

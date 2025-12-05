@@ -1,10 +1,11 @@
-import { Module, Global } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { GlobalExceptionFilter } from '@shared/filters';
-import { GraphQLLoggerPlugin } from '@shared/plugins';
-import { RelationshipValidatorService } from '@shared/services/relationship-validator.service';
-import { envs } from '@shared/config';
+
+import { envs } from './config/index';
+import { GlobalExceptionFilter } from './filters/index';
+import { GraphQLLoggerPlugin } from './plugins/index';
+import { RelationshipValidatorService } from './services/relationship-validator.service';
 
 @Global()
 @Module({

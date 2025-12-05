@@ -1,11 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import { Project } from '@projects/domain/entities/project.entity';
-import { ProjectMember } from '@projects/domain/entities/project-member.entity';
-import { ProjectNotFoundException, InvalidBudgetException } from '@projects/domain/exceptions';
-import { UserAlreadyMemberException } from '@projects/domain/exceptions/user-already-member.exception';
-import { ProjectRepository } from '@projects/repository/project.repository';
-import { ProjectMemberRepository } from '@projects/repository/project-member.repository';
+
+import { ProjectMember } from '../../domain/entities/project-member.entity';
+import { Project } from '../../domain/entities/project.entity';
+import { InvalidBudgetException, ProjectNotFoundException } from '../../domain/exceptions/index';
+import { UserAlreadyMemberException } from '../../domain/exceptions/user-already-member.exception';
+import { ProjectMemberRepository } from '../../repository/project-member.repository';
+import { ProjectRepository } from '../../repository/project.repository';
 
 @Injectable()
 export class ProjectService {
@@ -67,7 +68,7 @@ export class ProjectService {
   async updateProject(projectId: string, data: Partial<Project>): Promise<Project> {
     this.logger.log(`Actualizando proyecto: ${projectId}`);
 
-    const project = await this.getProject(projectId);
+    await this.getProject(projectId);
 
     if (data.budget !== undefined && data.budget < 0) {
       throw new InvalidBudgetException(data.budget);

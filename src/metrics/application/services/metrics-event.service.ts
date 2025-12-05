@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 export interface MetricsUpdateEvent {
   projectId: string;
   type: 'sprint' | 'project' | 'dashboard';
-  data: any;
+  data: unknown;
   timestamp: Date;
 }
 

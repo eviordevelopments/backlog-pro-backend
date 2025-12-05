@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+
+import { Feedback } from '../../domain/entities/feedback.entity';
+import { FeedbackRepository } from '../../repository/feedback.repository';
+
 import { CreateFeedbackCommand } from './create-feedback.command';
-import { Feedback } from '@feedback/domain/entities/feedback.entity';
-import { FeedbackRepository } from '@feedback/repository/feedback.repository';
 
 @Injectable()
 export class CreateFeedbackCommandHandler {

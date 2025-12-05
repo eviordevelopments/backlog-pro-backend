@@ -1,4 +1,5 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
+
 import { ProjectMetricsResponseDto } from './project-metrics.response.dto';
 
 @ObjectType()

@@ -1,7 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ListTasksSprintQuery } from '@tasks/application/queries/list-tasks-sprint.query';
-import { Task } from '@tasks/domain/entities/task.entity';
-import { TaskRepository } from '@tasks/repository/task.repository';
+
+import { Task } from '../../domain/entities/task.entity';
+import { TaskRepository } from '../../repository/task.repository';
+
+import { ListTasksSprintQuery } from './list-tasks-sprint.query';
 
 @Injectable()
 export class ListTasksSprintQueryHandler {

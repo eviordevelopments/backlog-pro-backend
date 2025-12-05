@@ -1,16 +1,17 @@
-import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { Logger } from '@nestjs/common';
-import { SignupInput } from '@auth/dto/request/signup.dto';
-import { SigninInput } from '@auth/dto/request/signin.dto';
-import { RequestPasswordResetInput } from '@auth/dto/request/request-password-reset.dto';
-import { AuthResponse } from '@auth/dto/response/auth.response.dto';
-import { PasswordResetResponse } from '@auth/dto/response/password-reset.response.dto';
-import { SignupCommandHandler } from '@auth/application/commands/signup.command-handler';
-import { SigninCommandHandler } from '@auth/application/commands/signin.command-handler';
-import { RequestPasswordResetCommandHandler } from '@auth/application/commands/request-password-reset.command-handler';
-import { SignupCommand } from '@auth/application/commands/signup.command';
-import { SigninCommand } from '@auth/application/commands/signin.command';
-import { RequestPasswordResetCommand } from '@auth/application/commands/request-password-reset.command';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
+
+import { RequestPasswordResetCommand } from '../application/commands/request-password-reset.command';
+import { RequestPasswordResetCommandHandler } from '../application/commands/request-password-reset.command-handler';
+import { SigninCommand } from '../application/commands/signin.command';
+import { SigninCommandHandler } from '../application/commands/signin.command-handler';
+import { SignupCommand } from '../application/commands/signup.command';
+import { SignupCommandHandler } from '../application/commands/signup.command-handler';
+import { RequestPasswordResetInput } from '../dto/request/request-password-reset.dto';
+import { SigninInput } from '../dto/request/signin.dto';
+import { SignupInput } from '../dto/request/signup.dto';
+import { AuthResponse } from '../dto/response/auth.response.dto';
+import { PasswordResetResponse } from '../dto/response/password-reset.response.dto';
 
 @Resolver()
 export class AuthResolver {

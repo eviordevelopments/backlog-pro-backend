@@ -1,4 +1,4 @@
-import { Risk } from '@risks/domain/entities/risk.entity';
+import type { Risk } from '../entities/risk.entity';
 
 export interface IRiskRepository {
   create(risk: Risk): Promise<Risk>;

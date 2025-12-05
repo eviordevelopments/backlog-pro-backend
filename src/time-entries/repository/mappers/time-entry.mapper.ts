@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { TimeEntry } from '@time-entries/domain/entities/time-entry.entity';
-import { TimeEntryTypeOrmEntity } from '@time-entries/repository/entities/time-entry.typeorm-entity';
+
+import { TimeEntry } from '../../domain/entities/time-entry.entity';
+import { TimeEntryTypeOrmEntity } from '../entities/time-entry.typeorm-entity';
 
 @Injectable()
 export class TimeEntryMapper {

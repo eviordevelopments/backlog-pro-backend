@@ -1,5 +1,5 @@
-import { IsString, IsUUID, IsOptional, IsNumber, Min, MaxLength } from 'class-validator';
-import { InputType, Field } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsNumber, IsOptional, IsString, IsUUID, MaxLength, Min } from 'class-validator';
 
 @InputType()
 export class CreateProjectDto {

@@ -1,13 +1,20 @@
-import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
-import { CurrentUser } from '@shared/decorators/current-user.decorator';
-import { GetUserNotificationsQueryHandler, GetUnreadNotificationsQueryHandler } from '@notifications/application/queries/get-user-notifications.query-handler';
-import { GetUserNotificationsQuery, GetUnreadNotificationsQuery } from '@notifications/application/queries/get-user-notifications.query';
-import { MarkNotificationAsReadCommandHandler } from '@notifications/application/commands/mark-notification-as-read.command-handler';
-import { MarkNotificationAsReadCommand } from '@notifications/application/commands/mark-notification-as-read.command';
-import { NotificationResponseDto } from '@notifications/dto/response/notification.response.dto';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { plainToInstance } from 'class-transformer';
+
+import { CurrentUser } from '../../shared/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { MarkNotificationAsReadCommand } from '../application/commands/mark-notification-as-read.command';
+import { MarkNotificationAsReadCommandHandler } from '../application/commands/mark-notification-as-read.command-handler';
+import {
+  GetUnreadNotificationsQuery,
+  GetUserNotificationsQuery,
+} from '../application/queries/get-user-notifications.query';
+import {
+  GetUnreadNotificationsQueryHandler,
+  GetUserNotificationsQueryHandler,
+} from '../application/queries/get-user-notifications.query-handler';
+import { NotificationResponseDto } from '../dto/response/notification.response.dto';
 
 @Resolver('Notification')
 export class NotificationResolver {
@@ -20,25 +27,25 @@ export class NotificationResolver {
   @Query(() => [NotificationResponseDto])
   @UseGuards(JwtAuthGuard)
   async getUserNotifications(
-    @CurrentUser() currentUser: any
+    @CurrentUser() currentUser: { sub: string; email: string },
   ): Promise<NotificationResponseDto[]> {
-    const query = new GetUserNotificationsQuery(currentUser.id);
+    const query = new GetUserNotificationsQuery(currentUser.sub);
     return this.getUserNotificationsHandler.handle(query);
   }
 
   @Query(() => [NotificationResponseDto])
   @UseGuards(JwtAuthGuard)
   async getUnreadNotifications(
-    @CurrentUser() currentUser: any
+    @CurrentUser() currentUser: { sub: string; email: string },
   ): Promise<NotificationResponseDto[]> {
-    const query = new GetUnreadNotificationsQuery(currentUser.id);
+    const query = new GetUnreadNotificationsQuery(currentUser.sub);
     return this.getUnreadNotificationsHandler.handle(query);
   }
 
   @Mutation(() => NotificationResponseDto)
   @UseGuards(JwtAuthGuard)
   async markNotificationAsRead(
-    @Args('notificationId') notificationId: string
+    @Args('notificationId') notificationId: string,
   ): Promise<NotificationResponseDto> {
     const command = new MarkNotificationAsReadCommand(notificationId);
     const notification = await this.markAsReadHandler.handle(command);

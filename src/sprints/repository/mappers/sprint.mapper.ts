@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Sprint } from '@sprints/domain/entities/sprint.entity';
-import { SprintTypeOrmEntity } from '@sprints/repository/entities/sprint.typeorm-entity';
-import { SprintStatus } from '@sprints/domain/value-objects/sprint-status.vo';
+
+import { Sprint } from '../../domain/entities/sprint.entity';
+import { SprintStatus } from '../../domain/value-objects/sprint-status.vo';
+import { SprintTypeOrmEntity } from '../entities/sprint.typeorm-entity';
 
 @Injectable()
 export class SprintMapper {

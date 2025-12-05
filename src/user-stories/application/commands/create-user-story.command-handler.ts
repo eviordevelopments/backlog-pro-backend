@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+
+import { UserStory } from '../../domain/entities/user-story.entity';
+import { UserStoryRepository } from '../../repository/user-story.repository';
+
 import { CreateUserStoryCommand } from './create-user-story.command';
-import { UserStory } from '@user-stories/domain/entities/user-story.entity';
-import { UserStoryRepository } from '@user-stories/repository/user-story.repository';
 
 @Injectable()
 export class CreateUserStoryCommandHandler {

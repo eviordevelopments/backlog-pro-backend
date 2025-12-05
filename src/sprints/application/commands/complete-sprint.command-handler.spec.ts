@@ -1,10 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { CompleteSprintCommandHandler } from '@sprints/application/commands/complete-sprint.command-handler';
-import { CompleteSprintCommand } from '@sprints/application/commands/complete-sprint.command';
-import { ISprintRepository } from '@sprints/domain/interfaces/sprint.repository.interface';
-import { Sprint } from '@sprints/domain/entities/sprint.entity';
-import { SprintNotFoundException } from '@sprints/domain/exceptions';
-import { SprintRepository } from '@sprints/repository/sprint.repository';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+
+import { Sprint } from '../../domain/entities/sprint.entity';
+import { SprintNotFoundException } from '../../domain/exceptions/index';
+import type { ISprintRepository } from '../../domain/interfaces/sprint.repository.interface';
+import { SprintRepository } from '../../repository/sprint.repository';
+
+import { CompleteSprintCommand } from './complete-sprint.command';
+import { CompleteSprintCommandHandler } from './complete-sprint.command-handler';
 
 describe('CompleteSprintCommandHandler', () => {
   let handler: CompleteSprintCommandHandler;
@@ -26,9 +29,7 @@ describe('CompleteSprintCommandHandler', () => {
       ],
     }).compile();
 
-    handler = module.get<CompleteSprintCommandHandler>(
-      CompleteSprintCommandHandler,
-    );
+    handler = module.get<CompleteSprintCommandHandler>(CompleteSprintCommandHandler);
   });
 
   describe('Unit Tests', () => {
@@ -57,9 +58,7 @@ describe('CompleteSprintCommandHandler', () => {
 
       const command = new CompleteSprintCommand('non-existent-id');
 
-      await expect(handler.handle(command)).rejects.toThrow(
-        SprintNotFoundException,
-      );
+      await expect(handler.handle(command)).rejects.toThrow(SprintNotFoundException);
     });
 
     it('should set velocity to 0 for sprint with no completed story points', async () => {

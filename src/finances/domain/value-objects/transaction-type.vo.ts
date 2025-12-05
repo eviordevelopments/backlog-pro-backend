@@ -6,11 +6,7 @@ export class TransactionType {
   static readonly REFUND = new TransactionType('refund');
 
   static create(value: string): TransactionType {
-    const validTypes = [
-      TransactionType.INCOME,
-      TransactionType.EXPENSE,
-      TransactionType.REFUND,
-    ];
+    const validTypes = [TransactionType.INCOME, TransactionType.EXPENSE, TransactionType.REFUND];
 
     const type = validTypes.find((t) => t.getValue() === value);
     if (!type) {

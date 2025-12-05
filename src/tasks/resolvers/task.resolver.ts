@@ -1,19 +1,20 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { Logger, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
-import { CreateTaskDto } from '@tasks/dto/request/create-task.dto';
-import { UpdateTaskDto } from '@tasks/dto/request/update-task.dto';
-import { TaskResponseDto } from '@tasks/dto/response/task.response.dto';
-import { TaskService } from '@tasks/application/services/task.service';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import {
+  AddDependencyCommand,
+  AddSubtasksCommand,
+  AssignTaskCommand,
   CreateTaskCommand,
   UpdateTaskCommand,
-  AssignTaskCommand,
-  AddSubtasksCommand,
-  AddDependencyCommand,
-} from '@tasks/application/commands';
-import { GetTaskQuery, ListTasksSprintQuery } from '@tasks/application/queries';
-import { Task } from '@tasks/domain/entities/task.entity';
+} from '../application/commands/index';
+import { GetTaskQuery, ListTasksSprintQuery } from '../application/queries/index';
+import { TaskService } from '../application/services/task.service';
+import { Task } from '../domain/entities/task.entity';
+import { CreateTaskDto } from '../dto/request/create-task.dto';
+import { UpdateTaskDto } from '../dto/request/update-task.dto';
+import { TaskResponseDto } from '../dto/response/task.response.dto';
 
 @Resolver()
 @UseGuards(JwtAuthGuard)
@@ -25,7 +26,9 @@ export class TaskResolver {
   @Mutation(() => TaskResponseDto, {
     description: 'Crea una nueva tarea',
   })
-  async createTask(@Args('input', { description: 'Datos de la tarea a crear' }) input: CreateTaskDto): Promise<TaskResponseDto> {
+  async createTask(
+    @Args('input', { description: 'Datos de la tarea a crear' }) input: CreateTaskDto,
+  ): Promise<TaskResponseDto> {
     this.logger.log(`Creando tarea: ${input.title}`);
     const command = new CreateTaskCommand(
       input.title,
@@ -45,7 +48,9 @@ export class TaskResolver {
   @Query(() => TaskResponseDto, {
     description: 'Obtiene una tarea por ID',
   })
-  async getTask(@Args('taskId', { description: 'UUID de la tarea' }) taskId: string): Promise<TaskResponseDto> {
+  async getTask(
+    @Args('taskId', { description: 'UUID de la tarea' }) taskId: string,
+  ): Promise<TaskResponseDto> {
     this.logger.log(`Obteniendo tarea: ${taskId}`);
     const query = new GetTaskQuery(taskId);
     const task = await this.taskService.getTask(query);
@@ -55,9 +60,7 @@ export class TaskResolver {
   @Query(() => [TaskResponseDto], {
     description: 'Lista todas las tareas de un sprint',
   })
-  async listTasksBySprint(
-    @Args('sprintId') sprintId: string,
-  ): Promise<TaskResponseDto[]> {
+  async listTasksBySprint(@Args('sprintId') sprintId: string): Promise<TaskResponseDto[]> {
     this.logger.log(`Listando tareas del sprint: ${sprintId}`);
     const query = new ListTasksSprintQuery(sprintId);
     const tasks = await this.taskService.listTasksBySprint(query);
@@ -106,7 +109,7 @@ export class TaskResolver {
   })
   async addSubtasks(
     @Args('taskId') taskId: string,
-    @Args('subtasks', { type: () => [String] }) subtasks: any[],
+    @Args('subtasks', { type: () => [String] }) subtasks: string[],
   ): Promise<TaskResponseDto> {
     this.logger.log(`Agregando subtareas a la tarea: ${taskId}`);
     const command = new AddSubtasksCommand(taskId, subtasks);

@@ -1,8 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { AddSubtasksCommand } from '@tasks/application/commands/add-subtasks.command';
-import { Task } from '@tasks/domain/entities/task.entity';
-import { TaskRepository } from '@tasks/repository/task.repository';
-import { TaskNotFoundException } from '@tasks/domain/exceptions';
+
+import { Task } from '../../domain/entities/task.entity';
+import { TaskNotFoundException } from '../../domain/exceptions/index';
+import { TaskRepository } from '../../repository/task.repository';
+
+import { AddSubtasksCommand } from './add-subtasks.command';
 
 @Injectable()
 export class AddSubtasksCommandHandler {
@@ -19,7 +21,7 @@ export class AddSubtasksCommandHandler {
     }
 
     const currentSubtasks = task.getSubtasks();
-    const updatedSubtasks = [...currentSubtasks, ...command.subtasks];
+    const updatedSubtasks: string[] = [...currentSubtasks, ...command.subtasks];
     task.setSubtasks(updatedSubtasks);
 
     const updated = await this.taskRepository.update(command.taskId, task);

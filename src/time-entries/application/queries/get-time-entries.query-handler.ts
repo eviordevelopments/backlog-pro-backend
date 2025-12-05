@@ -1,7 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GetTimeEntriesQuery } from '@time-entries/application/queries/get-time-entries.query';
-import { TimeEntry } from '@time-entries/domain/entities/time-entry.entity';
-import { TimeEntryRepository } from '@time-entries/repository/time-entry.repository';
+
+import { TimeEntry } from '../../domain/entities/time-entry.entity';
+import { TimeEntryRepository } from '../../repository/time-entry.repository';
+
+import { GetTimeEntriesQuery } from './get-time-entries.query';
 
 @Injectable()
 export class GetTimeEntriesQueryHandler {

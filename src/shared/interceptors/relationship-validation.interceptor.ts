@@ -1,12 +1,11 @@
 import {
+  BadRequestException,
+  CallHandler,
+  ExecutionContext,
   Injectable,
   NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-  BadRequestException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { RelationshipNotFoundException } from '@shared/exceptions/relationship-not-found.exception';
 
 /**
  * Interceptor para validar la existencia de relaciones entre entidades
@@ -14,19 +13,19 @@ import { RelationshipNotFoundException } from '@shared/exceptions/relationship-n
  */
 @Injectable()
 export class RelationshipValidationInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const request = context.switchToHttp().getRequest();
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
+    const request = context.switchToHttp().getRequest<{ body: unknown }>();
     const body = request.body;
 
     // Validar que los IDs de relaciones existan
     if (body && typeof body === 'object') {
-      this.validateRelationshipIds(body);
+      this.validateRelationshipIds(body as Record<string, unknown>);
     }
 
     return next.handle();
   }
 
-  private validateRelationshipIds(obj: any): void {
+  private validateRelationshipIds(obj: Record<string, unknown>): void {
     // Patrones comunes de IDs de relaciones
     const relationshipPatterns = [
       'projectId',
@@ -48,9 +47,7 @@ export class RelationshipValidationInterceptor implements NestInterceptor {
 
         // Validar que el ID no sea null, undefined o vacío
         if (value === null || value === undefined || value === '') {
-          throw new BadRequestException(
-            `${key} is required and cannot be empty`,
-          );
+          throw new BadRequestException(`${key} is required and cannot be empty`);
         }
 
         // Validar que sea un UUID válido si es un ID
@@ -62,8 +59,7 @@ export class RelationshipValidationInterceptor implements NestInterceptor {
   }
 
   private isValidUUID(uuid: string): boolean {
-    const uuidRegex =
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     return uuidRegex.test(uuid);
   }
 }

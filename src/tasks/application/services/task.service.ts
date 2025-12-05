@@ -1,12 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTaskCommandHandler } from '@tasks/application/commands/create-task.command-handler';
-import { UpdateTaskCommandHandler } from '@tasks/application/commands/update-task.command-handler';
-import { AssignTaskCommandHandler } from '@tasks/application/commands/assign-task.command-handler';
-import { AddSubtasksCommandHandler } from '@tasks/application/commands/add-subtasks.command-handler';
-import { AddDependencyCommandHandler } from '@tasks/application/commands/add-dependency.command-handler';
-import { GetTaskQueryHandler } from '@tasks/application/queries/get-task.query-handler';
-import { ListTasksSprintQueryHandler } from '@tasks/application/queries/list-tasks-sprint.query-handler';
-import { TaskRepository } from '@tasks/repository/task.repository';
+
+import { TaskRepository } from '../../repository/task.repository';
+import { AddDependencyCommand } from '../commands/add-dependency.command';
+import { AddDependencyCommandHandler } from '../commands/add-dependency.command-handler';
+import { AddSubtasksCommand } from '../commands/add-subtasks.command';
+import { AddSubtasksCommandHandler } from '../commands/add-subtasks.command-handler';
+import { AssignTaskCommand } from '../commands/assign-task.command';
+import { AssignTaskCommandHandler } from '../commands/assign-task.command-handler';
+import { CreateTaskCommand } from '../commands/create-task.command';
+import { CreateTaskCommandHandler } from '../commands/create-task.command-handler';
+import { UpdateTaskCommand } from '../commands/update-task.command';
+import { UpdateTaskCommandHandler } from '../commands/update-task.command-handler';
+import { GetTaskQuery } from '../queries/get-task.query';
+import { GetTaskQueryHandler } from '../queries/get-task.query-handler';
+import { ListTasksSprintQuery } from '../queries/list-tasks-sprint.query';
+import { ListTasksSprintQueryHandler } from '../queries/list-tasks-sprint.query-handler';
 
 @Injectable()
 export class TaskService {
@@ -21,31 +29,31 @@ export class TaskService {
     private readonly taskRepository: TaskRepository,
   ) {}
 
-  async createTask(command: any) {
+  async createTask(command: CreateTaskCommand) {
     return this.createTaskHandler.handle(command);
   }
 
-  async updateTask(command: any) {
+  async updateTask(command: UpdateTaskCommand) {
     return this.updateTaskHandler.handle(command);
   }
 
-  async assignTask(command: any) {
+  async assignTask(command: AssignTaskCommand) {
     return this.assignTaskHandler.handle(command);
   }
 
-  async addSubtasks(command: any) {
+  async addSubtasks(command: AddSubtasksCommand) {
     return this.addSubtasksHandler.handle(command);
   }
 
-  async addDependency(command: any) {
+  async addDependency(command: AddDependencyCommand) {
     return this.addDependencyHandler.handle(command);
   }
 
-  async getTask(query: any) {
+  async getTask(query: GetTaskQuery) {
     return this.getTaskHandler.handle(query);
   }
 
-  async listTasksBySprint(query: any) {
+  async listTasksBySprint(query: ListTasksSprintQuery) {
     return this.listTasksHandler.handle(query);
   }
 

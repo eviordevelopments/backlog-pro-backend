@@ -1,11 +1,12 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
-import { CreateInvoiceCommandHandler } from '@finances/application/commands/create-invoice.command-handler';
-import { CreateInvoiceCommand } from '@finances/application/commands/create-invoice.command';
-import { InvoiceRepository } from '@finances/repository/invoice.repository';
-import { CreateInvoiceDto } from '@finances/dto/request/create-invoice.dto';
-import { InvoiceResponseDto } from '@finances/dto/response/invoice.response.dto';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { CreateInvoiceCommand } from '../application/commands/create-invoice.command';
+import { CreateInvoiceCommandHandler } from '../application/commands/create-invoice.command-handler';
+import { CreateInvoiceDto } from '../dto/request/create-invoice.dto';
+import { InvoiceResponseDto } from '../dto/response/invoice.response.dto';
+import { InvoiceRepository } from '../repository/invoice.repository';
 
 @Resolver('Invoice')
 export class InvoiceResolver {
@@ -16,9 +17,7 @@ export class InvoiceResolver {
 
   @Mutation(() => InvoiceResponseDto)
   @UseGuards(JwtAuthGuard)
-  async createInvoice(
-    @Args('input') input: CreateInvoiceDto
-  ): Promise<InvoiceResponseDto> {
+  async createInvoice(@Args('input') input: CreateInvoiceDto): Promise<InvoiceResponseDto> {
     const command = new CreateInvoiceCommand(
       input.invoiceNumber,
       input.clientId,
@@ -28,7 +27,7 @@ export class InvoiceResolver {
       input.dueDate,
       input.projectId,
       input.items,
-      input.notes
+      input.notes,
     );
 
     const invoice = await this.createInvoiceHandler.handle(command);
@@ -56,7 +55,7 @@ export class InvoiceResolver {
   @UseGuards(JwtAuthGuard)
   async listInvoices(
     @Args('clientId', { nullable: true }) clientId?: string,
-    @Args('projectId', { nullable: true }) projectId?: string
+    @Args('projectId', { nullable: true }) projectId?: string,
   ): Promise<InvoiceResponseDto[]> {
     let invoices = [];
 

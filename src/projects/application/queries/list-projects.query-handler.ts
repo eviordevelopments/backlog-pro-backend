@@ -1,7 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ListProjectsQuery } from '@projects/application/queries/list-projects.query';
-import { Project } from '@projects/domain/entities/project.entity';
-import { ProjectRepository } from '@projects/repository/project.repository';
+
+import { Project } from '../../domain/entities/project.entity';
+import { ProjectRepository } from '../../repository/project.repository';
+
+import { ListProjectsQuery } from './list-projects.query';
 
 @Injectable()
 export class ListProjectsQueryHandler {

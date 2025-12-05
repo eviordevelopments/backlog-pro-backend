@@ -1,13 +1,14 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
-import { CreateRiskCommandHandler } from '@risks/application/commands/create-risk.command-handler';
-import { CreateRiskCommand } from '@risks/application/commands/create-risk.command';
-import { GetProjectRisksQueryHandler } from '@risks/application/queries/get-project-risks.query-handler';
-import { GetProjectRisksQuery } from '@risks/application/queries/get-project-risks.query';
-import { RiskRepository } from '@risks/repository/risk.repository';
-import { CreateRiskDto } from '@risks/dto/request/create-risk.dto';
-import { RiskResponseDto } from '@risks/dto/response/risk.response.dto';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { CreateRiskCommand } from '../application/commands/create-risk.command';
+import { CreateRiskCommandHandler } from '../application/commands/create-risk.command-handler';
+import { GetProjectRisksQuery } from '../application/queries/get-project-risks.query';
+import { GetProjectRisksQueryHandler } from '../application/queries/get-project-risks.query-handler';
+import { CreateRiskDto } from '../dto/request/create-risk.dto';
+import { RiskResponseDto } from '../dto/response/risk.response.dto';
+import { RiskRepository } from '../repository/risk.repository';
 
 @Resolver('Risk')
 export class RiskResolver {
@@ -20,7 +21,7 @@ export class RiskResolver {
   @Mutation(() => RiskResponseDto)
   @UseGuards(JwtAuthGuard)
   async createRisk(
-    @Args('input', { description: 'Datos del riesgo a crear' }) input: CreateRiskDto
+    @Args('input', { description: 'Datos del riesgo a crear' }) input: CreateRiskDto,
   ): Promise<RiskResponseDto> {
     const command = new CreateRiskCommand(
       input.projectId,
@@ -31,7 +32,7 @@ export class RiskResolver {
       input.responsibleId,
       input.description,
       input.mitigationStrategy,
-      input.isCore
+      input.isCore,
     );
 
     const risk = await this.createRiskHandler.handle(command);
@@ -58,7 +59,7 @@ export class RiskResolver {
   @Query(() => [RiskResponseDto])
   @UseGuards(JwtAuthGuard)
   async getProjectRisks(
-    @Args('projectId', { description: 'UUID del proyecto' }) projectId: string
+    @Args('projectId', { description: 'UUID del proyecto' }) projectId: string,
   ): Promise<RiskResponseDto[]> {
     const query = new GetProjectRisksQuery(projectId);
     return this.projectRisksHandler.handle(query);

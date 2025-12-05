@@ -1,5 +1,5 @@
-import { IsString, IsOptional, IsArray, IsNumber, Min, MaxLength } from 'class-validator';
-import { InputType, Field } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsArray, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
 
 @InputType()
 export class UpdateProfileDto {
