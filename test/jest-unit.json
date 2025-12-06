@@ -2,12 +2,17 @@
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": "..",
   "testEnvironment": "node",
-  "testRegex": "test/e2e/.*\\.e2e-spec\\.ts$",
+  "testRegex": "test/unit/.*\\.spec\\.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
-  "testTimeout": 30000,
-  "maxWorkers": 1,
+  "collectCoverageFrom": [
+    "src/**/*.(t|j)s",
+    "!src/**/*.spec.ts",
+    "!src/**/*.e2e-spec.ts",
+    "!src/main.ts"
+  ],
+  "coverageDirectory": "./coverage/unit",
   "moduleNameMapper": {
     "^@shared/(.*)$": "<rootDir>/src/shared/$1",
     "^@auth/(.*)$": "<rootDir>/src/auth/$1",

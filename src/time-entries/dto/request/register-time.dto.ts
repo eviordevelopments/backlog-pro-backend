@@ -1,5 +1,5 @@
 import { Field, Float, InputType } from '@nestjs/graphql';
-import { IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
+import { IsDate, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
 
 @InputType()
 export class RegisterTimeDto {
@@ -18,6 +18,7 @@ export class RegisterTimeDto {
   hours!: number;
 
   @Field()
+  @IsDate({ message: 'La fecha debe ser una fecha válida' })
   date!: Date;
 
   @Field({ nullable: true })

@@ -6,4 +6,5 @@ export interface IClientRepository {
   getById(id: string): Promise<Client | null>;
   list(): Promise<Client[]>;
   delete(id: string): Promise<void>;
+  deleteWithCascade(id: string): Promise<void>;
 }

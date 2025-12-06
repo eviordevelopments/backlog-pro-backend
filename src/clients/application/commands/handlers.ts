@@ -83,6 +83,7 @@ export class DeleteClientCommandHandler {
       throw new ClientNotFoundException(command.id);
     }
 
-    await this.clientRepository.delete(command.id);
+    // Cascade soft delete: delete client and all associated projects
+    await this.clientRepository.deleteWithCascade(command.id);
   }
 }

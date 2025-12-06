@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { ClientsModule } from '../clients/clients.module';
 import { AssignMembersCommandHandler } from './application/commands/assign-members.command-handler';
 import { ProjectService } from './application/services/project.service';
 import { ProjectMemberTypeOrmEntity } from './repository/entities/project-member.typeorm-entity';
@@ -10,7 +11,10 @@ import { ProjectRepository } from './repository/project.repository';
 import { ProjectResolver } from './resolvers/project.resolver';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProjectTypeOrmEntity, ProjectMemberTypeOrmEntity])],
+  imports: [
+    TypeOrmModule.forFeature([ProjectTypeOrmEntity, ProjectMemberTypeOrmEntity]),
+    ClientsModule,
+  ],
   providers: [
     ProjectRepository,
     ProjectMemberRepository,
