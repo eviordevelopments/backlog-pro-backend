@@ -1,8 +1,8 @@
 import fc from 'fast-check';
+import { Project } from 'src/projects/domain/entities/project.entity';
+import { InvalidBudgetException, InvalidProgressException } from 'src/projects/domain/exceptions';
 
-import { InvalidBudgetException, InvalidProgressException } from '../exceptions/index';
 
-import { Project } from './project.entity';
 
 describe('Project Entity - Property-Based Tests', () => {
   // Feature: backlog-pro-development, Property 6: Project creation with default state

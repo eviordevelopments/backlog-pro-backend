@@ -14,23 +14,6 @@
   ],
   "coverageDirectory": "./coverage/unit",
   "moduleNameMapper": {
-    "^@shared/(.*)$": "<rootDir>/src/shared/$1",
-    "^@auth/(.*)$": "<rootDir>/src/auth/$1",
-    "^@users/(.*)$": "<rootDir>/src/users/$1",
-    "^@projects/(.*)$": "<rootDir>/src/projects/$1",
-    "^@sprints/(.*)$": "<rootDir>/src/sprints/$1",
-    "^@tasks/(.*)$": "<rootDir>/src/tasks/$1",
-    "^@clients/(.*)$": "<rootDir>/src/clients/$1",
-    "^@meetings/(.*)$": "<rootDir>/src/meetings/$1",
-    "^@goals/(.*)$": "<rootDir>/src/goals/$1",
-    "^@risks/(.*)$": "<rootDir>/src/risks/$1",
-    "^@user-stories/(.*)$": "<rootDir>/src/user-stories/$1",
-    "^@feedback/(.*)$": "<rootDir>/src/feedback/$1",
-    "^@achievements/(.*)$": "<rootDir>/src/achievements/$1",
-    "^@time-entries/(.*)$": "<rootDir>/src/time-entries/$1",
-    "^@notifications/(.*)$": "<rootDir>/src/notifications/$1",
-    "^@finances/(.*)$": "<rootDir>/src/finances/$1",
-    "^@metrics/(.*)$": "<rootDir>/src/metrics/$1",
-    "^@database/(.*)$": "<rootDir>/src/database/$1"
+    "^src/(.*)$": "<rootDir>/src/$1"
   }
 }

@@ -1,8 +1,8 @@
 import fc from 'fast-check';
+import { Task } from 'src/tasks/domain/entities/task.entity';
+import { TimeEntry } from 'src/time-entries/domain/entities/time-entry.entity';
 
-import { Task } from '../../../tasks/domain/entities/task.entity';
 
-import { TimeEntry } from './time-entry.entity';
 
 describe('TimeEntry Entity - Property-Based Tests', () => {
   // Feature: backlog-pro-development, Property 14: Task hours consistency

@@ -1,9 +1,9 @@
 import fc from 'fast-check';
+import { Task } from 'src/tasks/domain/entities/task.entity';
+import { TaskPriority } from 'src/tasks/domain/value-objects/task-priority.vo';
+import { TaskStatus } from 'src/tasks/domain/value-objects/task-status.vo';
 
-import { TaskPriority } from '../value-objects/task-priority.vo';
-import { TaskStatus } from '../value-objects/task-status.vo';
 
-import { Task } from './task.entity';
 
 describe('Task Entity - Property-Based Tests', () => {
   // Feature: backlog-pro-development, Property 12: Task creation with default state
@@ -320,15 +320,15 @@ describe('Task Entity - Property-Based Tests', () => {
     it('should manage subtasks', () => {
       const task = new Task('Implement feature', 'project-123');
 
-      const subtask1 = { id: 'sub-1', title: 'Subtask 1' };
-      const subtask2 = { id: 'sub-2', title: 'Subtask 2' };
+      const subtask1Id = 'sub-1';
+      const subtask2Id = 'sub-2';
 
-      task.addSubtask(subtask1);
-      task.addSubtask(subtask2);
+      task.addSubtask(subtask1Id);
+      task.addSubtask(subtask2Id);
 
       expect(task.getSubtasks().length).toBe(2);
-      expect(task.getSubtasks()).toContain(subtask1);
-      expect(task.getSubtasks()).toContain(subtask2);
+      expect(task.getSubtasks()).toContain(subtask1Id);
+      expect(task.getSubtasks()).toContain(subtask2Id);
     });
 
     it('should support soft delete', () => {

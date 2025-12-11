@@ -3,9 +3,9 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import {
-  CreateClientCommand,
-  DeleteClientCommand,
-  UpdateClientCommand,
+    CreateClientCommand,
+    DeleteClientCommand,
+    UpdateClientCommand,
 } from '../application/commands/index';
 import { GetClientQuery, ListClientsQuery } from '../application/queries/index';
 import { ClientService } from '../application/services/client.service';

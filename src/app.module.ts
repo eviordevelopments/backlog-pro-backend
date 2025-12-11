@@ -10,16 +10,17 @@ import { ClientsModule } from './clients/clients.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { FinancesModule } from './finances/finances.module';
 import { GoalsModule } from './goals/goals.module';
+import { HealthModule } from './health/health.moudule';
 import { MeetingsModule } from './meetings/meetings.module';
 import { MetricsModule } from './metrics/metrics.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { ProjectsModule } from './projects/projects.module';
 import { RisksModule } from './risks/risks.module';
 import {
-  databaseConfig,
-  envsConfig,
-  graphqlConfig,
-  validationSchemaConfig,
+    databaseConfig,
+    envsConfig,
+    graphqlConfig,
+    validationSchemaConfig,
 } from './shared/config/index';
 import { SharedModule } from './shared/shared.module';
 import { SprintsModule } from './sprints/sprints.module';
@@ -27,7 +28,6 @@ import { TasksModule } from './tasks/tasks.module';
 import { TimeEntriesModule } from './time-entries/time-entries.module';
 import { UserStoriesModule } from './user-stories/user-stories.module';
 import { UsersModule } from './users/users.module';
-import { HealthModule } from './health/health.moudule';
 
 @Module({
   imports: [

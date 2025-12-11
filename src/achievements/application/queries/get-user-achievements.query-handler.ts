@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { UserAchievementResponseDto } from '../../dto/response/achievement.response.dto';
 import {
-  AchievementRepository,
-  UserAchievementRepository,
+    AchievementRepository,
+    UserAchievementRepository,
 } from '../../repository/achievement.repository';
 
 import { GetUserAchievementsQuery } from './get-user-achievements.query';

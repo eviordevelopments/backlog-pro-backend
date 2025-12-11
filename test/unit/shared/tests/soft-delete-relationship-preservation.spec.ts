@@ -1,6 +1,7 @@
-import { Project } from '../../projects/domain/entities/project.entity';
-import { Sprint } from '../../sprints/domain/entities/sprint.entity';
-import { Task } from '../../tasks/domain/entities/task.entity';
+import { Project } from "src/projects/domain/entities/project.entity";
+import { Sprint } from "src/sprints/domain/entities/sprint.entity";
+import { Task } from "src/tasks/domain/entities/task.entity";
+
 
 /**
  * Tests para verificar que el soft delete preserva las relaciones entre entidades

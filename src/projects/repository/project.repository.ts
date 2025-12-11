@@ -4,8 +4,8 @@ import { Repository } from 'typeorm';
 
 import { Project } from '../domain/entities/project.entity';
 import {
-  IProjectRepository,
-  ProjectFilters,
+    IProjectRepository,
+    ProjectFilters,
 } from '../domain/interfaces/project.repository.interface';
 
 import { ProjectTypeOrmEntity } from './entities/project.typeorm-entity';

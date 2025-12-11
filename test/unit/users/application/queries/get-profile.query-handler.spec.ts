@@ -1,13 +1,12 @@
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import fc from 'fast-check';
+import { GetProfileQuery, GetProfileQueryHandler } from 'src/users/application/queries';
+import { UserProfile } from 'src/users/domain/entities/user-profile.entity';
+import { UserProfileNotFoundException } from 'src/users/domain/exceptions';
+import { UserProfileRepository } from 'src/users/repository/user-profile.repository';
 
-import { UserProfile } from '../../domain/entities/user-profile.entity';
-import { UserProfileNotFoundException } from '../../domain/exceptions/index';
-import { UserProfileRepository } from '../../repository/user-profile.repository';
 
-import { GetProfileQuery } from './get-profile.query';
-import { GetProfileQueryHandler } from './get-profile.query-handler';
 
 describe('GetProfileQueryHandler', () => {
   let handler: GetProfileQueryHandler;

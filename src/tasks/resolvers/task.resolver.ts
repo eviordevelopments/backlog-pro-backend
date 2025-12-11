@@ -3,11 +3,11 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import {
-  AddDependencyCommand,
-  AddSubtasksCommand,
-  AssignTaskCommand,
-  CreateTaskCommand,
-  UpdateTaskCommand,
+    AddDependencyCommand,
+    AddSubtasksCommand,
+    AssignTaskCommand,
+    CreateTaskCommand,
+    UpdateTaskCommand,
 } from '../application/commands/index';
 import { GetTaskQuery, ListTasksSprintQuery } from '../application/queries/index';
 import { TaskService } from '../application/services/task.service';

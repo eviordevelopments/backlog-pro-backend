@@ -2,11 +2,11 @@ import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import fc from 'fast-check';
 
-import { UserProfile } from '../../domain/entities/user-profile.entity';
-import { UserProfileRepository } from '../../repository/user-profile.repository';
+import { UpdateProfileCommand, UpdateProfileCommandHandler } from 'src/users/application/commands';
+import { UserProfile } from 'src/users/domain/entities/user-profile.entity';
+import { UserProfileRepository } from 'src/users/repository/user-profile.repository';
 
-import { UpdateProfileCommand } from './update-profile.command';
-import { UpdateProfileCommandHandler } from './update-profile.command-handler';
+
 
 describe('UpdateProfileCommandHandler - Authorization', () => {
   let handler: UpdateProfileCommandHandler;

@@ -3,8 +3,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ProjectMemberRepository } from '../../../projects/repository/project-member.repository';
 import { Task } from '../../domain/entities/task.entity';
 import {
-  InvalidTaskAssignmentException,
-  TaskNotFoundException,
+    InvalidTaskAssignmentException,
+    TaskNotFoundException,
 } from '../../domain/exceptions/index';
 import { TaskRepository } from '../../repository/task.repository';
 

@@ -1,9 +1,9 @@
 import type { ArgumentsHost } from '@nestjs/common';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { BaseDomainException } from 'src/shared/exceptions';
+import { GlobalExceptionFilter } from 'src/shared/filters';
 
-import { BaseDomainException } from '../exceptions/index';
 
-import { GlobalExceptionFilter } from './index';
 
 class TestDomainException extends BaseDomainException {
   constructor() {

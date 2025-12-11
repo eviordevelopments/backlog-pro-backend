@@ -1,9 +1,10 @@
 import fc from 'fast-check';
+import { Project } from 'src/projects/domain/entities/project.entity';
+import { Budget } from 'src/projects/domain/value-objects/budget.vo';
+import { Sprint } from 'src/sprints/domain/entities/sprint.entity';
+import { Task } from 'src/tasks/domain/entities/task.entity';
 
-import { Project } from '../../projects/domain/entities/project.entity';
-import { Budget } from '../../projects/domain/value-objects/budget.vo';
-import { Sprint } from '../../sprints/domain/entities/sprint.entity';
-import { Task } from '../../tasks/domain/entities/task.entity';
+
 
 /**
  * Property-Based Tests for Data Integrity
