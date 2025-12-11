@@ -9,13 +9,12 @@ export class DeleteInvoiceCommandHandler {
 
   async handle(command: DeleteInvoiceCommand): Promise<void> {
     const invoice = await this.invoiceRepository.getById(command.id);
-    
+
     if (!invoice) {
       throw new Error(`Invoice with id ${command.id} not found`);
     }
 
     // Soft delete
-    invoice.setDeletedAt(new Date());
-    await this.invoiceRepository.save(invoice);
+    await this.invoiceRepository.delete(command.id);
   }
 }

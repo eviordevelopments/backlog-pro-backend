@@ -20,7 +20,7 @@ describe('Finances Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -111,7 +111,7 @@ describe('Finances Module (e2e)', () => {
     describe('createTransaction', () => {
       it('should create an expense transaction successfully', () => {
         const transactionDate = new Date();
-        
+
         return request(app.getHttpServer())
           .post('/graphql')
           .set('Authorization', `Bearer ${authToken}`)
@@ -156,7 +156,9 @@ describe('Finances Module (e2e)', () => {
             expect(res.body.data.createTransaction.category).toBe('software');
             expect(res.body.data.createTransaction.amount).toBe(299.99);
             expect(res.body.data.createTransaction.currency).toBe('USD');
-            expect(res.body.data.createTransaction.description).toBe('Software license for development tools');
+            expect(res.body.data.createTransaction.description).toBe(
+              'Software license for development tools',
+            );
             expect(res.body.data.createTransaction.clientId).toBe(clientId);
             expect(res.body.data.createTransaction.projectId).toBe(projectId);
             expect(res.body.data.createTransaction.isRecurring).toBe(false);
@@ -166,7 +168,7 @@ describe('Finances Module (e2e)', () => {
 
       it('should create a recurring income transaction successfully', () => {
         const transactionDate = new Date();
-        
+
         return request(app.getHttpServer())
           .post('/graphql')
           .set('Authorization', `Bearer ${authToken}`)
@@ -187,7 +189,7 @@ describe('Finances Module (e2e)', () => {
               input: {
                 type: 'income',
                 category: 'project_payment',
-                amount: 5000.00,
+                amount: 5000.0,
                 currency: 'USD',
                 date: transactionDate.toISOString(),
                 description: 'Monthly project payment',
@@ -211,7 +213,7 @@ describe('Finances Module (e2e)', () => {
 
       it('should fail with invalid amount (negative)', () => {
         const transactionDate = new Date();
-        
+
         return request(app.getHttpServer())
           .post('/graphql')
           .set('Authorization', `Bearer ${authToken}`)
@@ -244,7 +246,7 @@ describe('Finances Module (e2e)', () => {
 
       it('should fail with invalid currency', () => {
         const transactionDate = new Date();
-        
+
         return request(app.getHttpServer())
           .post('/graphql')
           .set('Authorization', `Bearer ${authToken}`)
@@ -421,7 +423,7 @@ describe('Finances Module (e2e)', () => {
       it('should create an invoice successfully', () => {
         const issueDate = new Date();
         const dueDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
-        
+
         return request(app.getHttpServer())
           .post('/graphql')
           .set('Authorization', `Bearer ${authToken}`)
@@ -481,7 +483,7 @@ describe('Finances Module (e2e)', () => {
       it('should fail with non-existent client ID', () => {
         const issueDate = new Date();
         const dueDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-        
+
         return request(app.getHttpServer())
           .post('/graphql')
           .set('Authorization', `Bearer ${authToken}`)
@@ -515,7 +517,7 @@ describe('Finances Module (e2e)', () => {
       it('should fail with invalid amount (negative)', () => {
         const issueDate = new Date();
         const dueDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-        
+
         return request(app.getHttpServer())
           .post('/graphql')
           .set('Authorization', `Bearer ${authToken}`)
@@ -599,7 +601,9 @@ describe('Finances Module (e2e)', () => {
             expect(res.body.data.listInvoices).toBeDefined();
             expect(Array.isArray(res.body.data.listInvoices)).toBe(true);
             if (res.body.data.listInvoices.length > 0) {
-              expect(res.body.data.listInvoices.every((inv: any) => inv.clientId === clientId)).toBe(true);
+              expect(
+                res.body.data.listInvoices.every((inv: any) => inv.clientId === clientId),
+              ).toBe(true);
             }
           });
       });
@@ -628,7 +632,9 @@ describe('Finances Module (e2e)', () => {
             expect(res.body.data.listInvoices).toBeDefined();
             expect(Array.isArray(res.body.data.listInvoices)).toBe(true);
             if (res.body.data.listInvoices.length > 0) {
-              expect(res.body.data.listInvoices.every((inv: any) => inv.projectId === projectId)).toBe(true);
+              expect(
+                res.body.data.listInvoices.every((inv: any) => inv.projectId === projectId),
+              ).toBe(true);
             }
           });
       });
@@ -705,7 +711,7 @@ describe('Finances Module (e2e)', () => {
           .expect((res) => {
             expect(res.body.data.calculateSalaries).toBeDefined();
             expect(Array.isArray(res.body.data.calculateSalaries)).toBe(true);
-            
+
             // If there are salary calculations, verify structure
             if (res.body.data.calculateSalaries.length > 0) {
               const salary = res.body.data.calculateSalaries[0];
@@ -782,11 +788,8 @@ describe('Finances Module (e2e)', () => {
       ];
 
       for (const query of queries) {
-        const res = await request(app.getHttpServer())
-          .post('/graphql')
-          .send({ query })
-          .expect(200);
-        
+        const res = await request(app.getHttpServer()).post('/graphql').send({ query }).expect(200);
+
         expect(res.body.errors).toBeDefined();
       }
     });

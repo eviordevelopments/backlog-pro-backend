@@ -6,8 +6,6 @@ import { TimeEntryRepository } from 'src/time-entries/repository/time-entry.repo
 import { GetHoursWorkedQuery } from 'src/users/application/queries/get-hours-worked.query';
 import { GetHoursWorkedQueryHandler } from 'src/users/application/queries/get-hours-worked.query-handler';
 
-
-
 describe('GetHoursWorkedQueryHandler', () => {
   let handler: GetHoursWorkedQueryHandler;
   let timeEntryRepository: TimeEntryRepository;

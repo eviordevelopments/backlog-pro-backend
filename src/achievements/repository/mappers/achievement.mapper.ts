@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { Achievement, UserAchievement } from '../../domain/entities/achievement.entity';
 import {
-    AchievementTypeOrmEntity,
-    UserAchievementTypeOrmEntity,
+  AchievementTypeOrmEntity,
+  UserAchievementTypeOrmEntity,
 } from '../entities/achievement.typeorm-entity';
 
 @Injectable()

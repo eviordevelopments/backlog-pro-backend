@@ -18,7 +18,7 @@ describe('Goals Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -63,7 +63,7 @@ describe('Goals Module (e2e)', () => {
     it('should create a personal goal successfully', () => {
       const startDate = new Date();
       const endDate = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000); // 90 days from now
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -93,7 +93,8 @@ describe('Goals Module (e2e)', () => {
           variables: {
             input: {
               title: 'Complete 100 hours of development',
-              description: 'Focus on improving coding skills by completing 100 hours of development work',
+              description:
+                'Focus on improving coding skills by completing 100 hours of development work',
               type: 'personal',
               category: 'skill_development',
               period: 'quarterly',
@@ -109,7 +110,9 @@ describe('Goals Module (e2e)', () => {
         .expect((res) => {
           expect(res.body.data.createGoal).toBeDefined();
           expect(res.body.data.createGoal.title).toBe('Complete 100 hours of development');
-          expect(res.body.data.createGoal.description).toBe('Focus on improving coding skills by completing 100 hours of development work');
+          expect(res.body.data.createGoal.description).toBe(
+            'Focus on improving coding skills by completing 100 hours of development work',
+          );
           expect(res.body.data.createGoal.type).toBe('personal');
           expect(res.body.data.createGoal.category).toBe('skill_development');
           expect(res.body.data.createGoal.period).toBe('quarterly');
@@ -126,7 +129,7 @@ describe('Goals Module (e2e)', () => {
     it('should create a team goal successfully', () => {
       const startDate = new Date();
       const endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -174,7 +177,7 @@ describe('Goals Module (e2e)', () => {
     it('should fail with invalid target value (negative)', () => {
       const startDate = new Date();
       const endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -210,7 +213,7 @@ describe('Goals Module (e2e)', () => {
     it('should fail with invalid date range (end before start)', () => {
       const startDate = new Date();
       const endDate = new Date(Date.now() - 24 * 60 * 60 * 1000); // 1 day ago
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -246,7 +249,7 @@ describe('Goals Module (e2e)', () => {
     it('should fail with non-existent owner ID', () => {
       const startDate = new Date();
       const endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -458,7 +461,7 @@ describe('Goals Module (e2e)', () => {
             expect(res.body.data.getUserGoals).toBeDefined();
             expect(Array.isArray(res.body.data.getUserGoals)).toBe(true);
             expect(res.body.data.getUserGoals.length).toBeGreaterThan(0);
-          
+
             // Verify all goals belong to the user
             res.body.data.getUserGoals.forEach((goal: any) => {
               expect(goal.ownerId).toBe(userId);
@@ -529,25 +532,20 @@ describe('Goals Module (e2e)', () => {
         `mutation { updateGoalProgress(goalId: "${goalId}", currentValue: 50) { id } }`,
       ];
 
-      const queries = [
-        `query { getUserGoals(ownerId: "${userId}") { id } }`,
-      ];
+      const queries = [`query { getUserGoals(ownerId: "${userId}") { id } }`];
 
       for (const mutation of mutations) {
         const res = await request(app.getHttpServer())
           .post('/graphql')
           .send({ query: mutation })
           .expect(200);
-        
+
         expect(res.body.errors).toBeDefined();
       }
 
       for (const query of queries) {
-        const res = await request(app.getHttpServer())
-          .post('/graphql')
-          .send({ query })
-          .expect(200);
-        
+        const res = await request(app.getHttpServer()).post('/graphql').send({ query }).expect(200);
+
         expect(res.body.errors).toBeDefined();
       }
     });

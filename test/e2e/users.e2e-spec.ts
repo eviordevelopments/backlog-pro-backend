@@ -17,7 +17,7 @@ describe('Users Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -217,7 +217,7 @@ describe('Users Module (e2e)', () => {
 
     it('should get worked hours with project filter', () => {
       const projectId = '00000000-0000-0000-0000-000000000000';
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)

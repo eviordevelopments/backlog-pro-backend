@@ -9,13 +9,12 @@ export class DeleteFeedbackCommandHandler {
 
   async handle(command: DeleteFeedbackCommand): Promise<void> {
     const feedback = await this.feedbackRepository.getById(command.id);
-    
+
     if (!feedback) {
       throw new Error(`Feedback with id ${command.id} not found`);
     }
 
     // Soft delete
-    feedback.setDeletedAt(new Date());
-    await this.feedbackRepository.save(feedback);
+    await this.feedbackRepository.delete(command.id);
   }
 }

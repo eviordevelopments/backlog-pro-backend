@@ -2,8 +2,6 @@ import fc from 'fast-check';
 import { Sprint } from 'src/sprints/domain/entities/sprint.entity';
 import { SprintStatus } from 'src/sprints/domain/value-objects/sprint-status.vo';
 
-
-
 describe('Sprint Entity - Property-Based Tests', () => {
   // Feature: backlog-pro-development, Property 10: Sprint date validation
   describe('Property 10: Sprint date validation', () => {

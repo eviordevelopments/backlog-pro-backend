@@ -19,7 +19,7 @@ describe('Sprints Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -348,7 +348,9 @@ describe('Sprints Module (e2e)', () => {
         .expect((res) => {
           expect(res.body.data.updateSprint).toBeDefined();
           expect(res.body.data.updateSprint.name).toBe('Updated Sprint 1');
-          expect(res.body.data.updateSprint.goal).toBe('Updated goal: Complete authentication and user management');
+          expect(res.body.data.updateSprint.goal).toBe(
+            'Updated goal: Complete authentication and user management',
+          );
           expect(res.body.data.updateSprint.status).toBe('active');
         });
     });
@@ -504,7 +506,8 @@ describe('Sprints Module (e2e)', () => {
           `,
           variables: {
             id: sprintId,
-            notes: 'What went well: Good team collaboration, Met most deadlines. What could improve: Better estimation, More testing. Action items: Implement code reviews, Add automated tests.',
+            notes:
+              'What went well: Good team collaboration, Met most deadlines. What could improve: Better estimation, More testing. Action items: Implement code reviews, Add automated tests.',
           },
         })
         .expect(200)

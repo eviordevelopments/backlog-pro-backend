@@ -9,7 +9,7 @@ export class DeleteRiskCommandHandler {
 
   async handle(command: DeleteRiskCommand): Promise<void> {
     const risk = await this.riskRepository.getById(command.id);
-    
+
     if (!risk) {
       throw new Error(`Risk with id ${command.id} not found`);
     }

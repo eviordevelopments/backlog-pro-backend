@@ -3,8 +3,6 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { BaseDomainException } from 'src/shared/exceptions';
 import { GlobalExceptionFilter } from 'src/shared/filters';
 
-
-
 class TestDomainException extends BaseDomainException {
   constructor() {
     super('TEST_001', 'Test domain exception');

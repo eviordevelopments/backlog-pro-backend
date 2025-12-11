@@ -10,7 +10,7 @@ export class UpdateRiskCommandHandler {
 
   async handle(command: UpdateRiskCommand): Promise<Risk> {
     const risk = await this.riskRepository.getById(command.id);
-    
+
     if (!risk) {
       throw new Error(`Risk with id ${command.id} not found`);
     }
@@ -31,7 +31,7 @@ export class UpdateRiskCommandHandler {
       risk.getId(),
       risk.getCreatedAt(),
       new Date(), // updatedAt
-      risk.getDeletedAt()
+      risk.getDeletedAt(),
     );
 
     return this.riskRepository.update(command.id, updatedRisk);

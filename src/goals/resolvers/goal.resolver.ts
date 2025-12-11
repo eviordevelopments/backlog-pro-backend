@@ -103,7 +103,9 @@ export class GoalResolver {
 
   @Mutation(() => Boolean)
   @UseGuards(JwtAuthGuard)
-  async deleteGoal(@Args('goalId', { description: 'UUID del objetivo a eliminar' }) goalId: string): Promise<boolean> {
+  async deleteGoal(
+    @Args('goalId', { description: 'UUID del objetivo a eliminar' }) goalId: string,
+  ): Promise<boolean> {
     const command = new DeleteGoalCommand(goalId);
     await this.deleteGoalHandler.handle(command);
     return true;

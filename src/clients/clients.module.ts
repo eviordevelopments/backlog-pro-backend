@@ -2,14 +2,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import {
-    CreateClientCommandHandler,
-    DeleteClientCommandHandler,
-    UpdateClientCommandHandler,
+  CreateClientCommandHandler,
+  DeleteClientCommandHandler,
+  UpdateClientCommandHandler,
 } from './application/commands/handlers';
 import {
-    GetClientProjectsQueryHandler,
-    GetClientQueryHandler,
-    ListClientsQueryHandler,
+  GetClientProjectsQueryHandler,
+  GetClientQueryHandler,
+  ListClientsQueryHandler,
 } from './application/queries/handlers';
 import { ClientService } from './application/services/client.service';
 import { ClientRepository } from './repository/client.repository';

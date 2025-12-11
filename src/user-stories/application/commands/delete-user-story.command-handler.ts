@@ -9,7 +9,7 @@ export class DeleteUserStoryCommandHandler {
 
   async handle(command: DeleteUserStoryCommand): Promise<void> {
     const userStory = await this.userStoryRepository.getById(command.id);
-    
+
     if (!userStory) {
       throw new Error(`User story with id ${command.id} not found`);
     }

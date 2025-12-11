@@ -12,7 +12,7 @@ export class UpdateTransactionCommandHandler {
 
   async handle(command: UpdateTransactionCommand): Promise<Transaction> {
     const transaction = await this.transactionRepository.getById(command.id);
-    
+
     if (!transaction) {
       throw new Error(`Transaction with id ${command.id} not found`);
     }
@@ -22,19 +22,23 @@ export class UpdateTransactionCommandHandler {
       transaction.getType(),
       command.category ?? transaction.getCategory(),
       command.amount !== undefined ? Amount.create(command.amount) : transaction.getAmount(),
-      command.currency !== undefined ? Currency.create(command.currency) : transaction.getCurrency(),
+      command.currency !== undefined
+        ? Currency.create(command.currency)
+        : transaction.getCurrency(),
       command.date ?? transaction.getDate(),
       command.description ?? transaction.getDescription(),
       transaction.getClientId(),
       transaction.getProjectId(),
       command.isRecurring ?? transaction.isRecurringTransaction(),
-      command.recurringFrequency !== undefined ? command.recurringFrequency : transaction.getRecurringFrequency(),
+      command.recurringFrequency !== undefined
+        ? command.recurringFrequency
+        : transaction.getRecurringFrequency(),
       transaction.getId(),
       transaction.getCreatedAt(),
       new Date(), // updatedAt
-      transaction.getDeletedAt()
+      transaction.getDeletedAt(),
     );
 
-    return this.transactionRepository.save(updatedTransaction);
+    return this.transactionRepository.update(command.id, updatedTransaction);
   }
 }

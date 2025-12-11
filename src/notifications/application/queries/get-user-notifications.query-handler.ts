@@ -4,8 +4,8 @@ import { NotificationResponseDto } from '../../dto/response/notification.respons
 import { NotificationRepository } from '../../repository/notification.repository';
 
 import {
-    GetUnreadNotificationsQuery,
-    GetUserNotificationsQuery,
+  GetUnreadNotificationsQuery,
+  GetUserNotificationsQuery,
 } from './get-user-notifications.query';
 
 @Injectable()

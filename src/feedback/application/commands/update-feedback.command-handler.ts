@@ -10,7 +10,7 @@ export class UpdateFeedbackCommandHandler {
 
   async handle(command: UpdateFeedbackCommand): Promise<Feedback> {
     const feedback = await this.feedbackRepository.getById(command.id);
-    
+
     if (!feedback) {
       throw new Error(`Feedback with id ${command.id} not found`);
     }
@@ -28,9 +28,9 @@ export class UpdateFeedbackCommandHandler {
       feedback.getId(),
       feedback.getCreatedAt(),
       new Date(), // updatedAt
-      feedback.getDeletedAt()
+      feedback.getDeletedAt(),
     );
 
-    return this.feedbackRepository.save(updatedFeedback);
+    return this.feedbackRepository.update(command.id, updatedFeedback);
   }
 }

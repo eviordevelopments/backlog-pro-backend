@@ -6,8 +6,6 @@ import { UpdateProfileCommand, UpdateProfileCommandHandler } from 'src/users/app
 import { UserProfile } from 'src/users/domain/entities/user-profile.entity';
 import { UserProfileRepository } from 'src/users/repository/user-profile.repository';
 
-
-
 describe('UpdateProfileCommandHandler - Authorization', () => {
   let handler: UpdateProfileCommandHandler;
   let repository: UserProfileRepository;

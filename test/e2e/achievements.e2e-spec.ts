@@ -17,7 +17,7 @@ describe('Achievements Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -85,7 +85,7 @@ describe('Achievements Module (e2e)', () => {
         .expect((res) => {
           expect(res.body.data.getAvailableAchievements).toBeDefined();
           expect(Array.isArray(res.body.data.getAvailableAchievements)).toBe(true);
-          
+
           // If there are achievements, verify structure
           if (res.body.data.getAvailableAchievements.length > 0) {
             const achievement = res.body.data.getAvailableAchievements[0];
@@ -149,7 +149,7 @@ describe('Achievements Module (e2e)', () => {
         .expect((res) => {
           expect(res.body.data.getUserAchievements).toBeDefined();
           expect(Array.isArray(res.body.data.getUserAchievements)).toBe(true);
-          
+
           // If there are user achievements, verify structure
           if (res.body.data.getUserAchievements.length > 0) {
             const userAchievement = res.body.data.getUserAchievements[0];

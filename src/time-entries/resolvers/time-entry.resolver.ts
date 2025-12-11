@@ -3,9 +3,9 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import {
-    DeleteTimeCommand,
-    ModifyTimeCommand,
-    RegisterTimeCommand,
+  DeleteTimeCommand,
+  ModifyTimeCommand,
+  RegisterTimeCommand,
 } from '../application/commands/index';
 import { GetGroupedTimeEntriesQuery, GetTimeEntriesQuery } from '../application/queries/index';
 import { TimeEntryService } from '../application/services/time-entry.service';

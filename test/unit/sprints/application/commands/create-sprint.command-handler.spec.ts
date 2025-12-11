@@ -4,8 +4,6 @@ import { CreateSprintCommand, CreateSprintCommandHandler } from 'src/sprints/app
 import { InvalidSprintDatesException } from 'src/sprints/domain/exceptions';
 import { SprintRepository } from 'src/sprints/repository/sprint.repository';
 
-
-
 describe('CreateSprintCommandHandler', () => {
   let handler: CreateSprintCommandHandler;
   let mockRepository: Partial<SprintRepository>;

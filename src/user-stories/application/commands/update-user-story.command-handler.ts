@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
 
 import { UserStory } from '../../domain/entities/user-story.entity';
 import { UserStoryRepository } from '../../repository/user-story.repository';
@@ -10,7 +11,7 @@ export class UpdateUserStoryCommandHandler {
 
   async handle(command: UpdateUserStoryCommand): Promise<UserStory> {
     const userStory = await this.userStoryRepository.getById(command.id);
-    
+
     if (!userStory) {
       throw new Error(`User story with id ${command.id} not found`);
     }
@@ -19,19 +20,19 @@ export class UpdateUserStoryCommandHandler {
     if (command.title !== undefined) {
       userStory.setTitle(command.title);
     }
-    
+
     if (command.sprintId !== undefined) {
       userStory.setSprintId(command.sprintId);
     }
-    
+
     if (command.storyPoints !== undefined) {
       userStory.setStoryPoints(command.storyPoints);
     }
-    
+
     if (command.status !== undefined) {
       userStory.setStatus(command.status);
     }
-    
+
     if (command.assignedTo !== undefined) {
       userStory.setAssignedTo(command.assignedTo);
     }
@@ -45,11 +46,13 @@ export class UpdateUserStoryCommandHandler {
       command.benefit ?? userStory.getBenefit(),
       command.priority ?? userStory.getPriority(),
       command.sprintId !== undefined ? command.sprintId : userStory.getSprintId(),
-      command.acceptanceCriteria ? command.acceptanceCriteria.map(desc => ({
-        id: require('uuid').v4(),
-        description: desc,
-        completed: false
-      })) : userStory.getAcceptanceCriteria(),
+      command.acceptanceCriteria
+        ? command.acceptanceCriteria.map((desc) => ({
+            id: uuidv4(),
+            description: desc,
+            completed: false,
+          }))
+        : userStory.getAcceptanceCriteria(),
       command.storyPoints ?? userStory.getStoryPoints(),
       command.status ?? userStory.getStatus(),
       command.assignedTo !== undefined ? command.assignedTo : userStory.getAssignedTo(),
@@ -58,7 +61,7 @@ export class UpdateUserStoryCommandHandler {
       userStory.getId(),
       userStory.getCreatedAt(),
       new Date(), // updatedAt
-      userStory.getDeletedAt()
+      userStory.getDeletedAt(),
     );
 
     return this.userStoryRepository.update(command.id, updatedUserStory);

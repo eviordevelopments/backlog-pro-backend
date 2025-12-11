@@ -10,7 +10,7 @@ export class UpdateMeetingCommandHandler {
 
   async handle(command: UpdateMeetingCommand): Promise<Meeting> {
     const meeting = await this.meetingRepository.getById(command.id);
-    
+
     if (!meeting) {
       throw new Error(`Meeting with id ${command.id} not found`);
     }
@@ -28,15 +28,17 @@ export class UpdateMeetingCommandHandler {
       meeting.getSprintId(),
       command.participants ?? meeting.getParticipants(),
       command.isRecurring ?? meeting.isRecurringMeeting(),
-      command.recurringPattern !== undefined ? command.recurringPattern : meeting.getRecurringPattern(),
+      command.recurringPattern !== undefined
+        ? command.recurringPattern
+        : meeting.getRecurringPattern(),
       command.status ?? meeting.getStatus(),
       meeting.getAttendance(),
       meeting.getId(),
       meeting.getCreatedAt(),
       new Date(), // updatedAt
-      meeting.getDeletedAt()
+      meeting.getDeletedAt(),
     );
 
-    return this.meetingRepository.save(updatedMeeting);
+    return this.meetingRepository.update(command.id, updatedMeeting);
   }
 }

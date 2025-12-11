@@ -9,13 +9,12 @@ export class DeleteMeetingCommandHandler {
 
   async handle(command: DeleteMeetingCommand): Promise<void> {
     const meeting = await this.meetingRepository.getById(command.id);
-    
+
     if (!meeting) {
       throw new Error(`Meeting with id ${command.id} not found`);
     }
 
     // Soft delete
-    meeting.setDeletedAt(new Date());
-    await this.meetingRepository.save(meeting);
+    await this.meetingRepository.delete(command.id);
   }
 }

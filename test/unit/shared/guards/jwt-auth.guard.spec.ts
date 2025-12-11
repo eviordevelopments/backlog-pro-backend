@@ -7,8 +7,6 @@ import { Test } from '@nestjs/testing';
 import fc from 'fast-check';
 import { JwtAuthGuard } from 'src/shared/guards';
 
-
-
 describe('JwtAuthGuard', () => {
   let guard: JwtAuthGuard;
   let jwtService: JwtService;

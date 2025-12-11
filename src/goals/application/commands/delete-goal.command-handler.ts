@@ -9,7 +9,7 @@ export class DeleteGoalCommandHandler {
 
   async handle(command: DeleteGoalCommand): Promise<void> {
     const goal = await this.goalRepository.getById(command.id);
-    
+
     if (!goal) {
       throw new Error(`Goal with id ${command.id} not found`);
     }

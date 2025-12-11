@@ -1,11 +1,11 @@
 import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryColumn,
-    UpdateDateColumn,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { ProjectTypeOrmEntity } from '../../../projects/repository/entities/project.typeorm-entity';

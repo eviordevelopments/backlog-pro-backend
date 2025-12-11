@@ -21,7 +21,7 @@ describe('Meetings Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -107,7 +107,7 @@ describe('Meetings Module (e2e)', () => {
 
     const startDate = new Date();
     const endDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
-    
+
     const sprintRes = await request(app.getHttpServer())
       .post('/graphql')
       .set('Authorization', `Bearer ${authToken}`)
@@ -140,7 +140,7 @@ describe('Meetings Module (e2e)', () => {
   describe('createMeeting', () => {
     it('should create a sprint planning meeting successfully', () => {
       const meetingDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // Tomorrow
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -193,7 +193,9 @@ describe('Meetings Module (e2e)', () => {
           expect(res.body.data.createMeeting.sprintId).toBe(sprintId);
           expect(res.body.data.createMeeting.duration).toBe(120);
           expect(res.body.data.createMeeting.ownerId).toBe(userId);
-          expect(res.body.data.createMeeting.agenda).toBe('Review backlog, estimate stories, plan sprint goals');
+          expect(res.body.data.createMeeting.agenda).toBe(
+            'Review backlog, estimate stories, plan sprint goals',
+          );
           expect(res.body.data.createMeeting.participants).toContain(userId);
           expect(res.body.data.createMeeting.isRecurring).toBe(false);
           expect(res.body.data.createMeeting.status).toBe('scheduled');
@@ -203,7 +205,7 @@ describe('Meetings Module (e2e)', () => {
 
     it('should create a recurring daily standup meeting successfully', () => {
       const meetingDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // Tomorrow
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -251,7 +253,7 @@ describe('Meetings Module (e2e)', () => {
 
     it('should create a retrospective meeting successfully', () => {
       const meetingDate = new Date(Date.now() + 48 * 60 * 60 * 1000); // Day after tomorrow
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -288,14 +290,18 @@ describe('Meetings Module (e2e)', () => {
           expect(res.body.data.createMeeting).toBeDefined();
           expect(res.body.data.createMeeting.title).toBe('Sprint Retrospective');
           expect(res.body.data.createMeeting.type).toBe('retrospective');
-          expect(res.body.data.createMeeting.agenda).toBe('What went well? What could be improved? Action items for next sprint');
-          expect(res.body.data.createMeeting.notes).toBe('Prepare feedback and suggestions for improvement');
+          expect(res.body.data.createMeeting.agenda).toBe(
+            'What went well? What could be improved? Action items for next sprint',
+          );
+          expect(res.body.data.createMeeting.notes).toBe(
+            'Prepare feedback and suggestions for improvement',
+          );
         });
     });
 
     it('should fail with non-existent project ID', () => {
       const meetingDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -328,7 +334,7 @@ describe('Meetings Module (e2e)', () => {
 
     it('should fail with invalid duration (negative)', () => {
       const meetingDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -361,7 +367,7 @@ describe('Meetings Module (e2e)', () => {
 
     it('should fail with past meeting date', () => {
       const pastDate = new Date(Date.now() - 24 * 60 * 60 * 1000); // Yesterday
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -394,7 +400,7 @@ describe('Meetings Module (e2e)', () => {
 
     it('should fail without authentication token', () => {
       const meetingDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .send({
@@ -454,7 +460,7 @@ describe('Meetings Module (e2e)', () => {
           expect(res.body.data.getSprintMeetings).toBeDefined();
           expect(Array.isArray(res.body.data.getSprintMeetings)).toBe(true);
           expect(res.body.data.getSprintMeetings.length).toBeGreaterThan(0);
-          
+
           // Verify meeting structure
           res.body.data.getSprintMeetings.forEach((meeting: any) => {
             expect(meeting.id).toBeDefined();

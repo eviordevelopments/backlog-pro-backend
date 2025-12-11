@@ -20,7 +20,7 @@ describe('Metrics Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -106,7 +106,7 @@ describe('Metrics Module (e2e)', () => {
 
     const startDate = new Date();
     const endDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
-    
+
     const sprintRes = await request(app.getHttpServer())
       .post('/graphql')
       .set('Authorization', `Bearer ${authToken}`)
@@ -449,14 +449,14 @@ describe('Metrics Module (e2e)', () => {
             expect(res.body.errors).toBeDefined();
           } else {
             const metrics = res.body.data.getSprintMetrics;
-            
+
             // Verify completion rate is between 0 and 100
             expect(metrics.completionRate).toBeGreaterThanOrEqual(0);
             expect(metrics.completionRate).toBeLessThanOrEqual(100);
-            
+
             // Verify story points consistency
             expect(metrics.storyPointsCompleted).toBeLessThanOrEqual(metrics.storyPointsCommitted);
-            
+
             // Verify completed tasks don't exceed total tasks
             expect(metrics.completedTasks).toBeLessThanOrEqual(metrics.totalTasks);
           }
@@ -490,15 +490,15 @@ describe('Metrics Module (e2e)', () => {
             expect(res.body.errors).toBeDefined();
           } else {
             const metrics = res.body.data.getProjectMetrics;
-            
+
             // Verify sprint count consistency
             expect(metrics.completedSprints).toBeLessThanOrEqual(metrics.totalSprints);
-            
+
             // Verify percentages are in valid range
             expect(metrics.progress).toBeGreaterThanOrEqual(0);
             expect(metrics.progress).toBeLessThanOrEqual(100);
             expect(metrics.budgetUtilization).toBeGreaterThanOrEqual(0);
-            
+
             // Verify task consistency
             expect(metrics.completedTasks).toBeLessThanOrEqual(metrics.totalTasks);
           }
@@ -526,15 +526,15 @@ describe('Metrics Module (e2e)', () => {
         .expect((res) => {
           expect(res.body.data.getDashboardMetrics).toBeDefined();
           const metrics = res.body.data.getDashboardMetrics;
-          
+
           // Verify task count consistency
           expect(metrics.completedTasks).toBeLessThanOrEqual(metrics.totalTasks);
-          
+
           // Verify percentages are in valid range
           expect(metrics.overallProgress).toBeGreaterThanOrEqual(0);
           expect(metrics.overallProgress).toBeLessThanOrEqual(100);
           expect(metrics.budgetUtilization).toBeGreaterThanOrEqual(0);
-          
+
           // Verify basic counts are non-negative
           expect(metrics.totalProjects).toBeGreaterThanOrEqual(0);
           expect(metrics.totalTasks).toBeGreaterThanOrEqual(0);

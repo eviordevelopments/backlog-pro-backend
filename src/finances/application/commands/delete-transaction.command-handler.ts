@@ -9,13 +9,12 @@ export class DeleteTransactionCommandHandler {
 
   async handle(command: DeleteTransactionCommand): Promise<void> {
     const transaction = await this.transactionRepository.getById(command.id);
-    
+
     if (!transaction) {
       throw new Error(`Transaction with id ${command.id} not found`);
     }
 
     // Soft delete
-    transaction.setDeletedAt(new Date());
-    await this.transactionRepository.save(transaction);
+    await this.transactionRepository.delete(command.id);
   }
 }

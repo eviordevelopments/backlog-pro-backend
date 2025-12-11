@@ -18,7 +18,7 @@ describe('Clients & Projects Modules (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -318,7 +318,9 @@ describe('Clients & Projects Modules (e2e)', () => {
           .expect(200)
           .expect((res) => {
             expect(res.body.data.listProjects).toBeDefined();
-            expect(res.body.data.listProjects.every((p: any) => p.clientId === clientId)).toBe(true);
+            expect(res.body.data.listProjects.every((p: any) => p.clientId === clientId)).toBe(
+              true,
+            );
           });
       });
     });

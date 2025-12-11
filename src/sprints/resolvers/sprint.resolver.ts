@@ -3,12 +3,12 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import {
-    CompleteSprintCommand,
-    CreateSprintCommand,
-    DeleteSprintCommand,
-    ExtendSprintCommand,
-    RegisterRetrospectiveCommand,
-    UpdateSprintCommand,
+  CompleteSprintCommand,
+  CreateSprintCommand,
+  DeleteSprintCommand,
+  ExtendSprintCommand,
+  RegisterRetrospectiveCommand,
+  UpdateSprintCommand,
 } from '../application/commands/index';
 import { GetSprintQuery, ListSprintsProjectQuery } from '../application/queries/index';
 import { SprintService } from '../application/services/sprint.service';

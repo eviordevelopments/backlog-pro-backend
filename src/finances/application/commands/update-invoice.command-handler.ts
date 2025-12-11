@@ -12,7 +12,7 @@ export class UpdateInvoiceCommandHandler {
 
   async handle(command: UpdateInvoiceCommand): Promise<Invoice> {
     const invoice = await this.invoiceRepository.getById(command.id);
-    
+
     if (!invoice) {
       throw new Error(`Invoice with id ${command.id} not found`);
     }
@@ -33,9 +33,9 @@ export class UpdateInvoiceCommandHandler {
       invoice.getId(),
       invoice.getCreatedAt(),
       new Date(), // updatedAt
-      invoice.getDeletedAt()
+      invoice.getDeletedAt(),
     );
 
-    return this.invoiceRepository.save(updatedInvoice);
+    return this.invoiceRepository.update(command.id, updatedInvoice);
   }
 }
