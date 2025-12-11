@@ -1,9 +1,9 @@
 import {
-    CanActivate,
-    ExecutionContext,
-    Injectable,
-    Logger,
-    UnauthorizedException,
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Logger,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';

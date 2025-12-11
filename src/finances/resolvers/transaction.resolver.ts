@@ -4,17 +4,24 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import { CreateTransactionCommand } from '../application/commands/create-transaction.command';
 import { CreateTransactionCommandHandler } from '../application/commands/create-transaction.command-handler';
+import { DeleteTransactionCommand } from '../application/commands/delete-transaction.command';
+import { DeleteTransactionCommandHandler } from '../application/commands/delete-transaction.command-handler';
+import { UpdateTransactionCommand } from '../application/commands/update-transaction.command';
+import { UpdateTransactionCommandHandler } from '../application/commands/update-transaction.command-handler';
 import { GetProjectExpensesQuery } from '../application/queries/get-project-expenses.query';
 import { GetProjectExpensesQueryHandler } from '../application/queries/get-project-expenses.query-handler';
 import { ListTransactionsQuery } from '../application/queries/list-transactions.query';
 import { ListTransactionsQueryHandler } from '../application/queries/list-transactions.query-handler';
 import { CreateTransactionDto } from '../dto/request/create-transaction.dto';
+import { UpdateTransactionDto } from '../dto/request/update-transaction.dto';
 import { TransactionResponseDto } from '../dto/response/transaction.response.dto';
 
 @Resolver('Transaction')
 export class TransactionResolver {
   constructor(
     private readonly createTransactionHandler: CreateTransactionCommandHandler,
+    private readonly updateTransactionHandler: UpdateTransactionCommandHandler,
+    private readonly deleteTransactionHandler: DeleteTransactionCommandHandler,
     private readonly getProjectExpensesHandler: GetProjectExpensesQueryHandler,
     private readonly listTransactionsHandler: ListTransactionsQueryHandler,
   ) {}
@@ -74,5 +81,49 @@ export class TransactionResolver {
   ): Promise<TransactionResponseDto[]> {
     const query = new ListTransactionsQuery({ clientId, projectId });
     return this.listTransactionsHandler.handle(query);
+  }
+
+  @Mutation(() => TransactionResponseDto)
+  @UseGuards(JwtAuthGuard)
+  async updateTransaction(
+    @Args('id') id: string,
+    @Args('input') input: UpdateTransactionDto,
+  ): Promise<TransactionResponseDto> {
+    const command = new UpdateTransactionCommand(
+      id,
+      input.category,
+      input.amount,
+      input.currency,
+      input.date ? new Date(input.date) : undefined,
+      input.description,
+      input.isRecurring,
+      input.recurringFrequency,
+    );
+
+    const transaction = await this.updateTransactionHandler.handle(command);
+
+    return {
+      id: transaction.getId(),
+      type: transaction.getType().getValue(),
+      category: transaction.getCategory(),
+      amount: transaction.getAmount().getValue(),
+      currency: transaction.getCurrency().getValue(),
+      date: transaction.getDate(),
+      description: transaction.getDescription(),
+      clientId: transaction.getClientId() ?? undefined,
+      projectId: transaction.getProjectId() ?? undefined,
+      isRecurring: transaction.isRecurringTransaction(),
+      recurringFrequency: transaction.getRecurringFrequency() ?? undefined,
+      createdAt: transaction.getCreatedAt(),
+      updatedAt: transaction.getUpdatedAt(),
+    };
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(JwtAuthGuard)
+  async deleteTransaction(@Args('id') id: string): Promise<boolean> {
+    const command = new DeleteTransactionCommand(id);
+    await this.deleteTransactionHandler.handle(command);
+    return true;
   }
 }

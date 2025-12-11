@@ -17,10 +17,10 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { ProjectsModule } from './projects/projects.module';
 import { RisksModule } from './risks/risks.module';
 import {
-    databaseConfig,
-    envsConfig,
-    graphqlConfig,
-    validationSchemaConfig,
+  databaseConfig,
+  envsConfig,
+  graphqlConfig,
+  validationSchemaConfig,
 } from './shared/config/index';
 import { SharedModule } from './shared/shared.module';
 import { SprintsModule } from './sprints/sprints.module';

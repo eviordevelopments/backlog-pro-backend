@@ -3,11 +3,12 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import {
-    CompleteSprintCommand,
-    CreateSprintCommand,
-    ExtendSprintCommand,
-    RegisterRetrospectiveCommand,
-    UpdateSprintCommand,
+  CompleteSprintCommand,
+  CreateSprintCommand,
+  DeleteSprintCommand,
+  ExtendSprintCommand,
+  RegisterRetrospectiveCommand,
+  UpdateSprintCommand,
 } from '../application/commands/index';
 import { GetSprintQuery, ListSprintsProjectQuery } from '../application/queries/index';
 import { SprintService } from '../application/services/sprint.service';
@@ -97,6 +98,13 @@ export class SprintResolver {
     const query = new ListSprintsProjectQuery(projectId);
     const sprints = await this.sprintService.listSprintsByProject(query);
     return sprints.map((sprint) => this.mapToResponse(sprint));
+  }
+
+  @Mutation(() => Boolean)
+  async deleteSprint(@Args('id') id: string): Promise<boolean> {
+    const command = new DeleteSprintCommand(id);
+    await this.sprintService.deleteSprint(command);
+    return true;
   }
 
   private mapToResponse(sprint: {

@@ -13,7 +13,7 @@ async function bootstrap() {
   // Enable CORS
   const corsOrigins =
     envs.server.environment === 'production'
-      ? ['backlog-pro-frontend.vercel.app']
+      ? ['https://backlog-pro-frontend.vercel.app']
       : [
           'https://studio.apollographql.com', // Apollo Server
           'http://localhost:3000', // Frontend local

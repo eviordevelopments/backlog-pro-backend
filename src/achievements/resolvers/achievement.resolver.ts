@@ -6,8 +6,8 @@ import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import { GetUserAchievementsQuery } from '../application/queries/get-user-achievements.query';
 import { GetUserAchievementsQueryHandler } from '../application/queries/get-user-achievements.query-handler';
 import {
-    AchievementResponseDto,
-    UserAchievementResponseDto,
+  AchievementResponseDto,
+  UserAchievementResponseDto,
 } from '../dto/response/achievement.response.dto';
 import { AchievementRepository } from '../repository/achievement.repository';
 

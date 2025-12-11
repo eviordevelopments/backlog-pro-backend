@@ -5,15 +5,22 @@ import { CurrentUser } from '../../shared/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import { CreateFeedbackCommand } from '../application/commands/create-feedback.command';
 import { CreateFeedbackCommandHandler } from '../application/commands/create-feedback.command-handler';
+import { DeleteFeedbackCommand } from '../application/commands/delete-feedback.command';
+import { DeleteFeedbackCommandHandler } from '../application/commands/delete-feedback.command-handler';
+import { UpdateFeedbackCommand } from '../application/commands/update-feedback.command';
+import { UpdateFeedbackCommandHandler } from '../application/commands/update-feedback.command-handler';
 import { GetUserFeedbackQuery } from '../application/queries/get-user-feedback.query';
 import { GetUserFeedbackQueryHandler } from '../application/queries/get-user-feedback.query-handler';
 import { CreateFeedbackDto } from '../dto/request/create-feedback.dto';
+import { UpdateFeedbackDto } from '../dto/request/update-feedback.dto';
 import { FeedbackResponseDto } from '../dto/response/feedback.response.dto';
 
 @Resolver('Feedback')
 export class FeedbackResolver {
   constructor(
     private readonly createFeedbackHandler: CreateFeedbackCommandHandler,
+    private readonly updateFeedbackHandler: UpdateFeedbackCommandHandler,
+    private readonly deleteFeedbackHandler: DeleteFeedbackCommandHandler,
     private readonly getUserFeedbackHandler: GetUserFeedbackQueryHandler,
   ) {}
 
@@ -58,5 +65,44 @@ export class FeedbackResolver {
   ): Promise<FeedbackResponseDto[]> {
     const query = new GetUserFeedbackQuery(currentUser.sub);
     return this.getUserFeedbackHandler.handle(query);
+  }
+
+  @Mutation(() => FeedbackResponseDto)
+  @UseGuards(JwtAuthGuard)
+  async updateFeedback(
+    @Args('id') id: string,
+    @Args('input') input: UpdateFeedbackDto,
+  ): Promise<FeedbackResponseDto> {
+    const command = new UpdateFeedbackCommand(
+      id,
+      input.type,
+      input.category,
+      input.rating,
+      input.comment,
+    );
+
+    const feedback = await this.updateFeedbackHandler.handle(command);
+
+    return {
+      id: feedback.getId(),
+      fromUserId: feedback.isAnon() ? undefined : feedback.getFromUserId(),
+      toUserId: feedback.getToUserId(),
+      type: feedback.getType(),
+      category: feedback.getCategory(),
+      rating: feedback.getRating(),
+      comment: feedback.getComment(),
+      sprintId: feedback.getSprintId(),
+      isAnonymous: feedback.isAnon(),
+      createdAt: feedback.getCreatedAt(),
+      updatedAt: feedback.getUpdatedAt(),
+    };
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(JwtAuthGuard)
+  async deleteFeedback(@Args('id') id: string): Promise<boolean> {
+    const command = new DeleteFeedbackCommand(id);
+    await this.deleteFeedbackHandler.handle(command);
+    return true;
   }
 }

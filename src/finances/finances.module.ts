@@ -8,6 +8,10 @@ import { UsersModule } from '../users/users.module';
 
 import { CreateInvoiceCommandHandler } from './application/commands/create-invoice.command-handler';
 import { CreateTransactionCommandHandler } from './application/commands/create-transaction.command-handler';
+import { DeleteInvoiceCommandHandler } from './application/commands/delete-invoice.command-handler';
+import { DeleteTransactionCommandHandler } from './application/commands/delete-transaction.command-handler';
+import { UpdateInvoiceCommandHandler } from './application/commands/update-invoice.command-handler';
+import { UpdateTransactionCommandHandler } from './application/commands/update-transaction.command-handler';
 import { CalculateIdealHourlyRateQueryHandler } from './application/queries/calculate-ideal-hourly-rate.query-handler';
 import { CalculateSalariesQueryHandler } from './application/queries/calculate-salaries.query-handler';
 import { GenerateFinancialReportQueryHandler } from './application/queries/generate-financial-report.query-handler';
@@ -37,7 +41,11 @@ import { TransactionResolver } from './resolvers/transaction.resolver';
     TransactionMapper,
     InvoiceMapper,
     CreateTransactionCommandHandler,
+    UpdateTransactionCommandHandler,
+    DeleteTransactionCommandHandler,
     CreateInvoiceCommandHandler,
+    UpdateInvoiceCommandHandler,
+    DeleteInvoiceCommandHandler,
     GetProjectExpensesQueryHandler,
     ListTransactionsQueryHandler,
     CalculateIdealHourlyRateQueryHandler,

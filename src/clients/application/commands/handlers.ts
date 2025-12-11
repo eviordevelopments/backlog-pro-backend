@@ -3,8 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Client } from '../../domain/entities/client.entity';
 import {
-    ClientNotFoundException,
-    InvalidClientMetricsException,
+  ClientNotFoundException,
+  InvalidClientMetricsException,
 } from '../../domain/exceptions/index';
 import { ClientRepository } from '../../repository/client.repository';
 

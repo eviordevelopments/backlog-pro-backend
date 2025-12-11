@@ -4,13 +4,13 @@ import { Repository } from 'typeorm';
 
 import { Achievement, UserAchievement } from '../domain/entities/achievement.entity';
 import {
-    IAchievementRepository,
-    IUserAchievementRepository,
+  IAchievementRepository,
+  IUserAchievementRepository,
 } from '../domain/interfaces/achievement.repository.interface';
 
 import {
-    AchievementTypeOrmEntity,
-    UserAchievementTypeOrmEntity,
+  AchievementTypeOrmEntity,
+  UserAchievementTypeOrmEntity,
 } from './entities/achievement.typeorm-entity';
 import { AchievementMapper, UserAchievementMapper } from './mappers/achievement.mapper';
 

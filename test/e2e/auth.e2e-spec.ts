@@ -17,7 +17,7 @@ describe('Auth Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     // Apply same pipes as main.ts
     app.useGlobalPipes(
       new ValidationPipe({
@@ -37,7 +37,7 @@ describe('Auth Module (e2e)', () => {
   describe('signup', () => {
     it('should create a new user successfully', () => {
       const email = `test-${Date.now()}@example.com`;
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .send({
@@ -66,7 +66,7 @@ describe('Auth Module (e2e)', () => {
           expect(res.body.data.signup.userId).toBeDefined();
           expect(res.body.data.signup.email).toBe(email);
           expect(res.body.data.signup.name).toBe('Test User');
-          
+
           // Save for later tests
           authToken = res.body.data.signup.token;
           userId = res.body.data.signup.userId;

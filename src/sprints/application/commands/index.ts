@@ -2,6 +2,8 @@ export * from './complete-sprint.command';
 export * from './complete-sprint.command-handler';
 export * from './create-sprint.command';
 export * from './create-sprint.command-handler';
+export * from './delete-sprint.command';
+export * from './delete-sprint.command-handler';
 export * from './extend-sprint.command';
 export * from './extend-sprint.command-handler';
 export * from './register-retrospective.command';

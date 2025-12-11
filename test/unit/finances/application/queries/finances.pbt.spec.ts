@@ -6,7 +6,6 @@ import { Currency } from 'src/finances/domain/value-objects/currency.vo';
 import { TransactionType } from 'src/finances/domain/value-objects/transaction-type.vo';
 import { Project } from 'src/projects/domain/entities/project.entity';
 
-
 /**
  * Property-Based Tests for Finances Module
  * Feature: backlog-pro-development

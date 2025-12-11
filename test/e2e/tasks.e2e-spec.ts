@@ -22,7 +22,7 @@ describe('Tasks Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -110,7 +110,7 @@ describe('Tasks Module (e2e)', () => {
     // Create a test sprint
     const startDate = new Date();
     const endDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
-    
+
     const sprintRes = await request(app.getHttpServer())
       .post('/graphql')
       .set('Authorization', `Bearer ${authToken}`)
@@ -199,7 +199,9 @@ describe('Tasks Module (e2e)', () => {
         .expect((res) => {
           expect(res.body.data.createTask).toBeDefined();
           expect(res.body.data.createTask.title).toBe('Implement user login');
-          expect(res.body.data.createTask.description).toBe('Create login functionality with JWT authentication');
+          expect(res.body.data.createTask.description).toBe(
+            'Create login functionality with JWT authentication',
+          );
           expect(res.body.data.createTask.projectId).toBe(projectId);
           expect(res.body.data.createTask.sprintId).toBe(sprintId);
           expect(res.body.data.createTask.status).toBe('todo');
@@ -391,7 +393,8 @@ describe('Tasks Module (e2e)', () => {
             taskId: taskId,
             input: {
               title: 'Updated: Implement user login',
-              description: 'Updated: Create login functionality with JWT authentication and validation',
+              description:
+                'Updated: Create login functionality with JWT authentication and validation',
               status: 'in_progress',
               priority: 'critical',
               estimatedHours: 10,
@@ -529,10 +532,7 @@ describe('Tasks Module (e2e)', () => {
           `,
           variables: {
             taskId,
-            subtasks: [
-              'Create login form',
-              'Implement JWT validation',
-            ],
+            subtasks: ['Create login form', 'Implement JWT validation'],
           },
         })
         .expect(200)

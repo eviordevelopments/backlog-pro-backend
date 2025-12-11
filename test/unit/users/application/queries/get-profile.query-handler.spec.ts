@@ -6,8 +6,6 @@ import { UserProfile } from 'src/users/domain/entities/user-profile.entity';
 import { UserProfileNotFoundException } from 'src/users/domain/exceptions';
 import { UserProfileRepository } from 'src/users/repository/user-profile.repository';
 
-
-
 describe('GetProfileQueryHandler', () => {
   let handler: GetProfileQueryHandler;
   let repository: UserProfileRepository;

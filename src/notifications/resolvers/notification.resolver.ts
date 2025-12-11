@@ -7,12 +7,12 @@ import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import { MarkNotificationAsReadCommand } from '../application/commands/mark-notification-as-read.command';
 import { MarkNotificationAsReadCommandHandler } from '../application/commands/mark-notification-as-read.command-handler';
 import {
-    GetUnreadNotificationsQuery,
-    GetUserNotificationsQuery,
+  GetUnreadNotificationsQuery,
+  GetUserNotificationsQuery,
 } from '../application/queries/get-user-notifications.query';
 import {
-    GetUnreadNotificationsQueryHandler,
-    GetUserNotificationsQueryHandler,
+  GetUnreadNotificationsQueryHandler,
+  GetUserNotificationsQueryHandler,
 } from '../application/queries/get-user-notifications.query-handler';
 import { NotificationResponseDto } from '../dto/response/notification.response.dto';
 

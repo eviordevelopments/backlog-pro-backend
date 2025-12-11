@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CompleteSprintCommandHandler } from './application/commands/complete-sprint.command-handler';
 import { CreateSprintCommandHandler } from './application/commands/create-sprint.command-handler';
+import { DeleteSprintCommandHandler } from './application/commands/delete-sprint.command-handler';
 import { ExtendSprintCommandHandler } from './application/commands/extend-sprint.command-handler';
 import { RegisterRetrospectiveCommandHandler } from './application/commands/register-retrospective.command-handler';
 import { UpdateSprintCommandHandler } from './application/commands/update-sprint.command-handler';
@@ -23,6 +24,7 @@ import { SprintResolver } from './resolvers/sprint.resolver';
     UpdateSprintCommandHandler,
     ExtendSprintCommandHandler,
     CompleteSprintCommandHandler,
+    DeleteSprintCommandHandler,
     RegisterRetrospectiveCommandHandler,
     GetSprintQueryHandler,
     ListSprintsProjectQueryHandler,

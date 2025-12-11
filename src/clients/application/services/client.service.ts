@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
 import {
-    CreateClientCommandHandler,
-    DeleteClientCommandHandler,
-    UpdateClientCommandHandler,
+  CreateClientCommandHandler,
+  DeleteClientCommandHandler,
+  UpdateClientCommandHandler,
 } from '../commands/handlers';
 import { CreateClientCommand, DeleteClientCommand, UpdateClientCommand } from '../commands/index';
 import { GetClientQueryHandler, ListClientsQueryHandler } from '../queries/handlers';

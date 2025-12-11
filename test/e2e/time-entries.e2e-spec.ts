@@ -22,7 +22,7 @@ describe('Time Entries Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -110,7 +110,7 @@ describe('Time Entries Module (e2e)', () => {
     // Create a test sprint
     const startDate = new Date();
     const endDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
-    
+
     const sprintRes = await request(app.getHttpServer())
       .post('/graphql')
       .set('Authorization', `Bearer ${authToken}`)
@@ -207,7 +207,7 @@ describe('Time Entries Module (e2e)', () => {
   describe('registerTime', () => {
     it('should register time entry successfully', () => {
       const workDate = new Date();
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -240,7 +240,9 @@ describe('Time Entries Module (e2e)', () => {
           expect(res.body.data.registerTime.taskId).toBe(taskId);
           expect(res.body.data.registerTime.userId).toBe(userId);
           expect(res.body.data.registerTime.hours).toBe(4.5);
-          expect(res.body.data.registerTime.description).toBe('Worked on implementing authentication logic');
+          expect(res.body.data.registerTime.description).toBe(
+            'Worked on implementing authentication logic',
+          );
           expect(res.body.data.registerTime.date).toBeDefined();
           timeEntryId = res.body.data.registerTime.id;
         });
@@ -248,7 +250,7 @@ describe('Time Entries Module (e2e)', () => {
 
     it('should fail with non-existent task ID', () => {
       const workDate = new Date();
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -278,7 +280,7 @@ describe('Time Entries Module (e2e)', () => {
 
     it('should fail with invalid hours (negative)', () => {
       const workDate = new Date();
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -308,7 +310,7 @@ describe('Time Entries Module (e2e)', () => {
 
     it('should fail with invalid hours (too many)', () => {
       const workDate = new Date();
-      
+
       return request(app.getHttpServer())
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
@@ -497,7 +499,9 @@ describe('Time Entries Module (e2e)', () => {
           expect(res.body.data.modifyTime).toBeDefined();
           expect(res.body.data.modifyTime.id).toBe(timeEntryId);
           expect(res.body.data.modifyTime.hours).toBe(6);
-          expect(res.body.data.modifyTime.description).toBe('Updated: Worked on implementing authentication logic and added tests');
+          expect(res.body.data.modifyTime.description).toBe(
+            'Updated: Worked on implementing authentication logic and added tests',
+          );
         });
     });
 

@@ -3,12 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { GetUserAchievementsQueryHandler } from './application/queries/get-user-achievements.query-handler';
 import {
-    AchievementRepository,
-    UserAchievementRepository,
+  AchievementRepository,
+  UserAchievementRepository,
 } from './repository/achievement.repository';
 import {
-    AchievementTypeOrmEntity,
-    UserAchievementTypeOrmEntity,
+  AchievementTypeOrmEntity,
+  UserAchievementTypeOrmEntity,
 } from './repository/entities/achievement.typeorm-entity';
 import { AchievementMapper, UserAchievementMapper } from './repository/mappers/achievement.mapper';
 import { AchievementResolver } from './resolvers/achievement.resolver';

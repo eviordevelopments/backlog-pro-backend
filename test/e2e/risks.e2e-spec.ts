@@ -20,7 +20,7 @@ describe('Risks Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -140,12 +140,14 @@ describe('Risks Module (e2e)', () => {
             input: {
               projectId,
               title: 'Database Performance Bottleneck',
-              description: 'The current database architecture may not handle the expected user load, potentially causing performance issues and system downtime.',
+              description:
+                'The current database architecture may not handle the expected user load, potentially causing performance issues and system downtime.',
               category: 'technical',
               probability: 'high',
               impact: 'high',
               responsibleId: userId,
-              mitigationStrategy: 'Implement database optimization, add caching layer, consider database scaling solutions, and conduct load testing.',
+              mitigationStrategy:
+                'Implement database optimization, add caching layer, consider database scaling solutions, and conduct load testing.',
               isCore: true,
             },
           },
@@ -155,14 +157,18 @@ describe('Risks Module (e2e)', () => {
           expect(res.body.data.createRisk).toBeDefined();
           expect(res.body.data.createRisk.projectId).toBe(projectId);
           expect(res.body.data.createRisk.title).toBe('Database Performance Bottleneck');
-          expect(res.body.data.createRisk.description).toBe('The current database architecture may not handle the expected user load, potentially causing performance issues and system downtime.');
+          expect(res.body.data.createRisk.description).toBe(
+            'The current database architecture may not handle the expected user load, potentially causing performance issues and system downtime.',
+          );
           expect(res.body.data.createRisk.category).toBe('technical');
           expect(res.body.data.createRisk.probability).toBe('high');
           expect(res.body.data.createRisk.impact).toBe('high');
           expect(typeof res.body.data.createRisk.severity).toBe('number');
           expect(res.body.data.createRisk.severity).toBeGreaterThan(5); // high + high = high severity number
           expect(res.body.data.createRisk.responsibleId).toBe(userId);
-          expect(res.body.data.createRisk.mitigationStrategy).toBe('Implement database optimization, add caching layer, consider database scaling solutions, and conduct load testing.');
+          expect(res.body.data.createRisk.mitigationStrategy).toBe(
+            'Implement database optimization, add caching layer, consider database scaling solutions, and conduct load testing.',
+          );
           expect(res.body.data.createRisk.status).toBe('identified');
           expect(res.body.data.createRisk.isCore).toBe(true);
           expect(Array.isArray(res.body.data.createRisk.comments)).toBe(true);
@@ -193,12 +199,14 @@ describe('Risks Module (e2e)', () => {
             input: {
               projectId,
               title: 'Market Competition Risk',
-              description: 'New competitors entering the market could affect user adoption and revenue projections.',
+              description:
+                'New competitors entering the market could affect user adoption and revenue projections.',
               category: 'business',
               probability: 'medium',
               impact: 'medium',
               responsibleId: userId,
-              mitigationStrategy: 'Monitor competitor activities, enhance unique value proposition, accelerate feature development.',
+              mitigationStrategy:
+                'Monitor competitor activities, enhance unique value proposition, accelerate feature development.',
               isCore: false,
             },
           },
@@ -239,12 +247,14 @@ describe('Risks Module (e2e)', () => {
             input: {
               projectId,
               title: 'Team Member Vacation Overlap',
-              description: 'Multiple team members taking vacation during the same period could slow development.',
+              description:
+                'Multiple team members taking vacation during the same period could slow development.',
               category: 'operational',
               probability: 'low',
               impact: 'low',
               responsibleId: userId,
-              mitigationStrategy: 'Coordinate vacation schedules, cross-train team members, maintain documentation.',
+              mitigationStrategy:
+                'Coordinate vacation schedules, cross-train team members, maintain documentation.',
               isCore: false,
             },
           },
@@ -328,7 +338,9 @@ describe('Risks Module (e2e)', () => {
         .expect(200)
         .expect((res) => {
           expect(res.body.data.createRisk).toBeDefined();
-          expect(res.body.data.createRisk.responsibleId).toBe('00000000-0000-0000-0000-000000000000');
+          expect(res.body.data.createRisk.responsibleId).toBe(
+            '00000000-0000-0000-0000-000000000000',
+          );
           expect(res.body.data.createRisk.title).toBe('Risk with Non-existent User');
         });
     });
@@ -462,7 +474,7 @@ describe('Risks Module (e2e)', () => {
           expect(res.body.data.getProjectRisks).toBeDefined();
           expect(Array.isArray(res.body.data.getProjectRisks)).toBe(true);
           expect(res.body.data.getProjectRisks.length).toBeGreaterThan(0);
-          
+
           // Verify all risks belong to the project
           res.body.data.getProjectRisks.forEach((risk: any) => {
             expect(risk.projectId).toBe(projectId);
@@ -597,25 +609,25 @@ describe('Risks Module (e2e)', () => {
         .expect(200)
         .expect((res) => {
           expect(res.body.data.getProjectRisks).toBeDefined();
-          
+
           // Find risks with different severity levels
           const risks = res.body.data.getProjectRisks;
           const highSeverityRisk = risks.find((r: any) => r.severity > 6);
           const mediumSeverityRisk = risks.find((r: any) => r.severity >= 3 && r.severity <= 6);
           const lowSeverityRisk = risks.find((r: any) => r.severity < 3);
-          
+
           if (highSeverityRisk) {
             expect(highSeverityRisk.probability).toBe('high');
             expect(highSeverityRisk.impact).toBe('high');
             expect(typeof highSeverityRisk.severity).toBe('number');
           }
-          
+
           if (mediumSeverityRisk) {
             expect(mediumSeverityRisk.probability).toBe('medium');
             expect(mediumSeverityRisk.impact).toBe('medium');
             expect(typeof mediumSeverityRisk.severity).toBe('number');
           }
-          
+
           if (lowSeverityRisk) {
             expect(lowSeverityRisk.probability).toBe('low');
             expect(lowSeverityRisk.impact).toBe('low');
@@ -645,21 +657,23 @@ describe('Risks Module (e2e)', () => {
         .expect(200)
         .expect((res) => {
           expect(res.body.data.getProjectRisks).toBeDefined();
-          
+
           const risks = res.body.data.getProjectRisks;
           const technicalRisk = risks.find((r: any) => r.category === 'technical');
           const businessRisk = risks.find((r: any) => r.category === 'business');
           const operationalRisk = risks.find((r: any) => r.category === 'operational');
-          
+
           if (technicalRisk) {
-            expect(['technical', 'business', 'operational', 'financial', 'legal']).toContain(technicalRisk.category);
+            expect(['technical', 'business', 'operational', 'financial', 'legal']).toContain(
+              technicalRisk.category,
+            );
             expect(typeof technicalRisk.isCore).toBe('boolean');
           }
-          
+
           if (businessRisk) {
             expect(businessRisk.category).toBe('business');
           }
-          
+
           if (operationalRisk) {
             expect(operationalRisk.category).toBe('operational');
           }

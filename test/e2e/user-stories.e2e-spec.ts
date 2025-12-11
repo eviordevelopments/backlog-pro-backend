@@ -21,7 +21,7 @@ describe('User Stories Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -107,7 +107,7 @@ describe('User Stories Module (e2e)', () => {
 
     const startDate = new Date();
     const endDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
-    
+
     const sprintRes = await request(app.getHttpServer())
       .post('/graphql')
       .set('Authorization', `Bearer ${authToken}`)
@@ -182,11 +182,13 @@ describe('User Stories Module (e2e)', () => {
                 'User can enter email and password',
                 'System validates credentials',
                 'User is redirected to dashboard on success',
-                'Error message shown for invalid credentials'
+                'Error message shown for invalid credentials',
               ],
               storyPoints: 8,
-              definitionOfDone: 'Code is reviewed and approved, Unit tests are written and passing, Integration tests are passing, Documentation is updated',
-              impactMetrics: 'User login success rate > 95%, Login time < 2 seconds, User satisfaction score > 4.5/5',
+              definitionOfDone:
+                'Code is reviewed and approved, Unit tests are written and passing, Integration tests are passing, Documentation is updated',
+              impactMetrics:
+                'User login success rate > 95%, Login time < 2 seconds, User satisfaction score > 4.5/5',
             },
           },
         })
@@ -198,14 +200,20 @@ describe('User Stories Module (e2e)', () => {
           expect(res.body.data.createUserStory.title).toBe('User Authentication');
           expect(res.body.data.createUserStory.userType).toBe('registered user');
           expect(res.body.data.createUserStory.action).toBe('log into the system');
-          expect(res.body.data.createUserStory.benefit).toBe('I can access my personal dashboard and data');
+          expect(res.body.data.createUserStory.benefit).toBe(
+            'I can access my personal dashboard and data',
+          );
           expect(res.body.data.createUserStory.priority).toBe('high');
           expect(res.body.data.createUserStory.storyPoints).toBe(8);
           expect(res.body.data.createUserStory.status).toBe('backlog');
           expect(Array.isArray(res.body.data.createUserStory.acceptanceCriteria)).toBe(true);
           expect(res.body.data.createUserStory.acceptanceCriteria).toHaveLength(4);
-          expect(res.body.data.createUserStory.definitionOfDone).toBe('Code is reviewed and approved, Unit tests are written and passing, Integration tests are passing, Documentation is updated');
-          expect(res.body.data.createUserStory.impactMetrics).toBe('User login success rate > 95%, Login time < 2 seconds, User satisfaction score > 4.5/5');
+          expect(res.body.data.createUserStory.definitionOfDone).toBe(
+            'Code is reviewed and approved, Unit tests are written and passing, Integration tests are passing, Documentation is updated',
+          );
+          expect(res.body.data.createUserStory.impactMetrics).toBe(
+            'User login success rate > 95%, Login time < 2 seconds, User satisfaction score > 4.5/5',
+          );
           userStoryId = res.body.data.createUserStory.id;
         });
     });
@@ -242,7 +250,7 @@ describe('User Stories Module (e2e)', () => {
               acceptanceCriteria: [
                 'Export button is visible on data page',
                 'CSV file is generated with all user data',
-                'Download starts automatically'
+                'Download starts automatically',
               ],
               storyPoints: 5,
             },
@@ -289,7 +297,7 @@ describe('User Stories Module (e2e)', () => {
               acceptanceCriteria: [
                 'Toggle switch in settings',
                 'All pages support dark theme',
-                'User preference is saved'
+                'User preference is saved',
               ],
               storyPoints: 3,
             },
@@ -334,7 +342,9 @@ describe('User Stories Module (e2e)', () => {
         .expect(200)
         .expect((res) => {
           expect(res.body.data.createUserStory).toBeDefined();
-          expect(res.body.data.createUserStory.projectId).toBe('00000000-0000-0000-0000-000000000000');
+          expect(res.body.data.createUserStory.projectId).toBe(
+            '00000000-0000-0000-0000-000000000000',
+          );
           expect(res.body.data.createUserStory.title).toBe('Story with Non-existent Project');
         });
     });
@@ -470,7 +480,7 @@ describe('User Stories Module (e2e)', () => {
           expect(res.body.data.getProjectBacklog).toBeDefined();
           expect(Array.isArray(res.body.data.getProjectBacklog)).toBe(true);
           expect(res.body.data.getProjectBacklog.length).toBeGreaterThan(0);
-          
+
           // Verify all user stories belong to the project
           res.body.data.getProjectBacklog.forEach((story: any) => {
             expect(story.projectId).toBe(projectId);

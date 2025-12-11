@@ -22,7 +22,7 @@ describe('Feedback Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -133,7 +133,7 @@ describe('Feedback Module (e2e)', () => {
 
     const startDate = new Date();
     const endDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
-    
+
     const sprintRes = await request(app.getHttpServer())
       .post('/graphql')
       .set('Authorization', `Bearer ${authToken}`)
@@ -206,7 +206,9 @@ describe('Feedback Module (e2e)', () => {
           expect(res.body.data.sendFeedback.type).toBe('peer');
           expect(res.body.data.sendFeedback.category).toBe('collaboration');
           expect(res.body.data.sendFeedback.rating).toBe(4);
-          expect(res.body.data.sendFeedback.comment).toBe('Great teamwork and communication skills!');
+          expect(res.body.data.sendFeedback.comment).toBe(
+            'Great teamwork and communication skills!',
+          );
           expect(res.body.data.sendFeedback.isAnonymous).toBe(false);
           expect(res.body.data.sendFeedback.sprintId).toBe(sprintId);
         });
@@ -370,7 +372,7 @@ describe('Feedback Module (e2e)', () => {
         .expect((res) => {
           expect(res.body.data.getUserFeedback).toBeDefined();
           expect(Array.isArray(res.body.data.getUserFeedback)).toBe(true);
-          
+
           // Should have received feedback from previous tests
           if (res.body.data.getUserFeedback.length > 0) {
             const feedback = res.body.data.getUserFeedback[0];

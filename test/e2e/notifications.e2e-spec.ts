@@ -20,7 +20,7 @@ describe('Notifications Module (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -112,7 +112,7 @@ describe('Notifications Module (e2e)', () => {
         .expect((res) => {
           expect(res.body.data.getUserNotifications).toBeDefined();
           expect(Array.isArray(res.body.data.getUserNotifications)).toBe(true);
-          
+
           // If there are notifications, verify structure
           if (res.body.data.getUserNotifications.length > 0) {
             const notification = res.body.data.getUserNotifications[0];
@@ -123,7 +123,7 @@ describe('Notifications Module (e2e)', () => {
             expect(notification.message).toBeDefined();
             expect(typeof notification.isRead).toBe('boolean');
             expect(notification.createdAt).toBeDefined();
-            
+
             // Store first notification ID for later tests
             if (!notificationId) {
               notificationId = notification.id;
@@ -175,7 +175,7 @@ describe('Notifications Module (e2e)', () => {
         .expect((res) => {
           expect(res.body.data.getUnreadNotifications).toBeDefined();
           expect(Array.isArray(res.body.data.getUnreadNotifications)).toBe(true);
-          
+
           // If there are unread notifications, verify they are actually unread
           if (res.body.data.getUnreadNotifications.length > 0) {
             res.body.data.getUnreadNotifications.forEach((notification: any) => {
@@ -402,7 +402,7 @@ describe('Notifications Module (e2e)', () => {
         .expect(200)
         .expect((res) => {
           expect(res.body.data.getUserNotifications).toBeDefined();
-          
+
           // If there are notifications, verify they have valid types
           if (res.body.data.getUserNotifications.length > 0) {
             res.body.data.getUserNotifications.forEach((notification: any) => {
@@ -410,7 +410,7 @@ describe('Notifications Module (e2e)', () => {
               expect(typeof notification.type).toBe('string');
               expect(notification.title).toBeDefined();
               expect(notification.message).toBeDefined();
-              
+
               // Metadata can be null or an object
               if (notification.metadata !== null) {
                 expect(typeof notification.metadata).toBe('object');
