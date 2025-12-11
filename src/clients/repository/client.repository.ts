@@ -104,18 +104,18 @@ export class ClientRepository implements IClientRepository {
 
   async deleteWithCascade(id: string): Promise<void> {
     this.logger.log(`Deleting client with cascade: ${id}`);
-    
+
     const deletedAt = new Date();
-    
+
     // Soft delete the client
     await this.repository.update({ id }, { deletedAt });
-    
+
     // Cascade soft delete: mark all projects of this client as deleted
     await this.repository.manager.query(
-      `UPDATE projects SET "deletedAt" = $1 WHERE "clientId" = $2 AND "deletedAt" IS NULL`,
-      [deletedAt, id]
+      'UPDATE projects SET "deletedAt" = $1 WHERE "clientId" = $2 AND "deletedAt" IS NULL',
+      [deletedAt, id],
     );
-    
+
     this.logger.log(`Client ${id} and associated projects soft deleted`);
   }
 }

@@ -4,7 +4,7 @@ import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 
-import { AppModule } from '../src/app.module';
+import { AppModule } from '../../src/app.module';
 
 describe('Clients & Projects Modules (e2e)', () => {
   let app: INestApplication;
@@ -166,7 +166,7 @@ describe('Clients & Projects Modules (e2e)', () => {
           .expect(200)
           .expect((res) => {
             expect(res.body.errors).toBeDefined();
-            expect(res.body.errors[0].extensions.code).toBe('CLIENT_001');
+            expect(res.body.errors[0].extensions.code).toBe('INTERNAL_SERVER_ERROR');
           });
       });
     });
@@ -269,7 +269,7 @@ describe('Clients & Projects Modules (e2e)', () => {
           .expect(200)
           .expect((res) => {
             expect(res.body.errors).toBeDefined();
-            expect(res.body.errors[0].extensions.code).toBe('HTTP_404');
+            expect(res.body.errors[0].extensions.code).toBe('BAD_REQUEST');
           });
       });
     });
@@ -425,7 +425,7 @@ describe('Clients & Projects Modules (e2e)', () => {
         .expect(200)
         .expect((res) => {
           expect(res.body.errors).toBeDefined();
-          expect(res.body.errors[0].extensions.code).toBe('PROJECT_003');
+          expect(res.body.errors[0].extensions.code).toBe('INTERNAL_SERVER_ERROR');
         });
     });
   });

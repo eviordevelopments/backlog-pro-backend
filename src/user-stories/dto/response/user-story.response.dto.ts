@@ -7,6 +7,18 @@ export interface AcceptanceCriteriaResponse {
 }
 
 @ObjectType()
+export class AcceptanceCriteriaResponseDto {
+  @Field()
+  id!: string;
+
+  @Field()
+  description!: string;
+
+  @Field()
+  completed!: boolean;
+}
+
+@ObjectType()
 export class UserStoryResponseDto {
   @Field()
   id!: string;
@@ -29,7 +41,7 @@ export class UserStoryResponseDto {
   @Field()
   benefit!: string;
 
-  @Field(() => [String], { nullable: true })
+  @Field(() => [AcceptanceCriteriaResponseDto], { nullable: true })
   acceptanceCriteria!: AcceptanceCriteriaResponse[];
 
   @Field()
