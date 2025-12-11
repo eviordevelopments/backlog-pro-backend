@@ -1,6 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
+import { ClientRepository } from '../../../clients/repository/client.repository';
 import { ProjectMember } from '../../domain/entities/project-member.entity';
 import { Project } from '../../domain/entities/project.entity';
 import { InvalidBudgetException, ProjectNotFoundException } from '../../domain/exceptions/index';
@@ -15,6 +16,7 @@ export class ProjectService {
   constructor(
     private readonly projectRepository: ProjectRepository,
     private readonly projectMemberRepository: ProjectMemberRepository,
+    private readonly clientRepository: ClientRepository,
   ) {}
 
   async createProject(
@@ -24,6 +26,12 @@ export class ProjectService {
     budget?: number,
   ): Promise<Project> {
     this.logger.log(`Creando proyecto: ${name}`);
+
+    // Validate that the client exists
+    const client = await this.clientRepository.getById(clientId);
+    if (!client) {
+      throw new NotFoundException(`Client with ID ${clientId} not found`);
+    }
 
     if (budget !== undefined && budget < 0) {
       throw new InvalidBudgetException(budget);

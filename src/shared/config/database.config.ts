@@ -36,9 +36,9 @@ export const databaseConfig: DataSourceOptions = isProduction
       // Usa .js si está compilado (Docker), .ts si es desarrollo local
       entities: [__dirname + `/../../**/*.typeorm-entity.${isCompiled ? 'js' : 'ts'}`],
       migrations: [__dirname + `/../../database/migrations/*.${isCompiled ? 'js' : 'ts'}`],
-      synchronize: true, // Activo en desarrollo para sincronizar automaticamente las entidades
-      dropSchema: true, // Activo en desarrollo para testear con la DB
-      logging: true, // Activo en desarrollo para ver logs de las queries
+      synchronize: true, // Activalo en desarrollo para sincronizar automaticamente las entidades
+      dropSchema: false, // Activalo en desarrollo para limpiar la DB
+      logging: false, // Activalo en desarrollo para ver logs de las queries
     };
 
 // DataSource para migraciones de TypeORM CLI

@@ -454,7 +454,7 @@ El proyecto está completamente compilado y funcional. Se han completado todas l
   - Corregir tipos en queries de metrics
   - _Requisitos: 20.1_
 
-- [ ] 20. Ejecutar tests y validar cobertura
+- [x] 20. Ejecutar tests y validar cobertura
   - Ejecutar suite de tests unitarios
   - Ejecutar suite de property-based tests
   - Validar cobertura mínima de 80%

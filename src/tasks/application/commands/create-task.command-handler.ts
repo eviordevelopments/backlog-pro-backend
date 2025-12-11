@@ -1,6 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
+import { ProjectRepository } from '../../../projects/repository/project.repository';
 import { Task } from '../../domain/entities/task.entity';
 import { TaskRepository } from '../../repository/task.repository';
 
@@ -10,10 +11,19 @@ import { CreateTaskCommand } from './create-task.command';
 export class CreateTaskCommandHandler {
   private readonly logger = new Logger(CreateTaskCommandHandler.name);
 
-  constructor(private readonly taskRepository: TaskRepository) {}
+  constructor(
+    private readonly taskRepository: TaskRepository,
+    private readonly projectRepository: ProjectRepository,
+  ) {}
 
   async handle(command: CreateTaskCommand): Promise<Task> {
     this.logger.log(`Creating task: ${command.title}`);
+
+    // Validate that the project exists
+    const project = await this.projectRepository.getById(command.projectId);
+    if (!project) {
+      throw new NotFoundException(`Project with ID ${command.projectId} not found`);
+    }
 
     const task = new Task(
       command.title,

@@ -11,12 +11,15 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Enable CORS
-  const corsOrigins = [
-    'https://studio.apollographql.com', // Apollo Server
-    'http://localhost:3000', // Frontend local
-    'http://localhost:3001', // Frontend local (alt)
-    'http://localhost:3002', // Frontend local (alt)
-  ];
+  const corsOrigins =
+    envs.server.environment === 'production'
+      ? ['backlog-pro-frontend.vercel.app']
+      : [
+          'https://studio.apollographql.com', // Apollo Server
+          'http://localhost:3000', // Frontend local
+          'http://localhost:3001', // Frontend local (alt)
+          'http://localhost:3002', // Frontend local (alt)
+        ];
 
   // En producción, agregar origen del frontend si está configurado
   if (envs.server.environment === 'production' && envs.frontend?.url) {

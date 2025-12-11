@@ -1,5 +1,9 @@
 import { registerAs } from '@nestjs/config';
-import 'dotenv/config';
+import { config as dotenvConfig } from 'dotenv';
+
+// Load environment-specific .env file
+const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
+dotenvConfig({ path: envFile });
 
 const server = {
   environment: process.env.NODE_ENV || 'development',
