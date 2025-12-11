@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CreateGoalCommandHandler } from './application/commands/create-goal.command-handler';
+import { DeleteGoalCommandHandler } from './application/commands/delete-goal.command-handler';
 import { UpdateGoalProgressCommandHandler } from './application/commands/update-goal-progress.command-handler';
 import { GetUserGoalsQueryHandler } from './application/queries/get-user-goals.query-handler';
 import { GoalTypeOrmEntity } from './repository/entities/goal.typeorm-entity';
@@ -16,6 +17,7 @@ import { GoalResolver } from './resolvers/goal.resolver';
     GoalMapper,
     CreateGoalCommandHandler,
     UpdateGoalProgressCommandHandler,
+    DeleteGoalCommandHandler,
     GetUserGoalsQueryHandler,
     GoalResolver,
   ],

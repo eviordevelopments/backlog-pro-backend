@@ -4,7 +4,12 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import { CreateInvoiceCommand } from '../application/commands/create-invoice.command';
 import { CreateInvoiceCommandHandler } from '../application/commands/create-invoice.command-handler';
+import { DeleteInvoiceCommand } from '../application/commands/delete-invoice.command';
+import { DeleteInvoiceCommandHandler } from '../application/commands/delete-invoice.command-handler';
+import { UpdateInvoiceCommand } from '../application/commands/update-invoice.command';
+import { UpdateInvoiceCommandHandler } from '../application/commands/update-invoice.command-handler';
 import { CreateInvoiceDto } from '../dto/request/create-invoice.dto';
+import { UpdateInvoiceDto } from '../dto/request/update-invoice.dto';
 import { InvoiceResponseDto } from '../dto/response/invoice.response.dto';
 import { InvoiceRepository } from '../repository/invoice.repository';
 
@@ -12,6 +17,8 @@ import { InvoiceRepository } from '../repository/invoice.repository';
 export class InvoiceResolver {
   constructor(
     private readonly createInvoiceHandler: CreateInvoiceCommandHandler,
+    private readonly updateInvoiceHandler: UpdateInvoiceCommandHandler,
+    private readonly deleteInvoiceHandler: DeleteInvoiceCommandHandler,
     private readonly invoiceRepository: InvoiceRepository,
   ) {}
 
@@ -84,5 +91,50 @@ export class InvoiceResolver {
       createdAt: inv.getCreatedAt(),
       updatedAt: inv.getUpdatedAt(),
     }));
+  }
+
+  @Mutation(() => InvoiceResponseDto)
+  @UseGuards(JwtAuthGuard)
+  async updateInvoice(
+    @Args('id') id: string,
+    @Args('input') input: UpdateInvoiceDto,
+  ): Promise<InvoiceResponseDto> {
+    const command = new UpdateInvoiceCommand(
+      id,
+      input.amount,
+      input.tax,
+      input.dueDate ? new Date(input.dueDate) : undefined,
+      input.status,
+      input.items,
+      input.notes,
+    );
+
+    const invoice = await this.updateInvoiceHandler.handle(command);
+
+    return {
+      id: invoice.getId(),
+      invoiceNumber: invoice.getInvoiceNumber(),
+      clientId: invoice.getClientId(),
+      projectId: invoice.getProjectId() ?? undefined,
+      amount: invoice.getAmount().getValue(),
+      tax: invoice.getTax().getValue(),
+      total: invoice.getTotal().getValue(),
+      status: invoice.getStatus().getValue(),
+      issueDate: invoice.getIssueDate(),
+      dueDate: invoice.getDueDate(),
+      paidDate: invoice.getPaidDate() ?? undefined,
+      items: invoice.getItems(),
+      notes: invoice.getNotes(),
+      createdAt: invoice.getCreatedAt(),
+      updatedAt: invoice.getUpdatedAt(),
+    };
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(JwtAuthGuard)
+  async deleteInvoice(@Args('id') id: string): Promise<boolean> {
+    const command = new DeleteInvoiceCommand(id);
+    await this.deleteInvoiceHandler.handle(command);
+    return true;
   }
 }

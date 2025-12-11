@@ -4,6 +4,8 @@ import { CompleteSprintCommand } from '../commands/complete-sprint.command';
 import { CompleteSprintCommandHandler } from '../commands/complete-sprint.command-handler';
 import { CreateSprintCommand } from '../commands/create-sprint.command';
 import { CreateSprintCommandHandler } from '../commands/create-sprint.command-handler';
+import { DeleteSprintCommand } from '../commands/delete-sprint.command';
+import { DeleteSprintCommandHandler } from '../commands/delete-sprint.command-handler';
 import { ExtendSprintCommand } from '../commands/extend-sprint.command';
 import { ExtendSprintCommandHandler } from '../commands/extend-sprint.command-handler';
 import { RegisterRetrospectiveCommand } from '../commands/register-retrospective.command';
@@ -22,6 +24,7 @@ export class SprintService {
     private readonly updateSprintHandler: UpdateSprintCommandHandler,
     private readonly extendSprintHandler: ExtendSprintCommandHandler,
     private readonly completeSprintHandler: CompleteSprintCommandHandler,
+    private readonly deleteSprintHandler: DeleteSprintCommandHandler,
     private readonly registerRetrospectiveHandler: RegisterRetrospectiveCommandHandler,
     private readonly getSprintHandler: GetSprintQueryHandler,
     private readonly listSprintsHandler: ListSprintsProjectQueryHandler,
@@ -53,5 +56,9 @@ export class SprintService {
 
   async listSprintsByProject(query: ListSprintsProjectQuery) {
     return this.listSprintsHandler.handle(query);
+  }
+
+  async deleteSprint(command: DeleteSprintCommand) {
+    return this.deleteSprintHandler.handle(command);
   }
 }

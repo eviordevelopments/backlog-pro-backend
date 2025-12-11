@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CreateUserStoryCommandHandler } from './application/commands/create-user-story.command-handler';
+import { DeleteUserStoryCommandHandler } from './application/commands/delete-user-story.command-handler';
+import { UpdateUserStoryCommandHandler } from './application/commands/update-user-story.command-handler';
 import { GetProjectBacklogQueryHandler } from './application/queries/get-project-backlog.query-handler';
 import { UserStoryTypeOrmEntity } from './repository/entities/user-story.typeorm-entity';
 import { UserStoryMapper } from './repository/mappers/user-story.mapper';
@@ -14,6 +16,8 @@ import { UserStoryResolver } from './resolvers/user-story.resolver';
     UserStoryRepository,
     UserStoryMapper,
     CreateUserStoryCommandHandler,
+    UpdateUserStoryCommandHandler,
+    DeleteUserStoryCommandHandler,
     GetProjectBacklogQueryHandler,
     UserStoryResolver,
   ],

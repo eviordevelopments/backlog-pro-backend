@@ -4,6 +4,8 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 import { CreateGoalCommand } from '../application/commands/create-goal.command';
 import { CreateGoalCommandHandler } from '../application/commands/create-goal.command-handler';
+import { DeleteGoalCommand } from '../application/commands/delete-goal.command';
+import { DeleteGoalCommandHandler } from '../application/commands/delete-goal.command-handler';
 import { UpdateGoalProgressCommand } from '../application/commands/update-goal-progress.command';
 import { UpdateGoalProgressCommandHandler } from '../application/commands/update-goal-progress.command-handler';
 import { GetUserGoalsQuery } from '../application/queries/get-user-goals.query';
@@ -16,6 +18,7 @@ export class GoalResolver {
   constructor(
     private readonly createGoalHandler: CreateGoalCommandHandler,
     private readonly updateProgressHandler: UpdateGoalProgressCommandHandler,
+    private readonly deleteGoalHandler: DeleteGoalCommandHandler,
     private readonly userGoalsHandler: GetUserGoalsQueryHandler,
   ) {}
 
@@ -96,5 +99,13 @@ export class GoalResolver {
   ): Promise<GoalResponseDto[]> {
     const query = new GetUserGoalsQuery(ownerId);
     return this.userGoalsHandler.handle(query);
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(JwtAuthGuard)
+  async deleteGoal(@Args('goalId', { description: 'UUID del objetivo a eliminar' }) goalId: string): Promise<boolean> {
+    const command = new DeleteGoalCommand(goalId);
+    await this.deleteGoalHandler.handle(command);
+    return true;
   }
 }
