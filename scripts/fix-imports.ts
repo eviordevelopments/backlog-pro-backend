@@ -10,8 +10,9 @@ async function fixImports() {
       tsConfigFilePath: 'tsconfig.json',
     });
 
-    const sourceFiles = project.getSourceFiles('src/**/*.ts');
+    const sourceFiles = project.getSourceFiles(['src/**/*.ts', 'test/**/*.ts']);
     const SRC_ROOT = path.resolve('src');
+    const TEST_ROOT = path.resolve('test');
 
     let fixedCount = 0;
     let brokenCount = 0;
@@ -41,8 +42,8 @@ async function fixImports() {
 
         const targetPath = resolved.getFilePath();
 
-        // Solo arreglar imports dentro de /src
-        if (!targetPath.startsWith(SRC_ROOT)) continue;
+        // Solo arreglar imports dentro de /src o /test
+        if (!targetPath.startsWith(SRC_ROOT) && !targetPath.startsWith(TEST_ROOT)) continue;
 
         // Si ya es relativo, no tocarlo
         if (spec.startsWith('.')) continue;

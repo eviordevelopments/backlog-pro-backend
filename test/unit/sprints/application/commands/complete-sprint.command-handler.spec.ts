@@ -1,13 +1,12 @@
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
+import { CompleteSprintCommand, CompleteSprintCommandHandler } from 'src/sprints/application/commands';
+import { Sprint } from 'src/sprints/domain/entities/sprint.entity';
+import { SprintNotFoundException } from 'src/sprints/domain/exceptions';
+import { ISprintRepository } from 'src/sprints/domain/interfaces/sprint.repository.interface';
+import { SprintRepository } from 'src/sprints/repository/sprint.repository';
 
-import { Sprint } from '../../domain/entities/sprint.entity';
-import { SprintNotFoundException } from '../../domain/exceptions/index';
-import type { ISprintRepository } from '../../domain/interfaces/sprint.repository.interface';
-import { SprintRepository } from '../../repository/sprint.repository';
 
-import { CompleteSprintCommand } from './complete-sprint.command';
-import { CompleteSprintCommandHandler } from './complete-sprint.command-handler';
 
 describe('CompleteSprintCommandHandler', () => {
   let handler: CompleteSprintCommandHandler;
