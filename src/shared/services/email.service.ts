@@ -37,15 +37,20 @@ export class EmailService {
         pass: smtpPass,
       },
       // Configuraciones adicionales para robustez
-      connectionTimeout: 10000, // 10 segundos
-      greetingTimeout: 5000, // 5 segundos
-      socketTimeout: 10000, // 10 segundos
-      // Para Gmail específicamente
+      connectionTimeout: process.env.NODE_ENV === 'production' ? 30000 : 10000, // 30s en prod, 10s en dev
+      greetingTimeout: process.env.NODE_ENV === 'production' ? 15000 : 5000, // 15s en prod, 5s en dev
+      socketTimeout: process.env.NODE_ENV === 'production' ? 30000 : 10000, // 30s en prod, 10s en dev
+      // Para Gmail específicamente (configuración optimizada para cloud)
       ...(smtpHost.includes('gmail') && {
         service: 'gmail',
         tls: {
-          rejectUnauthorized: false
-        }
+          rejectUnauthorized: false,
+          ciphers: 'SSLv3'
+        },
+        requireTLS: true,
+        secure: false, // true para 465, false para 587
+        logger: false, // Deshabilitar logs SMTP detallados
+        debug: false   // Deshabilitar debug SMTP
       })
     });
 
@@ -54,6 +59,12 @@ export class EmailService {
   }
 
   private async verifyConnection(): Promise<void> {
+    // En producción, saltamos la verificación para evitar timeouts
+    if (process.env.NODE_ENV === 'production') {
+      this.logger.log('🚀 Producción: Saltando verificación SMTP (se verificará al enviar)');
+      return;
+    }
+
     try {
       await this.transporter.verify();
       this.logger.log('✅ Conexión SMTP verificada exitosamente');
@@ -64,6 +75,12 @@ export class EmailService {
   }
 
   async sendEmail(options: EmailOptions): Promise<void> {
+    // Opción para deshabilitar emails completamente
+    if (process.env.DISABLE_EMAILS === 'true') {
+      this.logger.log(`📧 [DISABLED] Email simulado a: ${options.to} - ${options.subject}`);
+      return;
+    }
+
     const startTime = Date.now();
     this.logger.log(`📧 Enviando email a: ${options.to}`);
 
@@ -77,9 +94,10 @@ export class EmailService {
         html: options.html,
       });
 
-      // Timeout de 30 segundos para el envío
+      // Timeout más largo en producción
+      const timeoutMs = process.env.NODE_ENV === 'production' ? 60000 : 30000; // 60s en prod, 30s en dev
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Email timeout after 30 seconds')), 30000);
+        setTimeout(() => reject(new Error(`Email timeout after ${timeoutMs/1000} seconds`)), timeoutMs);
       });
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

@@ -60,7 +60,8 @@ export class SignupCommandHandler {
         email: command.email,
         passwordHash,
         name: command.name,
-        isEmailVerified: false,
+        // En producción sin emails, auto-verificar para permitir login inmediato
+        isEmailVerified: process.env.DISABLE_EMAILS === 'true' ? true : false,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
