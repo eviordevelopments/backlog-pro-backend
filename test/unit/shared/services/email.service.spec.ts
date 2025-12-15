@@ -139,8 +139,12 @@ describe('EmailService', () => {
         socketTimeout: 10000,
         service: 'gmail',
         tls: {
-          rejectUnauthorized: false
-        }
+          rejectUnauthorized: false,
+          ciphers: 'SSLv3'
+        },
+        requireTLS: true,
+        logger: false,
+        debug: false
       });
     });
 
@@ -169,13 +173,17 @@ describe('EmailService', () => {
           user: 'user@gmail.com',
           pass: 'app-password',
         },
-        connectionTimeout: 10000,
+        connectionTimeout: 10000, // Development timeouts (NODE_ENV not set to production in tests)
         greetingTimeout: 5000,
         socketTimeout: 10000,
         service: 'gmail',
         tls: {
-          rejectUnauthorized: false
-        }
+          rejectUnauthorized: false,
+          ciphers: 'SSLv3'
+        },
+        requireTLS: true,
+        logger: false,
+        debug: false
       });
     });
   });
@@ -542,8 +550,12 @@ describe('EmailService', () => {
         socketTimeout: 10000,
         service: 'gmail',
         tls: {
-          rejectUnauthorized: false
-        }
+          rejectUnauthorized: false,
+          ciphers: 'SSLv3'
+        },
+        requireTLS: true,
+        logger: false,
+        debug: false
       });
 
       expect(mockTransporter.sendMail).toHaveBeenCalledWith({

@@ -48,7 +48,6 @@ export class EmailService {
           ciphers: 'SSLv3'
         },
         requireTLS: true,
-        secure: false, // true para 465, false para 587
         logger: false, // Deshabilitar logs SMTP detallados
         debug: false   // Deshabilitar debug SMTP
       })
