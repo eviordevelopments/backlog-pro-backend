@@ -18,24 +18,58 @@ export class EmailService {
   }
 
   private createTransporter() {
+    const smtpHost = process.env.SMTP_HOST || 'sandbox.smtp.mailtrap.io';
+    const smtpPort = parseInt(process.env.SMTP_PORT || '2525');
+    const smtpUser = process.env.SMTP_USER || 'NO_CONFIGURADO';
+    const smtpPass = process.env.SMTP_PASS || 'NO_CONFIGURADO';
+
+    this.logger.log(`Configurando SMTP: ${smtpHost}:${smtpPort} (user: ${smtpUser})`);
+
     // Configuración por defecto: Mailtrap (recomendado para desarrollo)
     // Alternativas: Gmail (emails reales)
     // En producción: SendGrid, AWS SES, etc.
     this.transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'sandbox.smtp.mailtrap.io',
-      port: parseInt(process.env.SMTP_PORT || '2525'),
-      secure: false, // true para 465, false para otros puertos
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpPort === 465, // true para 465, false para otros puertos
       auth: {
-        user: process.env.SMTP_USER || 'NO_CONFIGURADO',
-        pass: process.env.SMTP_PASS || 'NO_CONFIGURADO',
+        user: smtpUser,
+        pass: smtpPass,
       },
+      // Configuraciones adicionales para robustez
+      connectionTimeout: 10000, // 10 segundos
+      greetingTimeout: 5000, // 5 segundos
+      socketTimeout: 10000, // 10 segundos
+      // Para Gmail específicamente
+      ...(smtpHost.includes('gmail') && {
+        service: 'gmail',
+        tls: {
+          rejectUnauthorized: false
+        }
+      })
     });
+
+    // Verificar la conexión al inicializar
+    this.verifyConnection();
+  }
+
+  private async verifyConnection(): Promise<void> {
+    try {
+      await this.transporter.verify();
+      this.logger.log('✅ Conexión SMTP verificada exitosamente');
+    } catch (error) {
+      this.logger.error('❌ Error verificando conexión SMTP:', error);
+      this.logger.warn('⚠️ Los emails pueden fallar. Verifica la configuración SMTP.');
+    }
   }
 
   async sendEmail(options: EmailOptions): Promise<void> {
+    const startTime = Date.now();
+    this.logger.log(`📧 Enviando email a: ${options.to}`);
+
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const info = await this.transporter.sendMail({
+      // Crear una promesa con timeout
+      const sendPromise = this.transporter.sendMail({
         from: process.env.SMTP_FROM || '"Backlog Pro" <noreply@backlogpro.com>',
         to: options.to,
         subject: options.subject,
@@ -43,8 +77,17 @@ export class EmailService {
         html: options.html,
       });
 
+      // Timeout de 30 segundos para el envío
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Email timeout after 30 seconds')), 30000);
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const info = await Promise.race([sendPromise, timeoutPromise]);
+      const duration = Date.now() - startTime;
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      this.logger.log(`Email enviado: ${String(info.messageId)}`);
+      this.logger.log(`✅ Email enviado exitosamente en ${duration}ms: ${String(info.messageId)}`);
 
       // Para desarrollo, mostrar información útil
       if (process.env.NODE_ENV === 'development') {
@@ -52,7 +95,7 @@ export class EmailService {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         const previewUrl = nodemailer.getTestMessageUrl(info);
         if (previewUrl) {
-          this.logger.log(`Preview URL: ${previewUrl}`);
+          this.logger.log(`🔗 Preview URL: ${previewUrl}`);
         }
         // Para Mailtrap, recordar dónde ver los emails
         if (process.env.SMTP_HOST?.includes('mailtrap')) {
@@ -60,10 +103,12 @@ export class EmailService {
         }
       }
     } catch (error) {
-      this.logger.error('Error enviando email:', error);
-      throw new Error(
-        `Failed to send email: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      );
+      const duration = Date.now() - startTime;
+      this.logger.error(`❌ Error enviando email después de ${duration}ms:`, error);
+      
+      // No lanzar error para evitar que bloquee el registro
+      // En su lugar, solo loggear el error
+      this.logger.warn('⚠️ El registro continuará sin envío de email');
     }
   }
 
