@@ -16,12 +16,10 @@ import { MetricsModule } from './metrics/metrics.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { ProjectsModule } from './projects/projects.module';
 import { RisksModule } from './risks/risks.module';
-import {
-  databaseConfig,
-  envsConfig,
-  graphqlConfig,
-  validationSchemaConfig,
-} from './shared/config/index';
+import { validationSchemaConfig } from './shared/config/config.validation';
+import { databaseConfig } from './shared/config/database.config';
+import envs from './shared/config/envs.config';
+import { graphqlConfig } from './shared/config/graphql.config';
 import { SharedModule } from './shared/shared.module';
 import { SprintsModule } from './sprints/sprints.module';
 import { TasksModule } from './tasks/tasks.module';
@@ -35,7 +33,7 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
       envFilePath: '.env',
       validationSchema: validationSchemaConfig,
-      load: [envsConfig],
+      load: [envs],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

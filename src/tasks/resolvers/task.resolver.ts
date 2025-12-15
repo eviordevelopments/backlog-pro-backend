@@ -2,14 +2,13 @@ import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import {
-  AddDependencyCommand,
-  AddSubtasksCommand,
-  AssignTaskCommand,
-  CreateTaskCommand,
-  UpdateTaskCommand,
-} from '../application/commands/index';
-import { GetTaskQuery, ListTasksSprintQuery } from '../application/queries/index';
+import { AddDependencyCommand } from '../application/commands/add-dependency.command';
+import { AddSubtasksCommand } from '../application/commands/add-subtasks.command';
+import { AssignTaskCommand } from '../application/commands/assign-task.command';
+import { CreateTaskCommand } from '../application/commands/create-task.command';
+import { UpdateTaskCommand } from '../application/commands/update-task.command';
+import { GetTaskQuery } from '../application/queries/get-task.query';
+import { ListTasksSprintQuery } from '../application/queries/list-tasks-sprint.query';
 import { TaskService } from '../application/services/task.service';
 import { Task } from '../domain/entities/task.entity';
 import { CreateTaskDto } from '../dto/request/create-task.dto';

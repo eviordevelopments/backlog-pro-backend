@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 import { Sprint } from '../../domain/entities/sprint.entity';
-import { SprintNotFoundException } from '../../domain/exceptions/index';
+import { SprintNotFoundException } from '../../domain/exceptions/sprint-not-found.exception';
 import { SprintStatus } from '../../domain/value-objects/sprint-status.vo';
 import { SprintRepository } from '../../repository/sprint.repository';
 

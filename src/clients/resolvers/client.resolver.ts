@@ -2,12 +2,11 @@ import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import {
-  CreateClientCommand,
-  DeleteClientCommand,
-  UpdateClientCommand,
-} from '../application/commands/index';
-import { GetClientQuery, ListClientsQuery } from '../application/queries/index';
+import { CreateClientCommand } from '../application/commands/create-client.command';
+import { DeleteClientCommand } from '../application/commands/delete-client.command';
+import { UpdateClientCommand } from '../application/commands/update-client.command';
+import { GetClientQuery } from '../application/queries/get-client.query';
+import { ListClientsQuery } from '../application/queries/list-clients.query';
 import { ClientService } from '../application/services/client.service';
 import { Client } from '../domain/entities/client.entity';
 import { CreateClientDto } from '../dto/request/create-client.dto';

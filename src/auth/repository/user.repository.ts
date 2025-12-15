@@ -53,4 +53,11 @@ export class UserRepository implements IUserRepository {
     });
     return count > 0;
   }
+
+  async findByEmailConfirmationToken(token: string): Promise<User | null> {
+    const entity = await this.repository.findOne({
+      where: { emailConfirmationToken: token },
+    });
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
 }

@@ -1,10 +1,10 @@
 import fc from 'fast-check';
-import { Invoice } from 'src/finances/domain/entities/invoice.entity';
-import { Transaction } from 'src/finances/domain/entities/transaction.entity';
-import { Amount } from 'src/finances/domain/value-objects/amount.vo';
-import { Currency } from 'src/finances/domain/value-objects/currency.vo';
-import { TransactionType } from 'src/finances/domain/value-objects/transaction-type.vo';
-import { Project } from 'src/projects/domain/entities/project.entity';
+import { Invoice } from '../../../../../src/finances/domain/entities/invoice.entity';
+import { Transaction } from '../../../../../src/finances/domain/entities/transaction.entity';
+import { Amount } from '../../../../../src/finances/domain/value-objects/amount.vo';
+import { Currency } from '../../../../../src/finances/domain/value-objects/currency.vo';
+import { TransactionType } from '../../../../../src/finances/domain/value-objects/transaction-type.vo';
+import { Project } from '../../../../../src/projects/domain/entities/project.entity';
 
 /**
  * Property-Based Tests for Finances Module

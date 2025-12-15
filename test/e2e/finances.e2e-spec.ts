@@ -1,10 +1,7 @@
 import type { INestApplication } from '@nestjs/common';
-import { ValidationPipe } from '@nestjs/common';
-import type { TestingModule } from '@nestjs/testing';
-import { Test } from '@nestjs/testing';
 import request from 'supertest';
 
-import { AppModule } from '../../src/app.module';
+import { createTestApp } from '../setup/test-app.setup';
 
 describe('Finances Module (e2e)', () => {
   let app: INestApplication;
@@ -15,44 +12,68 @@ describe('Finances Module (e2e)', () => {
   let invoiceId: string;
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-        transform: true,
-      }),
-    );
-
-    await app.init();
+    app = await createTestApp();
 
     // Create test user and get auth token
     const email = `finances-test-${Date.now()}@example.com`;
-    const signupRes = await request(app.getHttpServer())
+    const password = 'Test123456!';
+
+    // First signup
+    await request(app.getHttpServer())
       .post('/graphql')
       .send({
         query: `
           mutation Signup($input: SignupInput!) {
             signup(input: $input) {
-              token
+              userId
+              email
+              name
+              message
+              requiresEmailConfirmation
             }
           }
         `,
         variables: {
           input: {
             email,
-            password: 'Test123456!',
+            password,
             name: 'Finances Test User',
           },
         },
       });
 
-    authToken = signupRes.body.data.signup.token;
+    // Manually verify email for testing
+    const { UserRepository } = await import('../../src/auth/repository/user.repository');
+    const userRepository = app.get(UserRepository);
+    const user = await userRepository.getByEmail(email);
+    if (user) {
+      user.isEmailVerified = true;
+      await userRepository.update(user.id, user);
+    }
+
+    // Then signin to get token
+    const signinRes = await request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `
+          mutation Signin($input: SigninInput!) {
+            signin(input: $input) {
+              token
+              userId
+              email
+              name
+            }
+          }
+        `,
+        variables: {
+          input: {
+            email,
+            password,
+          },
+        },
+      });
+
+    authToken = signinRes.body.data.signin.token;
 
     // Create test client and project for financial operations
     const clientRes = await request(app.getHttpServer())

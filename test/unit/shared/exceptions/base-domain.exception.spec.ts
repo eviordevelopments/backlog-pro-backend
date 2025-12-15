@@ -1,4 +1,4 @@
-import { BaseDomainException } from 'src/shared/exceptions';
+import { BaseDomainException } from '../../../../src/shared/exceptions/base-domain.exception';
 
 class TestDomainException extends BaseDomainException {
   constructor() {

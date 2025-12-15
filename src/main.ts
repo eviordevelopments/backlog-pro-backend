@@ -2,9 +2,10 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
-import { envs } from './shared/config/index';
-import { GlobalExceptionFilter, GraphQLExceptionFilter } from './shared/filters/index';
-import { cronitorService } from './shared/services';
+import { envs } from './shared/config/envs.config';
+import { GlobalExceptionFilter } from './shared/filters/global-exception.filter';
+import { GraphQLExceptionFilter } from './shared/filters/graphql-exception.filter';
+import { cronitorService } from './shared/services/cronitor.service';
 import { heartbeatTask } from './shared/tasks/heartbeat.task';
 
 async function bootstrap() {

@@ -1,10 +1,11 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
+import { InvalidBudgetException } from '../../domain/exceptions/invalid-budget.exception';
+import { ProjectNotFoundException } from '../../domain/exceptions/project-not-found.exception';
 import { ClientRepository } from '../../../clients/repository/client.repository';
 import { ProjectMember } from '../../domain/entities/project-member.entity';
 import { Project } from '../../domain/entities/project.entity';
-import { InvalidBudgetException, ProjectNotFoundException } from '../../domain/exceptions/index';
 import { UserAlreadyMemberException } from '../../domain/exceptions/user-already-member.exception';
 import { ProjectMemberRepository } from '../../repository/project-member.repository';
 import { ProjectRepository } from '../../repository/project.repository';

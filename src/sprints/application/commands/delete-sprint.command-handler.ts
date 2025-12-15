@@ -1,9 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { SprintNotFoundException } from '../../domain/exceptions/index';
 import { SprintRepository } from '../../repository/sprint.repository';
-
 import { DeleteSprintCommand } from './delete-sprint.command';
+import { SprintNotFoundException } from '../../domain/exceptions/sprint-not-found.exception';
 
 @Injectable()
 export class DeleteSprintCommandHandler {

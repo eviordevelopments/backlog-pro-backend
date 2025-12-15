@@ -4,8 +4,8 @@ import { UserRepository } from '../../../auth/repository/user.repository';
 import { TimeEntryRepository } from '../../../time-entries/repository/time-entry.repository';
 import { SalaryResponseDto } from '../../dto/response/salary.response.dto';
 
-import { CalculateIdealHourlyRateQuery } from './calculate-ideal-hourly-rate.query';
 import { CalculateIdealHourlyRateQueryHandler } from './calculate-ideal-hourly-rate.query-handler';
+import { CalculateIdealHourlyRateQuery } from './calculate-ideal-hourly-rate.query';
 import { CalculateSalariesQuery } from './calculate-salaries.query';
 
 @Injectable()

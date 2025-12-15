@@ -4,16 +4,16 @@ import { plainToInstance } from 'class-transformer';
 
 import { CurrentUser } from '../../shared/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import { MarkNotificationAsReadCommand } from '../application/commands/mark-notification-as-read.command';
 import { MarkNotificationAsReadCommandHandler } from '../application/commands/mark-notification-as-read.command-handler';
-import {
-  GetUnreadNotificationsQuery,
-  GetUserNotificationsQuery,
-} from '../application/queries/get-user-notifications.query';
+import { MarkNotificationAsReadCommand } from '../application/commands/mark-notification-as-read.command';
 import {
   GetUnreadNotificationsQueryHandler,
   GetUserNotificationsQueryHandler,
 } from '../application/queries/get-user-notifications.query-handler';
+import {
+  GetUnreadNotificationsQuery,
+  GetUserNotificationsQuery,
+} from '../application/queries/get-user-notifications.query';
 import { NotificationResponseDto } from '../dto/response/notification.response.dto';
 
 @Resolver('Notification')

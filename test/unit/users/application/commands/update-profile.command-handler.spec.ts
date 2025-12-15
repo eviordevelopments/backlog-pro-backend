@@ -1,10 +1,12 @@
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import fc from 'fast-check';
-import { UpdateProfileCommand, UpdateProfileCommandHandler } from 'src/users/application/commands';
-import { UserProfile } from 'src/users/domain/entities/user-profile.entity';
-import { UserProfileNotFoundException } from 'src/users/domain/exceptions';
-import { UserProfileRepository } from 'src/users/repository/user-profile.repository';
+
+import { UpdateProfileCommandHandler } from '../../../../../src/users/application/commands/update-profile.command-handler';
+import { UpdateProfileCommand } from '../../../../../src/users/application/commands/update-profile.command';
+import { UserProfile } from '../../../../../src/users/domain/entities/user-profile.entity';
+import { UserProfileNotFoundException } from '../../../../../src/users/domain/exceptions/user-profile-not-found.exception';
+import { UserProfileRepository } from '../../../../../src/users/repository/user-profile.repository';
 
 describe('UpdateProfileCommandHandler', () => {
   let handler: UpdateProfileCommandHandler;

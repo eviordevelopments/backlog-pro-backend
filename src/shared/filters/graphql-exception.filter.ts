@@ -2,7 +2,7 @@ import { Catch, HttpException } from '@nestjs/common';
 import { GqlExceptionFilter } from '@nestjs/graphql';
 import { GraphQLError } from 'graphql';
 
-import { BaseDomainException } from '../exceptions/index';
+import { BaseDomainException } from '../exceptions/base-domain.exception';
 
 @Catch()
 export class GraphQLExceptionFilter implements GqlExceptionFilter {

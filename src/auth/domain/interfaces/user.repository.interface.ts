@@ -6,4 +6,5 @@ export interface IUserRepository {
   getById(id: string): Promise<User | null>;
   update(id: string, user: Partial<User>): Promise<User>;
   existsByEmail(email: string): Promise<boolean>;
+  findByEmailConfirmationToken(token: string): Promise<User | null>;
 }

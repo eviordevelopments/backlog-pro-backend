@@ -2,12 +2,11 @@ import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import {
-  DeleteTimeCommand,
-  ModifyTimeCommand,
-  RegisterTimeCommand,
-} from '../application/commands/index';
-import { GetGroupedTimeEntriesQuery, GetTimeEntriesQuery } from '../application/queries/index';
+import { DeleteTimeCommand } from '../application/commands/delete-time.command';
+import { ModifyTimeCommand } from '../application/commands/modify-time.command';
+import { RegisterTimeCommand } from '../application/commands/register-time.command';
+import { GetGroupedTimeEntriesQuery } from '../application/queries/get-grouped-time-entries.query';
+import { GetTimeEntriesQuery } from '../application/queries/get-time-entries.query';
 import { TimeEntryService } from '../application/services/time-entry.service';
 import { TimeEntry } from '../domain/entities/time-entry.entity';
 import { ModifyTimeDto } from '../dto/request/modify-time.dto';

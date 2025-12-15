@@ -2,15 +2,14 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import {
-  CompleteSprintCommand,
-  CreateSprintCommand,
-  DeleteSprintCommand,
-  ExtendSprintCommand,
-  RegisterRetrospectiveCommand,
-  UpdateSprintCommand,
-} from '../application/commands/index';
-import { GetSprintQuery, ListSprintsProjectQuery } from '../application/queries/index';
+import { CompleteSprintCommand } from '../application/commands/complete-sprint.command';
+import { CreateSprintCommand } from '../application/commands/create-sprint.command';
+import { DeleteSprintCommand } from '../application/commands/delete-sprint.command';
+import { ExtendSprintCommand } from '../application/commands/extend-sprint.command';
+import { RegisterRetrospectiveCommand } from '../application/commands/register-retrospective.command';
+import { UpdateSprintCommand } from '../application/commands/update-sprint.command';
+import { GetSprintQuery } from '../application/queries/get-sprint.query';
+import { ListSprintsProjectQuery } from '../application/queries/list-sprints-project.query';
 import { SprintService } from '../application/services/sprint.service';
 import { CreateSprintDto } from '../dto/request/create-sprint.dto';
 import { UpdateSprintDto } from '../dto/request/update-sprint.dto';

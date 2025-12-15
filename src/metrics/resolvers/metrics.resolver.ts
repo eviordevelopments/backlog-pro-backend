@@ -2,12 +2,12 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver, Subscription } from '@nestjs/graphql';
 
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import { CalculateProjectMetricsQuery } from '../application/queries/calculate-project-metrics.query';
 import { CalculateProjectMetricsQueryHandler } from '../application/queries/calculate-project-metrics.query-handler';
-import { CalculateSprintMetricsQuery } from '../application/queries/calculate-sprint-metrics.query';
+import { CalculateProjectMetricsQuery } from '../application/queries/calculate-project-metrics.query';
 import { CalculateSprintMetricsQueryHandler } from '../application/queries/calculate-sprint-metrics.query-handler';
-import { GetDashboardMetricsQuery } from '../application/queries/get-dashboard-metrics.query';
+import { CalculateSprintMetricsQuery } from '../application/queries/calculate-sprint-metrics.query';
 import { GetDashboardMetricsQueryHandler } from '../application/queries/get-dashboard-metrics.query-handler';
+import { GetDashboardMetricsQuery } from '../application/queries/get-dashboard-metrics.query';
 import { MetricsEventService } from '../application/services/metrics-event.service';
 import { DashboardMetricsResponseDto } from '../dto/response/dashboard-metrics.response.dto';
 import { ProjectMetricsResponseDto } from '../dto/response/project-metrics.response.dto';

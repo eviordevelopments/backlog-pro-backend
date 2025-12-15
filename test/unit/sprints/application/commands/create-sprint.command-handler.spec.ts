@@ -1,8 +1,10 @@
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
-import { CreateSprintCommand, CreateSprintCommandHandler } from 'src/sprints/application/commands';
-import { InvalidSprintDatesException } from 'src/sprints/domain/exceptions';
-import { SprintRepository } from 'src/sprints/repository/sprint.repository';
+
+import { CreateSprintCommandHandler } from '../../../../../src/sprints/application/commands/create-sprint.command-handler';
+import { CreateSprintCommand } from '../../../../../src/sprints/application/commands/create-sprint.command';
+import { InvalidSprintDatesException } from '../../../../../src/sprints/domain/exceptions/invalid-sprint-dates.exception';
+import { SprintRepository } from '../../../../../src/sprints/repository/sprint.repository';
 
 describe('CreateSprintCommandHandler', () => {
   let handler: CreateSprintCommandHandler;

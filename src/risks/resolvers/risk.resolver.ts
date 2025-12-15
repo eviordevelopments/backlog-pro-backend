@@ -13,7 +13,6 @@ import { GetProjectRisksQueryHandler } from '../application/queries/get-project-
 import { CreateRiskDto } from '../dto/request/create-risk.dto';
 import { UpdateRiskDto } from '../dto/request/update-risk.dto';
 import { RiskResponseDto } from '../dto/response/risk.response.dto';
-import { RiskRepository } from '../repository/risk.repository';
 
 @Resolver('Risk')
 export class RiskResolver {
@@ -22,7 +21,6 @@ export class RiskResolver {
     private readonly updateRiskHandler: UpdateRiskCommandHandler,
     private readonly deleteRiskHandler: DeleteRiskCommandHandler,
     private readonly projectRisksHandler: GetProjectRisksQueryHandler,
-    private readonly riskRepository: RiskRepository,
   ) {}
 
   @Mutation(() => RiskResponseDto)

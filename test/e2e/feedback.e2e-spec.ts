@@ -1,10 +1,7 @@
 import type { INestApplication } from '@nestjs/common';
-import { ValidationPipe } from '@nestjs/common';
-import type { TestingModule } from '@nestjs/testing';
-import { Test } from '@nestjs/testing';
 import request from 'supertest';
 
-import { AppModule } from '../../src/app.module';
+import { createTestApp } from '../setup/test-app.setup';
 
 describe('Feedback Module (e2e)', () => {
   let app: INestApplication;
@@ -17,71 +14,131 @@ describe('Feedback Module (e2e)', () => {
   let sprintId: string;
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-        transform: true,
-      }),
-    );
-
-    await app.init();
+    app = await createTestApp();
 
     // Create first test user and get auth token
     const email = `feedback-test-${Date.now()}@example.com`;
+    const password = 'Test123456!';
+
+    // First signup
     const signupRes = await request(app.getHttpServer())
       .post('/graphql')
       .send({
         query: `
           mutation Signup($input: SignupInput!) {
             signup(input: $input) {
-              token
               userId
+              email
+              name
+              message
+              requiresEmailConfirmation
             }
           }
         `,
         variables: {
           input: {
             email,
-            password: 'Test123456!',
+            password,
             name: 'Feedback Test User',
           },
         },
       });
 
-    authToken = signupRes.body.data.signup.token;
     userId = signupRes.body.data.signup.userId;
+
+    // Manually verify email for testing
+    const { UserRepository } = await import('../../src/auth/repository/user.repository');
+    const userRepository = app.get(UserRepository);
+    const user = await userRepository.getByEmail(email);
+    if (user) {
+      user.isEmailVerified = true;
+      await userRepository.update(user.id, user);
+    }
+
+    // Then signin to get token
+    const signinRes = await request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `
+          mutation Signin($input: SigninInput!) {
+            signin(input: $input) {
+              token
+              userId
+              email
+              name
+            }
+          }
+        `,
+        variables: {
+          input: {
+            email,
+            password,
+          },
+        },
+      });
+
+    authToken = signinRes.body.data.signin.token;
 
     // Create second test user for feedback recipient
     const secondEmail = `feedback-test-2-${Date.now()}@example.com`;
+    const secondPassword = 'Test123456!';
+
+    // Second signup
     const secondSignupRes = await request(app.getHttpServer())
       .post('/graphql')
       .send({
         query: `
           mutation Signup($input: SignupInput!) {
             signup(input: $input) {
-              token
               userId
+              email
+              name
+              message
+              requiresEmailConfirmation
             }
           }
         `,
         variables: {
           input: {
             email: secondEmail,
-            password: 'Test123456!',
+            password: secondPassword,
             name: 'Feedback Recipient User',
           },
         },
       });
 
-    secondAuthToken = secondSignupRes.body.data.signup.token;
     secondUserId = secondSignupRes.body.data.signup.userId;
+
+    // Manually verify second user's email for testing
+    const secondUser = await userRepository.getByEmail(secondEmail);
+    if (secondUser) {
+      secondUser.isEmailVerified = true;
+      await userRepository.update(secondUser.id, secondUser);
+    }
+
+    // Then signin second user to get token
+    const secondSigninRes = await request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `
+          mutation Signin($input: SigninInput!) {
+            signin(input: $input) {
+              token
+              userId
+              email
+              name
+            }
+          }
+        `,
+        variables: {
+          input: {
+            email: secondEmail,
+            password: secondPassword,
+          },
+        },
+      });
+
+    secondAuthToken = secondSigninRes.body.data.signin.token;
 
     // Create test client, project, and sprint for feedback context
     const clientRes = await request(app.getHttpServer())

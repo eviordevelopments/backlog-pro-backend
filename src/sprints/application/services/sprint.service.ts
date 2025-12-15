@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
-
-import { CompleteSprintCommand } from '../commands/complete-sprint.command';
-import { CompleteSprintCommandHandler } from '../commands/complete-sprint.command-handler';
-import { CreateSprintCommand } from '../commands/create-sprint.command';
-import { CreateSprintCommandHandler } from '../commands/create-sprint.command-handler';
-import { DeleteSprintCommand } from '../commands/delete-sprint.command';
-import { DeleteSprintCommandHandler } from '../commands/delete-sprint.command-handler';
-import { ExtendSprintCommand } from '../commands/extend-sprint.command';
-import { ExtendSprintCommandHandler } from '../commands/extend-sprint.command-handler';
-import { RegisterRetrospectiveCommand } from '../commands/register-retrospective.command';
-import { RegisterRetrospectiveCommandHandler } from '../commands/register-retrospective.command-handler';
-import { UpdateSprintCommand } from '../commands/update-sprint.command';
-import { UpdateSprintCommandHandler } from '../commands/update-sprint.command-handler';
+import {
+  CreateSprintCommandHandler,
+  UpdateSprintCommandHandler,
+  ExtendSprintCommandHandler,
+  CompleteSprintCommandHandler,
+  DeleteSprintCommandHandler,
+  RegisterRetrospectiveCommandHandler,
+  CreateSprintCommand,
+  UpdateSprintCommand,
+  ExtendSprintCommand,
+  CompleteSprintCommand,
+  RegisterRetrospectiveCommand,
+  DeleteSprintCommand,
+} from '../commands';
 import { GetSprintQuery } from '../queries/get-sprint.query';
 import { GetSprintQueryHandler } from '../queries/get-sprint.query-handler';
 import { ListSprintsProjectQuery } from '../queries/list-sprints-project.query';

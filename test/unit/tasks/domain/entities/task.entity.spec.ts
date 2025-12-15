@@ -1,7 +1,7 @@
 import fc from 'fast-check';
-import { Task } from 'src/tasks/domain/entities/task.entity';
-import { TaskPriority } from 'src/tasks/domain/value-objects/task-priority.vo';
-import { TaskStatus } from 'src/tasks/domain/value-objects/task-status.vo';
+import { Task } from '../../../../../src/tasks/domain/entities/task.entity';
+import { TaskPriority } from '../../../../../src/tasks/domain/value-objects/task-priority.vo';
+import { TaskStatus } from '../../../../../src/tasks/domain/value-objects/task-status.vo';
 
 describe('Task Entity - Property-Based Tests', () => {
   // Feature: backlog-pro-development, Property 12: Task creation with default state

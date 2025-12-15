@@ -1,4 +1,4 @@
-import { BaseDomainException } from '../../../shared/exceptions/index';
+import { BaseDomainException } from '../../../shared/exceptions/base-domain.exception';
 
 export class UserAlreadyMemberException extends BaseDomainException {
   constructor(userId: string, projectId: string) {

@@ -1,13 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 
+import { InvalidSprintDatesException } from '../../domain/exceptions/invalid-sprint-dates.exception';
+import { SprintNotFoundException } from '../../domain/exceptions/sprint-not-found.exception';
 import { Sprint } from '../../domain/entities/sprint.entity';
-import {
-  InvalidSprintDatesException,
-  SprintNotFoundException,
-} from '../../domain/exceptions/index';
 import { SprintStatus } from '../../domain/value-objects/sprint-status.vo';
 import { SprintRepository } from '../../repository/sprint.repository';
-
 import { UpdateSprintCommand } from './update-sprint.command';
 
 @Injectable()

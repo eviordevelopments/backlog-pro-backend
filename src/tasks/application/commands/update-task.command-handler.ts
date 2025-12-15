@@ -1,11 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 
+import { TaskNotFoundException } from '../../domain/exceptions/task-not-found.exception';
 import { Task } from '../../domain/entities/task.entity';
-import { TaskNotFoundException } from '../../domain/exceptions/index';
 import { TaskPriority } from '../../domain/value-objects/task-priority.vo';
 import { TaskStatus } from '../../domain/value-objects/task-status.vo';
 import { TaskRepository } from '../../repository/task.repository';
-
 import { UpdateTaskCommand } from './update-task.command';
 
 @Injectable()
