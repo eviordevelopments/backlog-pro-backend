@@ -44,7 +44,7 @@
     "docker:prod:restart": "docker compose -p backlog-pro-prod -f compose.production.yml restart",
     "docker:prod:db": "docker compose -p backlog-pro-prod exec postgres psql -U postgres -d backlog_pro",
     "docker:prod:shell": "docker compose -p backlog-pro-prod exec app sh",
-    "docker:prod:push": "docker build -f Dockerfile.production -t frangauna01/backlog-pro-backend:latest . && docker push frangauna01/backlog-pro-backend:latest",
+    "docker:prod:push": "docker build -f Dockerfile.production -t eviordevelopments/backlog-pro-backend:latest . && docker push eviordevelopments/backlog-pro-backend:latest",
     "docker:migration:run": "npm run typeorm:js -- migration:run -d dist/shared/config/database.config.js",
     "docker:migration:revert": "npm run typeorm:js -- migration:revert -d dist/shared/config/database.config.js",
     "docker:migration:show": "npm run typeorm:js -- migration:show -d dist/shared/config/database.config.js",
