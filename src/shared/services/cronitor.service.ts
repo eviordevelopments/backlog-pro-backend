@@ -1,6 +1,6 @@
 import cronitor from 'cronitor';
 
-import { envs } from '../config';
+import { envs } from '../config/envs.config';
 
 /**
  * Servicio de monitoreo con Cronitor

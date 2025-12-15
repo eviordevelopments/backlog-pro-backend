@@ -13,7 +13,6 @@ import { GetSprintMeetingsQueryHandler } from '../application/queries/get-sprint
 import { CreateMeetingDto } from '../dto/request/create-meeting.dto';
 import { UpdateMeetingDto } from '../dto/request/update-meeting.dto';
 import { MeetingResponseDto } from '../dto/response/meeting.response.dto';
-import { MeetingRepository } from '../repository/meeting.repository';
 
 @Resolver('Meeting')
 export class MeetingResolver {
@@ -22,7 +21,6 @@ export class MeetingResolver {
     private readonly updateMeetingHandler: UpdateMeetingCommandHandler,
     private readonly deleteMeetingHandler: DeleteMeetingCommandHandler,
     private readonly sprintMeetingsHandler: GetSprintMeetingsQueryHandler,
-    private readonly meetingRepository: MeetingRepository,
   ) {}
 
   @Mutation(() => MeetingResponseDto)

@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { InvalidCredentialsException, UserNotFoundException } from '../../domain/exceptions/index';
+import { InvalidCredentialsException } from '../../domain/exceptions/invalid-credentials.exception';
+import { UserNotFoundException } from '../../domain/exceptions/user-not-found.exception';
 import { UserRepository } from '../../repository/user.repository';
 import { JwtService } from '../services/jwt.service';
 import { PasswordService } from '../services/password.service';
-
 import { SigninCommand } from './signin.command';
 
 export interface SigninResult {
@@ -31,6 +31,13 @@ export class SigninCommandHandler {
     const user = await this.userRepository.getByEmail(command.email);
     if (!user) {
       throw new UserNotFoundException(command.email);
+    }
+
+    // Verificar que el email esté confirmado
+    if (!user.isEmailVerified) {
+      throw new Error(
+        'Por favor confirma tu email antes de iniciar sesión. Revisa tu bandeja de entrada.',
+      );
     }
 
     // Validar contraseña

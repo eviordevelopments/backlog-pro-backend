@@ -5,7 +5,7 @@ import type { ApolloDriverConfig } from '@nestjs/apollo';
 import type { Request } from 'express';
 import type { GraphQLError, GraphQLFormattedError } from 'graphql';
 
-import { envs } from './index';
+import { envs } from './envs.config';
 
 interface GraphQLContext {
   req?: Request;

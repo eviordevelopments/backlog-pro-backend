@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 
-import { DeleteTimeCommand } from '../commands/delete-time.command';
 import { DeleteTimeCommandHandler } from '../commands/delete-time.command-handler';
-import { ModifyTimeCommand } from '../commands/modify-time.command';
+import { DeleteTimeCommand } from '../commands/delete-time.command';
 import { ModifyTimeCommandHandler } from '../commands/modify-time.command-handler';
-import { RegisterTimeCommand } from '../commands/register-time.command';
+import { ModifyTimeCommand } from '../commands/modify-time.command';
 import { RegisterTimeCommandHandler } from '../commands/register-time.command-handler';
-import { GetGroupedTimeEntriesQuery } from '../queries/get-grouped-time-entries.query';
+import { RegisterTimeCommand } from '../commands/register-time.command';
 import { GetGroupedTimeEntriesQueryHandler } from '../queries/get-grouped-time-entries.query-handler';
-import { GetTimeEntriesQuery } from '../queries/get-time-entries.query';
+import { GetGroupedTimeEntriesQuery } from '../queries/get-grouped-time-entries.query';
 import { GetTimeEntriesQueryHandler } from '../queries/get-time-entries.query-handler';
+import { GetTimeEntriesQuery } from '../queries/get-time-entries.query';
 
 @Injectable()
 export class TimeEntryService {

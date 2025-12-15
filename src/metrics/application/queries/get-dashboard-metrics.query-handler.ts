@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { ProjectRepository } from '../../../projects/repository/project.repository';
 import { DashboardMetricsResponseDto } from '../../dto/response/dashboard-metrics.response.dto';
 
-import { CalculateProjectMetricsQuery } from './calculate-project-metrics.query';
 import { CalculateProjectMetricsQueryHandler } from './calculate-project-metrics.query-handler';
+import { CalculateProjectMetricsQuery } from './calculate-project-metrics.query';
 import { GetDashboardMetricsQuery } from './get-dashboard-metrics.query';
 
 @Injectable()

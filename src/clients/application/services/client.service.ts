@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
 
+import { CreateClientCommand } from '../commands/create-client.command';
+import { DeleteClientCommand } from '../commands/delete-client.command';
 import {
   CreateClientCommandHandler,
   DeleteClientCommandHandler,
   UpdateClientCommandHandler,
 } from '../commands/handlers';
-import { CreateClientCommand, DeleteClientCommand, UpdateClientCommand } from '../commands/index';
+import { UpdateClientCommand } from '../commands/update-client.command';
+import { GetClientQuery } from '../queries/get-client.query';
 import { GetClientQueryHandler, ListClientsQueryHandler } from '../queries/handlers';
-import { GetClientQuery, ListClientsQuery } from '../queries/index';
+import { ListClientsQuery } from '../queries/list-clients.query';
 
 @Injectable()
 export class ClientService {

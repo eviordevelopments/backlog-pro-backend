@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 
 import { TaskRepository } from '../../repository/task.repository';
-import { AddDependencyCommand } from '../commands/add-dependency.command';
 import { AddDependencyCommandHandler } from '../commands/add-dependency.command-handler';
-import { AddSubtasksCommand } from '../commands/add-subtasks.command';
+import { AddDependencyCommand } from '../commands/add-dependency.command';
 import { AddSubtasksCommandHandler } from '../commands/add-subtasks.command-handler';
-import { AssignTaskCommand } from '../commands/assign-task.command';
+import { AddSubtasksCommand } from '../commands/add-subtasks.command';
 import { AssignTaskCommandHandler } from '../commands/assign-task.command-handler';
-import { CreateTaskCommand } from '../commands/create-task.command';
+import { AssignTaskCommand } from '../commands/assign-task.command';
 import { CreateTaskCommandHandler } from '../commands/create-task.command-handler';
-import { UpdateTaskCommand } from '../commands/update-task.command';
+import { CreateTaskCommand } from '../commands/create-task.command';
 import { UpdateTaskCommandHandler } from '../commands/update-task.command-handler';
-import { GetTaskQuery } from '../queries/get-task.query';
+import { UpdateTaskCommand } from '../commands/update-task.command';
 import { GetTaskQueryHandler } from '../queries/get-task.query-handler';
-import { ListTasksSprintQuery } from '../queries/list-tasks-sprint.query';
+import { GetTaskQuery } from '../queries/get-task.query';
 import { ListTasksSprintQueryHandler } from '../queries/list-tasks-sprint.query-handler';
+import { ListTasksSprintQuery } from '../queries/list-tasks-sprint.query';
 
 @Injectable()
 export class TaskService {

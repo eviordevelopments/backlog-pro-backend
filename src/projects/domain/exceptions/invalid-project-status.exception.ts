@@ -1,4 +1,4 @@
-import { BaseDomainException } from '../../../shared/exceptions/index';
+import { BaseDomainException } from '../../../shared/exceptions/base-domain.exception';
 
 export class InvalidProjectStatusException extends BaseDomainException {
   constructor(status: string) {

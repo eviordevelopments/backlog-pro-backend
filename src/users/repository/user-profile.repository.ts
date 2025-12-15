@@ -45,6 +45,13 @@ export class UserProfileRepository implements IUserProfileRepository {
     return Promise.resolve(0);
   }
 
+  async list(): Promise<UserProfile[]> {
+    const entities = await this.repository.find({
+      order: { name: 'ASC' },
+    });
+    return entities.map((entity) => UserProfileMapper.toDomain(entity));
+  }
+
   getWorkedHoursByUserIdAndProject(_userId: string, _projectId: string): Promise<number> {
     // Esta consulta se implementará cuando se tenga el módulo de time-entries
     // Por ahora retorna 0

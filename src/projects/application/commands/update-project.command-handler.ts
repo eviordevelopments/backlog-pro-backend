@@ -1,12 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 
+import { ProjectNotFoundException } from '../../domain/exceptions/project-not-found.exception';
 import { Project } from '../../domain/entities/project.entity';
-import { ProjectNotFoundException } from '../../domain/exceptions/index';
 import { InvalidProgressException } from '../../domain/exceptions/invalid-progress.exception';
 import { Budget } from '../../domain/value-objects/budget.vo';
 import { ProjectStatus } from '../../domain/value-objects/project-status.vo';
 import { ProjectRepository } from '../../repository/project.repository';
-
 import { UpdateProjectCommand } from './update-project.command';
 
 @Injectable()

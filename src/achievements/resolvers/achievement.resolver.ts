@@ -3,8 +3,8 @@ import { Query, Resolver } from '@nestjs/graphql';
 
 import { CurrentUser } from '../../shared/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import { GetUserAchievementsQuery } from '../application/queries/get-user-achievements.query';
 import { GetUserAchievementsQueryHandler } from '../application/queries/get-user-achievements.query-handler';
+import { GetUserAchievementsQuery } from '../application/queries/get-user-achievements.query';
 import {
   AchievementResponseDto,
   UserAchievementResponseDto,

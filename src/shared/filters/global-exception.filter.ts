@@ -2,8 +2,8 @@ import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from
 import { GqlContextType } from '@nestjs/graphql';
 import { GraphQLError } from 'graphql';
 
-import { BaseDomainException } from '../exceptions/index';
-import { cronitorService } from '../services';
+import { BaseDomainException } from '../exceptions/base-domain.exception';
+import { cronitorService } from '../services/cronitor.service';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {

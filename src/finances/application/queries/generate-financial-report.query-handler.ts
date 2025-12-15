@@ -4,8 +4,8 @@ import { ProjectRepository } from '../../../projects/repository/project.reposito
 import { InvoiceRepository } from '../../repository/invoice.repository';
 import { TransactionRepository } from '../../repository/transaction.repository';
 
-import { CalculateSalariesQuery } from './calculate-salaries.query';
 import { CalculateSalariesQueryHandler } from './calculate-salaries.query-handler';
+import { CalculateSalariesQuery } from './calculate-salaries.query';
 import { GenerateFinancialReportQuery } from './generate-financial-report.query';
 
 @Injectable()

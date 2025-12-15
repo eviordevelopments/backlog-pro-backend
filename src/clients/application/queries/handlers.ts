@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 import { Client } from '../../domain/entities/client.entity';
-import { ClientNotFoundException } from '../../domain/exceptions/index';
+import { ClientNotFoundException } from '../../domain/exceptions/client-not-found.exception';
 import { ClientRepository } from '../../repository/client.repository';
-
-import { GetClientProjectsQuery, GetClientQuery, ListClientsQuery } from './index';
+import { GetClientProjectsQuery } from './get-client-projects.query';
+import { GetClientQuery } from './get-client.query';
+import { ListClientsQuery } from './list-clients.query';
 
 @Injectable()
 export class GetClientQueryHandler {

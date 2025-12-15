@@ -2,7 +2,7 @@ import { ApolloServerPlugin, GraphQLRequestContext, GraphQLRequestListener } fro
 import { Plugin } from '@nestjs/apollo';
 import { Logger } from '@nestjs/common';
 
-import { envs } from '../config/index';
+import { envs } from '../config/envs.config';
 
 @Plugin()
 export class GraphQLLoggerPlugin implements ApolloServerPlugin {

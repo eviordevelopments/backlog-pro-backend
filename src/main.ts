@@ -2,24 +2,22 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
-import { envs } from './shared/config/index';
-import { GlobalExceptionFilter, GraphQLExceptionFilter } from './shared/filters/index';
-import { cronitorService } from './shared/services';
+import { envs } from './shared/config/envs.config';
+import { GlobalExceptionFilter } from './shared/filters/global-exception.filter';
+import { GraphQLExceptionFilter } from './shared/filters/graphql-exception.filter';
+import { cronitorService } from './shared/services/cronitor.service';
 import { heartbeatTask } from './shared/tasks/heartbeat.task';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Enable CORS
-  const corsOrigins =
-    envs.server.environment === 'production'
-      ? ['https://backlog-pro-frontend.vercel.app']
-      : [
-          'https://studio.apollographql.com', // Apollo Server
-          'http://localhost:3000', // Frontend local
-          'http://localhost:3001', // Frontend local (alt)
-          'http://localhost:3002', // Frontend local (alt)
-        ];
+  const corsOrigins = [
+    'https://studio.apollographql.com', // Apollo Server
+    'http://localhost:3000', // Frontend local
+    'http://localhost:3001', // Frontend local (alt)
+    'http://localhost:3002', // Frontend local (alt)
+  ];
 
   // En producción, agregar origen del frontend si está configurado
   if (envs.server.environment === 'production' && envs.frontend?.url) {

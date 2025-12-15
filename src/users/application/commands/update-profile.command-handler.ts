@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 import { UserProfile } from '../../domain/entities/user-profile.entity';
-import { UserProfileNotFoundException } from '../../domain/exceptions/index';
+import { UserProfileNotFoundException } from '../../domain/exceptions/user-profile-not-found.exception';
 import { HourlyRate } from '../../domain/value-objects/hourly-rate.vo';
 import { UserProfileRepository } from '../../repository/user-profile.repository';
 

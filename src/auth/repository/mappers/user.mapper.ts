@@ -12,6 +12,8 @@ export class UserMapper {
       skills: raw.skills,
       hourlyRate: raw.hourlyRate,
       isEmailVerified: raw.isEmailVerified,
+      emailConfirmationToken: raw.emailConfirmationToken,
+      emailConfirmationExpiresAt: raw.emailConfirmationExpiresAt,
       passwordResetToken: raw.passwordResetToken,
       passwordResetExpiresAt: raw.passwordResetExpiresAt,
       createdAt: raw.createdAt,
@@ -30,6 +32,8 @@ export class UserMapper {
     entity.skills = user.skills;
     entity.hourlyRate = user.hourlyRate;
     entity.isEmailVerified = user.isEmailVerified;
+    entity.emailConfirmationToken = user.emailConfirmationToken;
+    entity.emailConfirmationExpiresAt = user.emailConfirmationExpiresAt;
     entity.passwordResetToken = user.passwordResetToken;
     entity.passwordResetExpiresAt = user.passwordResetExpiresAt;
     entity.createdAt = user.createdAt;

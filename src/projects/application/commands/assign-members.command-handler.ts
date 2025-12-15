@@ -1,11 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
+import { ProjectNotFoundException } from '../../domain/exceptions/project-not-found.exception';
 import { ProjectMember } from '../../domain/entities/project-member.entity';
-import { ProjectNotFoundException } from '../../domain/exceptions/index';
 import { ProjectMemberRepository } from '../../repository/project-member.repository';
 import { ProjectRepository } from '../../repository/project.repository';
-
 import { AssignMembersCommand } from './assign-members.command';
 
 @Injectable()

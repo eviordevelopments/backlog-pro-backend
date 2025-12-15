@@ -1,10 +1,10 @@
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import fc from 'fast-check';
-import { TimeEntry } from 'src/time-entries/domain/entities/time-entry.entity';
-import { TimeEntryRepository } from 'src/time-entries/repository/time-entry.repository';
-import { GetHoursWorkedQuery } from 'src/users/application/queries/get-hours-worked.query';
-import { GetHoursWorkedQueryHandler } from 'src/users/application/queries/get-hours-worked.query-handler';
+import { TimeEntry } from '../../../../../src/time-entries/domain/entities/time-entry.entity';
+import { TimeEntryRepository } from '../../../../../src/time-entries/repository/time-entry.repository';
+import { GetHoursWorkedQueryHandler } from '../../../../../src/users/application/queries/get-hours-worked.query-handler';
+import { GetHoursWorkedQuery } from '../../../../../src/users/application/queries/get-hours-worked.query';
 
 describe('GetHoursWorkedQueryHandler', () => {
   let handler: GetHoursWorkedQueryHandler;

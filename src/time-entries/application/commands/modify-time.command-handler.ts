@@ -1,10 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 
+import { TimeEntryNotFoundException } from '../../domain/exceptions/time-entry-not-found.exception';
 import { TaskRepository } from '../../../tasks/repository/task.repository';
 import { TimeEntry } from '../../domain/entities/time-entry.entity';
-import { TimeEntryNotFoundException } from '../../domain/exceptions/index';
 import { TimeEntryRepository } from '../../repository/time-entry.repository';
-
 import { ModifyTimeCommand } from './modify-time.command';
 
 @Injectable()

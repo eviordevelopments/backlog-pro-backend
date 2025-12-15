@@ -1,4 +1,4 @@
-import { cronitorService } from '../services';
+import { cronitorService } from '../services/cronitor.service';
 
 /**
  * Tarea que envía heartbeats periódicos a Cronitor

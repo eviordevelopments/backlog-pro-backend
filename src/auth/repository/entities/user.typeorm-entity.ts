@@ -36,6 +36,12 @@ export class UserTypeOrmEntity {
   isEmailVerified!: boolean;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
+  emailConfirmationToken?: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  emailConfirmationExpiresAt?: Date;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
   passwordResetToken?: string;
 
   @Column({ type: 'timestamp', nullable: true })

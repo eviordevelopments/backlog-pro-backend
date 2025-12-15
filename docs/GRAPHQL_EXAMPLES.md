@@ -26,16 +26,16 @@ Esta documentación contiene ejemplos completos de todas las operaciones GraphQL
 
 Los siguientes módulos tienen operaciones CRUD completas:
 
-- ✅ **Projects**: Create, Read, Update, Delete
+- ✅ **Projects**: Create, Read, Update, Delete + Members Management
 - ✅ **Clients**: Create, Read, Update, Delete  
-- ✅ **Tasks**: Create, Read, Update, Delete
-- ✅ **Sprints**: Create, Read, Update, Delete
-- ✅ **Time Entries**: Create, Read, Update, Delete
-- ✅ **User Stories**: Create, Read, Update, Delete
-- ✅ **Risks**: Create, Read, Update, Delete
-- ✅ **Meetings**: Create, Read, Update, Delete
-- ✅ **Goals**: Create, Read, Update, Delete
-- ✅ **Transactions**: Create, Read, Update, Delete
+- ✅ **Tasks**: Create, Read, Update, Delete + Assignment & Dependencies
+- ✅ **Sprints**: Create, Read, Update, Delete + Complete, Extend, Retrospective
+- ✅ **Time Entries**: Create, Read, Update, Delete + Grouped Queries
+- ✅ **User Stories**: Create, Read, Update, Delete + Backlog Management
+- ✅ **Risks**: Create, Read, Update, Delete + Project-specific Queries
+- ✅ **Meetings**: Create, Read, Update, Delete + Sprint-specific Queries
+- ✅ **Goals**: Create, Read, Update, Delete + Progress Tracking
+- ✅ **Transactions**: Create, Read, Update, Delete + Project Expenses
 
 ---
 
@@ -43,16 +43,17 @@ Los siguientes módulos tienen operaciones CRUD completas:
 
 ### Signup (Register User)
 
-Registra un nuevo usuario en el sistema.
+Registra un nuevo usuario en el sistema. El usuario debe confirmar su email antes de poder iniciar sesión.
 
 **Mutation:**
 ```graphql
 mutation Signup($input: SignupInput!) {
   signup(input: $input) {
-    token
     userId
     email
     name
+    message
+    requiresEmailConfirmation
   }
 }
 ```
@@ -73,10 +74,11 @@ mutation Signup($input: SignupInput!) {
 {
   "data": {
     "signup": {
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
       "userId": "550e8400-e29b-41d4-a716-446655440000",
       "email": "user@example.com",
-      "name": "John Doe"
+      "name": "John Doe",
+      "message": "Usuario registrado exitosamente. Por favor, revisa tu email para confirmar tu cuenta.",
+      "requiresEmailConfirmation": true
     }
   }
 }
@@ -152,6 +154,137 @@ mutation RequestPasswordReset($input: RequestPasswordResetInput!) {
     "requestPasswordReset": {
       "resetToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
       "expiresIn": "1h"
+    }
+  }
+}
+```
+
+### Confirm Email
+
+Confirma el email del usuario con el token recibido por correo.
+
+**Mutation:**
+```graphql
+mutation ConfirmEmail($token: String!) {
+  confirmEmail(token: $token) {
+    success
+    message
+    token
+    userId
+    email
+    name
+  }
+}
+```
+
+**Variables:**
+```json
+{
+  "token": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6"
+}
+```
+
+**Response (Success):**
+```json
+{
+  "data": {
+    "confirmEmail": {
+      "success": true,
+      "message": "Email confirmado exitosamente. Ya puedes usar tu cuenta.",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+      "userId": "550e8400-e29b-41d4-a716-446655440000",
+      "email": "user@example.com",
+      "name": "John Doe"
+    }
+  }
+}
+```
+
+**Response (Error):**
+```json
+{
+  "data": {
+    "confirmEmail": {
+      "success": false,
+      "message": "Token de confirmación inválido o expirado.",
+      "token": null,
+      "userId": null,
+      "email": null,
+      "name": null
+    }
+  }
+}
+```
+
+---
+
+## 📧 Email Confirmation Flow
+
+### Flujo Completo de Registro con Confirmación
+
+El sistema implementa un flujo de registro seguro que requiere confirmación de email:
+
+#### 1. Registro de Usuario
+```graphql
+mutation Signup($input: SignupInput!) {
+  signup(input: $input) {
+    userId
+    email
+    name
+    message
+    requiresEmailConfirmation
+  }
+}
+```
+
+**Resultado**: El usuario se registra pero su cuenta está inactiva hasta confirmar el email.
+
+#### 2. Email de Confirmación
+El sistema envía automáticamente un email con:
+- Enlace de confirmación con token único
+- Token válido por 24 horas
+- Instrucciones claras para el usuario
+
+#### 3. Confirmación y Login Automático
+```graphql
+mutation ConfirmEmail($token: String!) {
+  confirmEmail(token: $token) {
+    success
+    message
+    token      # JWT para login automático
+    userId
+    email
+    name
+  }
+}
+```
+
+**Resultado**: 
+- Email confirmado ✅
+- Cuenta activada ✅  
+- Usuario logueado automáticamente ✅
+
+#### 4. Casos de Error Comunes
+
+**Token inválido o expirado:**
+```json
+{
+  "data": {
+    "confirmEmail": {
+      "success": false,
+      "message": "Token de confirmación inválido o expirado."
+    }
+  }
+}
+```
+
+**Email ya confirmado:**
+```json
+{
+  "data": {
+    "confirmEmail": {
+      "success": false,
+      "message": "El email ya ha sido confirmado anteriormente."
     }
   }
 }
@@ -294,6 +427,64 @@ mutation UpdateAvatar($input: UpdateAvatarDto!) {
       "avatar": "https://example.com/new-avatar.jpg",
       "updatedAt": "2025-01-02T00:00:00Z"
     }
+  }
+}
+```
+
+### List All Users
+
+Lista todos los usuarios registrados (útil para agregar miembros a proyectos).
+
+**Query:**
+```graphql
+query ListAllUsers {
+  listAllUsers {
+    id
+    userId
+    name
+    email
+    avatar
+    skills
+    hourlyRate
+    createdAt
+    updatedAt
+  }
+}
+```
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Response:**
+```json
+{
+  "data": {
+    "listAllUsers": [
+      {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "userId": "550e8400-e29b-41d4-a716-446655440000",
+        "name": "John Doe",
+        "email": "john@example.com",
+        "avatar": "https://example.com/avatar1.jpg",
+        "skills": ["TypeScript", "NestJS", "GraphQL"],
+        "hourlyRate": 50,
+        "createdAt": "2025-01-01T00:00:00Z",
+        "updatedAt": "2025-01-01T00:00:00Z"
+      },
+      {
+        "id": "550e8400-e29b-41d4-a716-446655440001",
+        "userId": "550e8400-e29b-41d4-a716-446655440001",
+        "name": "Jane Smith",
+        "email": "jane@example.com",
+        "avatar": "https://example.com/avatar2.jpg",
+        "skills": ["React", "Node.js", "MongoDB"],
+        "hourlyRate": 45,
+        "createdAt": "2025-01-01T00:00:00Z",
+        "updatedAt": "2025-01-01T00:00:00Z"
+      }
+    ]
   }
 }
 ```
@@ -1533,7 +1724,7 @@ mutation CreateTransaction($input: CreateTransactionDto!) {
 {
   "data": {
     "createTransaction": {
-      "id": "550e8400-e29b-41d4-a716-446655440060",
+      "id": "550e8400-e29b-41d4-a716-446655440060": "550e8400-e29b-41d4-a716-446655440060",
       "type": "expense",
       "category": "salaries",
       "amount": 5000,
@@ -2847,12 +3038,26 @@ Suscripción a actualizaciones de métricas del dashboard.
 **Subscription:**
 ```graphql
 subscription DashboardMetricsUpdated {
- dMetricsUpdated   totalProjects
+  dashboardMetricsUpdated {
+    totalProjects
     totalTasks
     completedTasks
     overallProgress
+    totalBudget
+    totalSpent
+    remainingBudget
+    budgetUtilization
+    projects {
+      projectId
+      projectName
+      status
+      progress
+      budget
+      spent
+    }
     timestamp
   }
+}
 ```
 
 ### Project Metrics Updated
@@ -2899,13 +3104,14 @@ Los siguientes módulos tienen operaciones CRUD completas (Create, Read, Update,
 
 | Módulo | Create | Read | Update | Delete | Notas |
 |--------|--------|------|--------|--------|-------|
-| **Auth** | ✅ | ✅ | ❌ | ❌ | Solo registro y login |
-| **Users** | ❌ | ✅ | ✅ | ❌ | Create se hace en Auth |
-| **Invoices** | ✅ | ✅ | ❌ | ❌ | Pendiente Update/Delete |
-| **Feedback** | ✅ | ✅ | ❌ | ❌ | Pendiente Update/Delete |
-| **Notifications** | ❌ | ✅ | ✅ | ❌ | Create automático |
-| **Achievements** | ❌ | ✅ | ❌ | ❌ | Solo lectura |
-| **Metrics** | ❌ | ✅ | ❌ | ❌ | Solo lectura (calculados) |
+| **Auth** | ✅ | ✅ | ❌ | ❌ | Registro, login, confirmación email, reset password |
+| **Users** | ❌ | ✅ | ✅ | ❌ | Create se hace en Auth, incluye listAllUsers |
+| **Invoices** | ✅ | ✅ | ✅ | ✅ | CRUD completo disponible |
+| **Feedback** | ✅ | ✅ | ✅ | ✅ | CRUD completo disponible |
+| **Notifications** | ❌ | ✅ | ✅ | ❌ | Create automático, markAsRead disponible |
+| **Achievements** | ❌ | ✅ | ❌ | ❌ | Solo lectura (sistema de logros) |
+| **Metrics** | ❌ | ✅ | ❌ | ❌ | Solo lectura (calculados automáticamente) |
+| **Finances** | ✅ | ✅ | ❌ | ❌ | Reportes y cálculos financieros |
 
 ### 🔐 Authentication Required
 
@@ -2943,10 +3149,25 @@ Authorization: Bearer <jwt_token>
 
 ### 🚀 Getting Started
 
-1. **Authenticate**: Use `signup` or `signin` to get JWT token
-2. **Set Headers**: Include `Authorization: Bearer <token>` in all requests
-3. **Create Resources**: Start with clients and projects
-4. **Manage Work**: Create sprints, user stories, and tasks
-5. **Track Progress**: Use time entries and metrics
+#### Flujo de Registro y Autenticación
+
+1. **Registro**: Use `signup` mutation para crear cuenta
+   - El sistema envía un email de confirmación automáticamente
+   - El usuario recibe un mensaje indicando que debe confirmar su email
+
+2. **Confirmación de Email**: Use `confirmEmail` mutation con el token del email
+   - El sistema confirma el email y devuelve un JWT token
+   - El usuario queda automáticamente logueado
+
+3. **Login**: Use `signin` mutation para sesiones posteriores
+
+#### Flujo de Trabajo
+
+4. **Set Headers**: Include `Authorization: Bearer <token>` in all requests
+5. **List Users**: Use `listAllUsers` to see available team members
+6. **Create Resources**: Start with clients and projects
+7. **Add Team Members**: Use project member endpoints with user IDs from `listAllUsers`
+8. **Manage Work**: Create sprints, user stories, and tasks
+9. **Track Progress**: Use time entries and metrics
 
 Para más detalles sobre la implementación, consulta el código fuente en los resolvers correspondientes.

@@ -2,13 +2,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Client } from '../../domain/entities/client.entity';
-import {
-  ClientNotFoundException,
-  InvalidClientMetricsException,
-} from '../../domain/exceptions/index';
+import { ClientNotFoundException } from '../../domain/exceptions/client-not-found.exception';
+import { InvalidClientMetricsException } from '../../domain/exceptions/invalid-client-metrics.exception';
 import { ClientRepository } from '../../repository/client.repository';
-
-import { CreateClientCommand, DeleteClientCommand, UpdateClientCommand } from './index';
+import { CreateClientCommand } from './create-client.command';
+import { DeleteClientCommand } from './delete-client.command';
+import { UpdateClientCommand } from './update-client.command';
 
 @Injectable()
 export class CreateClientCommandHandler {

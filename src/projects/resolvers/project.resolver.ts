@@ -2,8 +2,8 @@ import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import { AssignMembersCommand } from '../application/commands/assign-members.command';
 import { AssignMembersCommandHandler } from '../application/commands/assign-members.command-handler';
+import { AssignMembersCommand } from '../application/commands/assign-members.command';
 import { ProjectService } from '../application/services/project.service';
 import { ProjectMember } from '../domain/entities/project-member.entity';
 import { Project } from '../domain/entities/project.entity';

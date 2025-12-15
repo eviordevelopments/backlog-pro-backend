@@ -1,16 +1,21 @@
 import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { CurrentUser, CurrentUserPayload } from '../../shared/decorators/current-user.decorator';
+import {
+  CurrentUser,
+  type CurrentUserPayload,
+} from '../../shared/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import { UpdateAvatarCommand } from '../application/commands/update-avatar.command';
 import { UpdateAvatarCommandHandler } from '../application/commands/update-avatar.command-handler';
-import { UpdateProfileCommand } from '../application/commands/update-profile.command';
+import { UpdateAvatarCommand } from '../application/commands/update-avatar.command';
 import { UpdateProfileCommandHandler } from '../application/commands/update-profile.command-handler';
-import { GetProfileQuery } from '../application/queries/get-profile.query';
+import { UpdateProfileCommand } from '../application/commands/update-profile.command';
 import { GetProfileQueryHandler } from '../application/queries/get-profile.query-handler';
-import { GetWorkedHoursQuery } from '../application/queries/get-worked-hours.query';
+import { GetProfileQuery } from '../application/queries/get-profile.query';
 import { GetWorkedHoursQueryHandler } from '../application/queries/get-worked-hours.query-handler';
+import { GetWorkedHoursQuery } from '../application/queries/get-worked-hours.query';
+import { ListAllUsersQueryHandler } from '../application/queries/list-all-users.query-handler';
+import { ListAllUsersQuery } from '../application/queries/list-all-users.query';
 import { UpdateAvatarDto } from '../dto/request/update-avatar.dto';
 import { UpdateProfileDto } from '../dto/request/update-profile.dto';
 import { UserProfileResponseDto } from '../dto/response/user-profile.response.dto';
@@ -24,6 +29,7 @@ export class UserResolver {
   constructor(
     private readonly getProfileQueryHandler: GetProfileQueryHandler,
     private readonly getWorkedHoursQueryHandler: GetWorkedHoursQueryHandler,
+    private readonly listAllUsersQueryHandler: ListAllUsersQueryHandler,
     private readonly updateProfileCommandHandler: UpdateProfileCommandHandler,
     private readonly updateAvatarCommandHandler: UpdateAvatarCommandHandler,
   ) {}
@@ -64,6 +70,27 @@ export class UserResolver {
     this.logger.log(`Obteniendo horas trabajadas del usuario: ${userId}`);
     const query = new GetWorkedHoursQuery(userId, projectId);
     return this.getWorkedHoursQueryHandler.handle(query);
+  }
+
+  @Query(() => [UserProfileResponseDto], {
+    description: 'Lista todos los usuarios registrados (para agregar a proyectos)',
+  })
+  async listAllUsers(): Promise<UserProfileResponseDto[]> {
+    this.logger.log('Obteniendo lista de todos los usuarios');
+    const query = new ListAllUsersQuery();
+    const users = await this.listAllUsersQueryHandler.handle(query);
+
+    return users.map((user) => ({
+      id: user.id,
+      userId: user.userId,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      skills: user.skills,
+      hourlyRate: user.hourlyRate,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    }));
   }
 
   @Mutation(() => UserProfileResponseDto, {

@@ -2,12 +2,12 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 
 import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
-import { CalculateIdealHourlyRateQuery } from '../application/queries/calculate-ideal-hourly-rate.query';
 import { CalculateIdealHourlyRateQueryHandler } from '../application/queries/calculate-ideal-hourly-rate.query-handler';
-import { CalculateSalariesQuery } from '../application/queries/calculate-salaries.query';
+import { CalculateIdealHourlyRateQuery } from '../application/queries/calculate-ideal-hourly-rate.query';
 import { CalculateSalariesQueryHandler } from '../application/queries/calculate-salaries.query-handler';
-import { GenerateFinancialReportQuery } from '../application/queries/generate-financial-report.query';
+import { CalculateSalariesQuery } from '../application/queries/calculate-salaries.query';
 import { GenerateFinancialReportQueryHandler } from '../application/queries/generate-financial-report.query-handler';
+import { GenerateFinancialReportQuery } from '../application/queries/generate-financial-report.query';
 import { FinancialReportResponseDto } from '../dto/response/financial-report.response.dto';
 import { SalaryResponseDto } from '../dto/response/salary.response.dto';
 
